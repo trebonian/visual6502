@@ -29,7 +29,7 @@ var statbox;
 var layernames = ['metal', 'diff', 'inputdiode', 'diff0', 'diff1', 'poly'];
 var colors = ['rgba(128,128,192,0.4)','#FFFF00','#FF00FF','#4DFF4D',
               '#FF4D4D','#801AC0','rgba(128,0,255,0.75)'];
-var drawlayers = [true, true, false, false, false, false];
+var drawlayers = [true, true, true, true, true, true];
               
 var nodes = new Array();
 var transistors = {};
