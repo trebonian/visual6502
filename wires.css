@@ -24,7 +24,7 @@ body {
  background: white;
  color: black;
  font-family: cursive;
- font-size: 30px;
+ font-size: 12px;
 }
 
 div.frame {
@@ -64,25 +64,23 @@ p.status {
 }
 
 img.navbutton{
- margin-left: -5px;
  border: 0px;
 }
 
 img.navplay{
- margin-left: -5px;
+ position: relative;
+ margin-right: 5px;
  border: 0px;
 }
 
 img.navstop{
  position: absolute;
- left: -5px;
- top: 9px;
  border: 0px;
 }
 
 table.memtable {
  position: absolute;
- top: 63px;
+ top: 78px;
  left: 820px;
  font-family: monospace;
  font-size: 12px;

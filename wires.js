@@ -26,8 +26,10 @@ var zoom=1;
 var dragMouseX, dragMouseY, moved;
 var statbox;
 
-var colors = ['rgba(128,128,128,0.4)','#FFFF00','#FF00FF','#4DFF4D',
+var layernames = ['metal', 'diff', 'inputdiode', 'diff0', 'diff1', 'poly'];
+var colors = ['rgba(128,128,192,0.4)','#FFFF00','#FF00FF','#4DFF4D',
               '#FF4D4D','#801AC0','rgba(128,0,255,0.75)'];
+var drawlayers = [true, true, true, true, true, true];
               
 var nodes = new Array();
 var transistors = {};
@@ -42,11 +44,19 @@ var npwr = nodenames['vcc'];
 //
 /////////////////////////
 
+// try to present a meaningful page before starting expensive work
 function setup(){
+	statbox = document.getElementById('status');
+	setStatus('loading 6502...');
+	setTimeout(setup_part2, 0);
+}
+
+function setup_part2(){
 	frame = document.getElementById('frame');
 	statbox = document.getElementById('status');
 	setupNodes();
 	setupTransistors();
+	setupLayerVisibility();
 	setupBackground();
 	setupOverlay();
 	setupHilite();
@@ -56,6 +66,11 @@ function setup(){
 	setupTable();
 	window.onkeypress = function(e){handleKey(e);}
 	hilite.onmousedown = function(e){mouseDown(e);}
+	setStatus('resetting 6502...');
+	setTimeout(setup_part3, 0);
+}
+
+function setup_part3(){
 	initChip();
 	document.getElementById('stop').style.visibility = 'hidden';
 	go();
@@ -89,8 +104,17 @@ function setupTransistors(){
 	}
 }
 
+function setupLayerVisibility(){
+	var x=document.getElementById('updateShow');
+	for (var i=0;i<x.childNodes.length;i++) {
+		if(x.childNodes[i].type='checkbox'){
+			x.childNodes[i].checked=drawlayers[x.childNodes[i].name];
+		}
+	}
+}
 
 function setupBackground(){
+	console.log('starting setupBackground');
 	chipbg = document.getElementById('chipbg');
 	chipbg.width = 4000;
 	chipbg.height = 4000;
@@ -100,16 +124,16 @@ function setupBackground(){
 	ctx.strokeStyle = 'rgba(255,255,255,0.5)';
 	ctx.lineWidth = 4;
 	ctx.fillRect(0,0,10000,10000);
-	var start = now();
 	for(var i in segdefs){
 		var seg = segdefs[i];
 		var c = seg[2];
-		ctx.fillStyle = colors[c];
-		drawSeg(ctx, segdefs[i].slice(3));
-		ctx.fill();
-		if((c==0)||(c==6)) ctx.stroke();
+		if (drawlayers[c]) {
+			ctx.fillStyle = colors[c];
+			drawSeg(ctx, segdefs[i].slice(3));
+			ctx.fill();
+			if((c==0)||(c==6)) ctx.stroke();
+		}
 	}		
-	// console.log('time to draw: ', now() - start, ' ms');
 }
 
 function setupOverlay(){
@@ -189,6 +213,7 @@ function hiliteNode(n){
 
 
 function drawSeg(ctx, seg){
+	if(noGraphics) return;
 	var dx = 400;
 	ctx.beginPath();
 	ctx.moveTo(seg[0]+dx, 10000-seg[1])
@@ -286,6 +311,11 @@ function findNodeNumber(x,y){
 	var mid = pixels[1]>>4;
 	var low = pixels[2]>>4;
 	return (high<<8)+(mid<<4)+low;
+}
+
+function updateShow(layer, on){
+	drawlayers[layer]=on;
+	setupBackground();
 }
 
 /////////////////////////
