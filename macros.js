@@ -55,7 +55,7 @@ function initChip(){
 	recalcNodeList(allNodes()); 
 	for(var i=0;i<8;i++){setHigh('clk0'), setLow('clk0');}
 	setHigh('res');
-	for(var i=0;i<14;i++){step();}
+	for(var i=0;i<18;i++){resetStep();}
 	refresh();
 	cycle = 0;
 	trace = Array();
@@ -75,6 +75,13 @@ function halfStep(){
 	else {setHigh('clk0'); handleBusWrite();}
 	refresh();
 }
+
+function resetStep(){
+	var clk = isNodeHigh(nodenames['clk0']);
+	if (clk) {setLow('clk0'); handleBusRead(); } 
+	else {setHigh('clk0'); handleBusWrite();}
+}
+
 
 function handleBusRead(){
 	if(isNodeHigh(nodenames['rw'])) writeDataBus(mRead(readAddressBus()));
