@@ -1,0 +1,68 @@
+body {
+ background: white;
+ color: black;
+ font-family: cursive;
+ font-size: 30px;
+}
+
+div.frame {
+ margin-left: 10px;
+ position: relative;
+ width: 1150px;
+ height: 600px;
+}
+
+div.chip {
+ background: lightgray;
+ border: 2px solid gray;
+ position: absolute;
+ width: 800px;
+ height: 600px;
+ overflow: hidden;
+}
+
+canvas.chip {
+ position: absolute;
+ width: 600px;
+ height: 600px;
+}
+
+div.buttons{
+ position: absolute;
+ top: -5px;
+ left: 820px;
+}
+
+p.status {
+ position: absolute;
+ left: 820px;
+ top: 20px;
+ font-family: monospace;
+ font-size: 12px;
+}
+
+img.navbutton{
+ margin-left: -5px;
+ border: 0px;
+}
+
+img.navplay{
+ margin-left: -5px;
+ border: 0px;
+}
+
+img.navstop{
+ position: absolute;
+ left: -5px;
+ top: 9px;
+ border: 0px;
+}
+
+table.memtable {
+ position: absolute;
+ top: 63px;
+ left: 820px;
+ font-family: monospace;
+ font-size: 12px;
+ border-spacing: 0px;
+}
