@@ -306,19 +306,13 @@ function setChipStyle(props){
 
 function localx(el, gx){
 	var lx = gx+window.pageXOffset;
-	while(el.offsetLeft!=undefined){
-		lx-=el.offsetLeft+el.clientLeft;
-		el = el.parentNode;
-	}
+	lx-=el.getBoundingClientRect().left
 	return lx;
 }
 
 function localy(el, gy){
 	var ly = gy+window.pageYOffset;
-	while(el.offsetTop!=undefined){
-		ly-=el.offsetTop+el.clientTop;
-		el = el.parentNode;
-	}
+	ly-=el.getBoundingClientRect().top
 	return ly;
 }
 
