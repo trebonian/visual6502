@@ -1,8 +1,10 @@
-This is the javascript simulator from the visual5602.org project.
+This is the javascript simulator from the visual5602.org project:
+www.visual6502.org/JSSim
 
-It includes a general purpose switch-level simulator, layout browser,
-and data from a 6502D chip. 
+It includes a general purpose transistor-level simulator, layout browser,
+and the data from a 6502 revD chip. 
 
-Please note the various licenses of the different files.
+Note the various licenses and Copyright associated with each file.
 
 Enjoy!
+- The Visual 6502 Team

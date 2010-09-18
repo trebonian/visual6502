@@ -23,7 +23,8 @@
 body {
  background: white;
  color: black;
- font-family: cursive;
+/* font-family: cursive;*/
+ font-family :Verdana, Arial, Helvetica, Sans-Serif;
  font-size: 12px;
 }
 
@@ -85,4 +86,9 @@ table.memtable {
  font-family: monospace;
  font-size: 12px;
  border-spacing: 0px;
+}
+
+#title {
+font-size:30px;
+font-weight:bold;	
 }

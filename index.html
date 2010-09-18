@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <head>
-<title>Visual 6502</title>
+<title>Visual 6502 in JavaScript</title>
 <style type="text/css">@import "wires.css";</style>
 <script src="segdefs.js"></script>
 <script src="transdefs.js"></script>
@@ -14,8 +14,13 @@
 
 <body onload="setTimeout(setup,200)">
 <br />
-<span id="title"><a href="http://visual6502.org">The Visual 6502</a></span><br /><br />
+<span id="title"><a href="http://visual6502.org">The Visual 6502</a></span>
 <span id="plain">
+<br />
+<a href="http://www.visual6502.org/faq.html">FAQ</a>&nbsp;
+<a href="http://blog.visual6502.org">Blog</a>&nbsp;
+<a href="http://www.visual6502.org/links.html">Links</a>&nbsp
+<br /><br />
 If the chip does not load, try another browser: Chrome, Safari, or Firefox
 <br />
 <br />
@@ -50,11 +55,11 @@ Enter your own program into the array of RAM
 </div>
 <div id="updateShow"> Show:
   <input type="checkbox" name="0" id="updateShow0" onchange="updateShow(this.name,this.checked)" />(metal)
-  <input type="checkbox" name="1" id="updateShow1" onchange="updateShow(this.name,this.checked)" />(diff)
+  <input type="checkbox" name="1" id="updateShow1" onchange="updateShow(this.name,this.checked)" />(switched diffusion)
+  <input type="checkbox" name="3" id="updateShow3" onchange="updateShow(this.name,this.checked)" />(grounded diffusion)
+  <input type="checkbox" name="4" id="updateShow4" onchange="updateShow(this.name,this.checked)" />(powered diffusion)
+  <input type="checkbox" name="5" id="updateShow5" onchange="updateShow(this.name,this.checked)" />(polysilicon)
   <input type="checkbox" name="2" id="updateShow2" onchange="updateShow(this.name,this.checked)" />(diode)
-  <input type="checkbox" name="3" id="updateShow3" onchange="updateShow(this.name,this.checked)" />(diff0)
-  <input type="checkbox" name="4" id="updateShow4" onchange="updateShow(this.name,this.checked)" />(diff1)
-  <input type="checkbox" name="5" id="updateShow5" onchange="updateShow(this.name,this.checked)" />(poly)
 </div>
 <br />
 <br />

@@ -26,7 +26,8 @@ var zoom=1;
 var dragMouseX, dragMouseY, moved;
 var statbox;
 
-var layernames = ['metal', 'diff', 'inputdiode', 'diff0', 'diff1', 'poly'];
+// Index of layerNames corresponds to index into drawLayers
+var layernames = ['metal', 'switched diffusion', 'inputdiode', 'grounded diffusion', 'powered diffusion', 'polysilicon'];
 var colors = ['rgba(128,128,192,0.4)','#FFFF00','#FF00FF','#4DFF4D',
               '#FF4D4D','#801AC0','rgba(128,0,255,0.75)'];
 var drawlayers = [true, true, true, true, true, true];
