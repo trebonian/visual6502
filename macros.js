@@ -39,11 +39,55 @@ function go(n){
 }
 
 function steps(){
-	if(running) step();
-	setTimeout(steps, 200);
+	if(running) {
+           step();
+	   setTimeout(steps, 0); // schedule the next poll
+        }
 }
 
+function testNMI(n){
+        initChip();
+
+        mWrite(0x0000, 0x38); // set carry
+        mWrite(0x0001, 0x4c); // jump to test code
+        mWrite(0x0002, 0x06);
+        mWrite(0x0003, 0x23);
+
+        mWrite(0x22ff, 0x38); // set carry
+        mWrite(0x2300, 0xea);
+        mWrite(0x2301, 0xea);
+        mWrite(0x2302, 0xea);
+        mWrite(0x2303, 0xea);
+        mWrite(0x2304, 0xb0); // branch carry set to self
+        mWrite(0x2305, 0xfe);
+
+        mWrite(0x2306, 0xb0); // branch carry set to self
+        mWrite(0x2307, 0x01);
+        mWrite(0x2308, 0x00); // brk should be skipped
+        mWrite(0x2309, 0xa9); // anything
+        mWrite(0x230a, 0xde); // anything
+        mWrite(0x230b, 0xb0); // branch back with page crossing
+        mWrite(0x230c, 0xf2);
+
+        mWrite(0xc018, 0x40); // nmi handler
+
+        mWrite(0xfffa, 0x18); // nmi vector
+        mWrite(0xfffb, 0xc0);
+        mWrite(0xfffc, 0x00); // reset vector
+        mWrite(0xfffd, 0x00);
+
+        for(var i=0;i<n;i++){step();}
+        setLow('nmi');
+        chipStatus();
+        for(var i=0;i<8;i++){step();}
+        setHigh('nmi');
+        chipStatus();
+        for(var i=0;i<16;i++){step();}
+}
+
+
 function initChip(){
+        var start = now();
 	for(var nn in nodes) nodes[nn].state = 'fl';
 	nodes[ngnd].state = 'gnd';
 	nodes[npwr].state = 'vcc';
@@ -60,6 +104,7 @@ function initChip(){
 	cycle = 0;
 	trace = Array();
 	chipStatus();
+	console.log('initChip done after', now()-start);
 }
 
 function step(){
@@ -78,10 +123,9 @@ function halfStep(){
 
 function resetStep(){
 	var clk = isNodeHigh(nodenames['clk0']);
-	if (clk) {setLow('clk0'); handleBusRead(); } 
+	if (clk) {setLow('clk0'); handleBusRead(); }
 	else {setHigh('clk0'); handleBusWrite();}
 }
-
 
 function handleBusRead(){
 	if(isNodeHigh(nodenames['rw'])) writeDataBus(mRead(readAddressBus()));
@@ -102,8 +146,26 @@ function readA(){return readBits('a', 8);}
 function readY(){return readBits('y', 8);}
 function readX(){return readBits('x', 8);}
 function readP(){return readBits('p', 8);}
+function readPstring(){
+   var result;
+   result = (isNodeHigh(nodenames['p7'])?'N':'n') +
+            (isNodeHigh(nodenames['p6'])?'V':'v') +
+            '-' +
+            (isNodeHigh(nodenames['p3'])?'B':'b') +
+            (isNodeHigh(nodenames['p3'])?'D':'d') +
+            (isNodeHigh(nodenames['p2'])?'I':'i') +
+            (isNodeHigh(nodenames['p1'])?'Z':'z') +
+            (isNodeHigh(nodenames['p0'])?'C':'c');
+   return result;
+}
 function readSP(){return readBits('s', 8);}
+function readPC(){return (readBits('pch', 8)<<8) + readBits('pcl', 8);}
+function readPCL(){return readBits('pcl', 8);}
+function readPCH(){return readBits('pch', 8);}
 
+function readBit(name){
+        return isNodeHigh(nodenames[name])?1:0;
+}
 function readBits(name, n){
 	var res = 0;
 	for(var i=0;i<n;i++){
@@ -151,6 +213,7 @@ function runChip(){
 	start.style.visibility = 'hidden';
 	stop.style.visibility = 'visible';
 	running = true;
+        steps();
 }
 
 function stopChip(){
@@ -163,7 +226,8 @@ function stopChip(){
 
 function resetChip(){
 	stopChip();
-	initChip();
+        setStatus('resetting 6502...');                          
+	setTimeout(initChip,0);
 }
 
 function stepForward(){
@@ -181,17 +245,40 @@ function stepBack(){
 }
 
 function chipStatus(){
-	var pc = readAddressBus();
-	setStatus('PC:', hexWord(pc),
-	          'D:', hexByte(readDataBus()), 
-	          'SP:',hexByte(readSP()),
-	          'cycle:', cycle, '<br>',
-	          'A:', hexByte(readA()),
-	          'X:', hexByte(readX()),
-	          'Y:', hexByte(readY()),
-	          'P:', hexByte(readP())
-	          );
-	selectCell(pc);
+	var ab = readAddressBus();
+	var machine1 =
+	        ' halfcyc:' + cycle +
+	        ' phi0:' + readBit('clk0') +
+                ' AB:' + hexWord(ab) +
+	        ' D:' + hexByte(readDataBus()) +
+	        ' RnW:' + readBit('rw');
+	var machine2 =
+	        ' PC:' + hexWord(readPC()) +
+	        ' A:' + hexByte(readA()) +
+	        ' X:' + hexByte(readX()) +
+	        ' Y:' + hexByte(readY()) +
+	        ' SP:' + hexByte(readSP()) +
+	        ' ' + readPstring();
+	var machine3 =
+	        ' Sync:' + readBit('sync')
+		' IRQ:' + readBit('irq') +
+	        ' NMI:' + readBit('nmi');
+	var machine4 =
+	        ' IR:' + hexByte(255 - readBits('notir', 8)) +
+	        ' idl:' + hexByte(255 - readBits('idl', 8)) +
+	        ' alu:' + hexByte(255 - readBits('alu', 8)) +
+	        ' TCstate:' + readBit('clock1') + readBit('clock2') +
+                	readBit('t2') + readBit('t3') + readBit('t4') + readBit('t5');
+        var machine5 =
+                ' notRdy0:' + readBit('notRdy0') +
+                ' fetch:'   + readBit('fetch') +
+                ' clearIR:' + readBit('clearIR') +
+                ' D1x1:'    + readBit('D1x1');
+        setStatus(machine1 + "<br>" + machine2);
+	if (loglevel>2) {
+		console.log(machine1 + " " + machine2 + " " + machine3 + " " + machine4 + " " + machine5);
+	}
+	selectCell(ab);
 }
 
 function getMem(){

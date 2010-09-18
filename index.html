@@ -8,12 +8,26 @@
 <script src="nodenames.js"></script>
 <script src="wires.js"></script>
 <script src="chipsim.js"></script>
+<br>
 <script src="memtable.js"></script>
 <script src="macros.js"></script>
 </head>
 
-<body onload="setup();">
-<p class="title">The 6502</p>
+<body onload="setTimeout(setup,200)">
+<br />
+<span id="title"><a href="/">The Visual 6502</a></span><br /><br />
+<span id="plain">
+If the chip does not load, try another browser: Chrome, Safari, or Firefox
+<br />
+<br />
+Hit '>' to zoom in, '<' to zoom out
+<br />
+Right-click to scroll around
+<br />
+Enter your own program into the array of RAM
+<br />
+<br /> 
+</span>
 <div class="frame" id="frame">
 <div class="chip">
 <canvas class="chip" id="chipbg"></canvas>
@@ -22,15 +36,30 @@
 <canvas class="chip" id="hitbuffer"></canvas>
 </div>
 <div class = "buttons">
-<a href ="javascript:stopChip()"id="stop"><img class="navstop" src="images/stop.png"></a>
-<a href ="javascript:runChip()" id="start"><img class="navplay" src="images/play.png"></a>
-<a href ="javascript:resetChip()"><img class="navbutton" src="images/up.png"></a>
-<a href ="javascript:stepBack()"><img class="navbutton" src="images/prev.png"></a>
-<a href ="javascript:stepForward()"><img class="navbutton" src="images/next.png"></a>
+  <div style="position:relative; float:left;">
+    <a href ="javascript:stopChip()"id="stop"><img class="navstop" src="images/stop.png"></a>
+    <a href ="javascript:runChip()" id="start"><img class="navplay" src="images/play.png"></a>
+  </div>
+  <div style="float:left;">
+    <a href ="javascript:resetChip()"><img class="navbutton" src="images/up.png"></a>
+    <a href ="javascript:stepBack()"><img class="navbutton" src="images/prev.png"></a>
+    <a href ="javascript:stepForward()"><img class="navbutton" src="images/next.png"></a>
+  </div>
 </div>
 <p class="status" id="status">x: 0<br>y: 0</p>
 <table class="memtable" id="memtable"></table>
 </div>
+<div id="updateShow"> Show:
+  <input type="checkbox" name="0" id="updateShow0" onchange="updateShow(this.name,this.checked)" />(metal)
+  <input type="checkbox" name="1" id="updateShow1" onchange="updateShow(this.name,this.checked)" />(diff)
+  <input type="checkbox" name="2" id="updateShow2" onchange="updateShow(this.name,this.checked)" />(diode)
+  <input type="checkbox" name="3" id="updateShow3" onchange="updateShow(this.name,this.checked)" />(diff0)
+  <input type="checkbox" name="4" id="updateShow4" onchange="updateShow(this.name,this.checked)" />(diff1)
+  <input type="checkbox" name="5" id="updateShow5" onchange="updateShow(this.name,this.checked)" />(poly)
+</div>
+<br />
+<br />
+In addition to this JavaScript project, see our <a href="../python6502.html">Python-based simulator</a> which may be easier to customize, verify, and apply to the study of long programs.<br />
+<br />
 </body>
-
 </html>
