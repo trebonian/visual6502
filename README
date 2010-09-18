@@ -1,0 +1,8 @@
+This is the javascript simulator from the visual5602.org project.
+
+It includes a general purpose switch-level simulator, layout browser,
+and data from a 6502D chip. 
+
+Please note the various licenses of the different files.
+
+Enjoy!
