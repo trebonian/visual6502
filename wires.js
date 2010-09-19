@@ -335,15 +335,11 @@ function setChipStyle(props){
 
 
 function localx(el, gx){
-	var lx = gx+window.pageXOffset;
-	lx-=el.getBoundingClientRect().left
-	return lx;
+	return gx-el.getBoundingClientRect().left;
 }
 
 function localy(el, gy){
-	var ly = gy+window.pageYOffset;
-	ly-=el.getBoundingClientRect().top
-	return ly;
+	return gy-el.getBoundingClientRect().top;
 }
 
 function setStatus(){
