@@ -104,7 +104,7 @@ function initChip(){
 	cycle = 0;
 	trace = Array();
 	chipStatus();
-	console.log('initChip done after', now()-start);
+	if(ctrace)console.log('initChip done after', now()-start);
 }
 
 function step(){
@@ -275,7 +275,7 @@ function chipStatus(){
                 ' clearIR:' + readBit('clearIR') +
                 ' D1x1:'    + readBit('D1x1');
         setStatus(machine1 + "<br>" + machine2);
-	if (loglevel>2) {
+	if (loglevel>2 && ctrace) {
 		console.log(machine1 + " " + machine2 + " " + machine3 + " " + machine4 + " " + machine5);
 	}
 	selectCell(ab);

@@ -35,7 +35,7 @@ function recalcNodeList(list){
 		list = recalclist;
 		recalclist = new Array();
 	}
-	console.log(n,'looping...');
+	if(ctrace) console.log(n,'looping...');
 }
 
 function recalcNode(node, recalclist){
@@ -131,7 +131,7 @@ function getNodeValue(group){
 		if((n.state=='fl')&&(flstate==undefined)) flstate = 'fl';
 		if(n.state=='fh') flstate = 'fh';
 	}
-	if(flstate==undefined) console.log(group);
+	if(flstate==undefined && ctrace) console.log(group);
 	return flstate;
 }
 

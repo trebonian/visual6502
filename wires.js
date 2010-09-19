@@ -115,7 +115,6 @@ function setupLayerVisibility(){
 }
 
 function setupBackground(){
-	console.log('starting setupBackground');
 	chipbg = document.getElementById('chipbg');
 	chipbg.width = 4000;
 	chipbg.height = 4000;
