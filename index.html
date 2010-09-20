@@ -10,9 +10,22 @@
 <script src="chipsim.js"></script>
 <script src="memtable.js"></script>
 <script src="macros.js"></script>
+
+<script type="text/javascript">
+function handleOnload() {
+       if(navigator.appName != 'Microsoft Internet Explorer'){
+           setTimeout(setup,200);
+       }else{
+           document.getElementById('browsertrouble').innerHTML=
+             '<p>Sorry, '+navigator.appName+' not supported - showing you a picture instead!</p>';
+           document.getElementById('frame').innerHTML='<a href="browsertrouble.html"><img src="images/jssim2.png" style="border:10px"></a>';
+       }
+}
+</script>
+
 </head>
 
-<body onload="setTimeout(setup,200)">
+<body onload="handleOnload();">
 <br />
 <span id="title"><a href="http://visual6502.org">The Visual 6502</a></span>
 <span id="plain">
@@ -21,8 +34,10 @@
 <a href="http://blog.visual6502.org">Blog</a>&nbsp;
 <a href="http://www.visual6502.org/links.html">Links</a>&nbsp
 <br /><br />
-If the chip does not load, try another browser: Chrome, Safari, or Firefox
+This simulator uses HTML5 features only found on the latest versions of browsers and needs
+lots of RAM. If you have trouble, please <a href="browsertrouble.html">check compatibility.</a>
 <br />
+<span id="browsertrouble"></span>
 <br />
 Hit '>' to zoom in, '<' to zoom out
 <br />
@@ -33,7 +48,7 @@ Enter your own program into the array of RAM
 <br /> 
 </span>
 <div class="frame" id="frame">
-<div class="chip">
+<div class="chip" id="chip">
 <canvas class="chip" id="chipbg"></canvas>
 <canvas class="chip" id="overlay"></canvas>
 <canvas class="chip" id="hilite"></canvas>
