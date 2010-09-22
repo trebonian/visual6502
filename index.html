@@ -13,13 +13,15 @@
 
 <script type="text/javascript">
 function handleOnload() {
-       if((navigator.appName == 'Microsoft Internet Explorer') && (parseInt(navigator.appVersion,10)<9)){
-           document.getElementById('browsertrouble').innerHTML=
-             '<p>Sorry, '+navigator.appName+' not supported - showing you a picture instead!</p>';
-           document.getElementById('frame').innerHTML='<a href="browsertrouble.html"><img src="images/jssim2.png" style="border:10px"></a>';
-       }else{
-           setTimeout(setup,200);
-       }
+	/MSIE (\d+\.\d+);/.test(navigator.appVersion);
+	IEVersion=Number(RegExp.$1);
+	if((navigator.appName == 'Microsoft Internet Explorer') && (IEVersion<9)){
+		document.getElementById('browsertrouble').innerHTML=
+			'<p>Sorry, '+navigator.appName+' not supported - showing you a picture instead!</p>';
+		document.getElementById('frame').innerHTML='<a href="browsertrouble.html"><img src="images/jssim2.png" style="border:10px"></a>';
+	}else{
+		setTimeout(setup,200);
+	}
 }
 </script>
 
