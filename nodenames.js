@@ -102,8 +102,8 @@ p0: 687,        // machine state: status register
 p1: 1444,
 p2: 1421,
 p3: 439,
-p4: 1119,
-p5: 0,
+p4: 1119,       // there is no bit4 in the status register!
+p5: 999999,     // there is no bit5 in the status register!
 p6: 77,
 p7: 1370,
 s0: 1403,       // machine state: stack pointer
@@ -207,4 +207,149 @@ fetch: 879,     // internal signal
 clearIR: 1077,  // internal signal
 D1x1: 827,      // internal signal: interrupt handler related
 H1x1: 1042,     // internal signal: drive status byte onto databus
+
+pla0: 1601,     // internal signal: pla outputs block 1
+pla1: 60,
+pla2: 1512,
+pla3: 382,
+pla4: 1173,
+pla5: 1233,
+
+pla6: 258,      // internal signal: pla outputs block 2
+pla7: 1562,
+pla8: 84,
+pla9: 1543,
+pla10: 76,
+pla11: 1658,
+pla12: 1540,
+pla13: 245,
+pla14: 985,
+pla15: 786,
+pla16: 1664,
+pla17: 682,
+pla18: 1482,
+pla19: 665,
+pla20: 286,
+
+                // internal signal: pla outputs block 3
+pla21: 888,     // not pla, feed through
+pla22: 271,
+pla23: 370,
+pla24: 552,
+pla25: 1612,
+pla26: 1487,
+pla27: 784,
+pla28: 244,
+pla29: 788,
+pla30: 1623,
+pla31: 764,
+pla32: 1057,
+pla33: 403,
+pla34: 204,
+pla35: 1273,
+pla36: 1582,
+pla37: 1031,
+
+pla38: 804,     // internal signal: pla outputs block 4
+pla39: 1311,
+pla40: 1428,
+pla41: 492,
+pla42: 1204,
+pla43: 58,
+pla44: 1520,
+pla45: 1259,
+pla46: 342,
+pla47: 712,
+pla48: 857,
+pla49: 712,
+pla50: 1337,
+pla51: 1355,
+pla52: 787,
+pla53: 575,
+pla54: 1466,
+
+pla55: 1381,    // internal signal: pla outputs block 5
+pla56: 546,
+pla57: 776,
+pla58: 157,
+pla59: 257,
+pla60: 1243,
+pla61: 822,
+pla62: 1324,
+pla63: 179,
+pla64: 131,
+pla65: 1420,
+pla66: 1342,
+pla67: 4,
+pla68: 1396,
+pla69: 167,
+pla70: 303,
+pla71: 1504,
+pla72: 354,
+pla73: 1168,
+
+                // internal signal: pla outputs block 6
+pla74: 1721,    // has extra non-pla input
+pla75: 1086,
+pla76: 1074,
+pla77: 1246,
+pla78: 487,
+pla79: 579,
+pla80: 145,
+pla81: 1239,
+pla82: 285,
+                 // not pla, feed through
+                 // not pla, feed through
+pla83: 1524,
+pla84: 273,      // has extra pulldown: pla100
+pla85: 0,
+pla86: 341,
+pla87: 120,
+pla88: 1478,
+pla89: 594,
+pla90: 1210,
+pla91: 677,      // has extra pulldown: pla100
+
+pla92: 461,      // internal signal: pla outputs block 7
+pla93: 447,
+pla94: 660,
+pla95: 1557,
+pla96: 259,
+pla97: 1052,
+pla98: 791,      // feeds into pla86 and pla93
+pla99: 517,
+pla100: 352,
+pla101: 750,
+pla102: 932,
+pla103: 1589,
+pla104: 446,
+pla105: 528,
+
+pla106: 309,     // internal signal: pla outputs block 8
+pla107: 1430,
+pla108: 53,
+pla109: 691,
+pla110: 1292,
+pla111: 1646,
+pla112: 1114,
+pla113: 904,
+pla114: 1155,
+pla115: 1476,
+pla116: 1226,
+pla117: 1569,
+pla118: 301,
+pla119: 950,
+pla120: 1665,
+pla121: 1710,
+
+                 // internal signal: pla outputs block 9
+pla122: 1050,    // feeds into pla130 (no normal pla output)
+pla123: 840,
+pla124: 607,
+pla125: 219,
+pla126: 1385,
+pla127: 281,
+pla128: 1174,
+pla129: 1164,
+pla130: 1006,    // has extra pulldowns: pla122 and node328 which could be ir0
 }
