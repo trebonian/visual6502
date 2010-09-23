@@ -299,8 +299,14 @@ function handleClick(e){
 	else {var a=new Array(); a.push(w); hiliteNode(a);}
 	var cx = Math.round(x*10000/600);
 	var cy = Math.round(y*10000/600);	
-	if(w==-1) setStatus('x:',cx,'<br>','y:',cy);
-	else {setStatus('x:',cx, 'y:', cy,'<br>','node:',w, nodeName(w));}
+	if(w==-1) {
+		setStatus('x:',cx,'<br>','y:',cy);
+	} else {
+		var s1='x: ' + cx + ' y: ' + cy;
+		var s2='node: ' + w + ' ' + nodeName(w);
+		setStatus(s1, '<br>', s2);
+		if(ctrace) console.log(s1, s2);
+	}
 }
 
 function findNodeNumber(x,y){
