@@ -114,7 +114,15 @@ s4: 1702,
 s5: 1098,
 s6: 1212,
 s7: 1435,
-notir0: 194,    // internal state: instruction register
+ir0: 328,       // internal state: instruction register
+ir1: 1626,
+ir2: 1384,
+ir3: 1576,
+ir4: 1112,
+ir5: 1329,
+ir6: 337,
+ir7: 1328,
+notir0: 194,    // internal signal: instruction register inverted outputs
 notir1: 702,
 notir2: 1182,  
 notir3: 1125,  
@@ -122,6 +130,7 @@ notir4: 26,
 notir5: 1394,
 notir6: 895,
 notir7: 1320,
+irline3: 996,   // internal signal: PLA input - ir0 AND ir1
 clock1: 156,    // internal state: timing control
 clock2: 1536,   // internal state: timing control
 t2: 971,        // internal state: timing control
@@ -202,20 +211,22 @@ pd6: 1669,
 pd7: 1690,
 notRdy0: 248,   // internal signal: global pipeline control
 cp1: 710,       // internal signal: clock phase 1
-cclk: 943,      // internal signal: clock phase 2
+cclk: 943,      // unbonded pad: internal non-overlappying phi2
 fetch: 879,     // internal signal
 clearIR: 1077,  // internal signal
 D1x1: 827,      // internal signal: interrupt handler related
 H1x1: 1042,     // internal signal: drive status byte onto databus
 
-pla0: 1601,     // internal signal: pla outputs block 1
+                // internal signal: pla outputs block 1 (west/left edge of die)
+pla0: 1601,
 pla1: 60,
 pla2: 1512,
 pla3: 382,
 pla4: 1173,
 pla5: 1233,
 
-pla6: 258,      // internal signal: pla outputs block 2
+                // internal signal: pla outputs block 2
+pla6: 258,
 pla7: 1562,
 pla8: 84,
 pla9: 1543,
@@ -232,124 +243,131 @@ pla19: 665,
 pla20: 286,
 
                 // internal signal: pla outputs block 3
-pla21: 888,     // not pla, feed through
-pla22: 271,
-pla23: 370,
-pla24: 552,
-pla25: 1612,
-pla26: 1487,
-pla27: 784,
-pla28: 244,
-pla29: 788,
-pla30: 1623,
-pla31: 764,
-pla32: 1057,
-pla33: 403,
-pla34: 204,
-pla35: 1273,
-pla36: 1582,
-pla37: 1031,
+                // not pla, feed through
+pla21: 271,
+pla22: 370,
+pla23: 552,
+pla24: 1612,
+pla25: 1487,
+pla26: 784,
+pla27: 244,
+pla28: 788,
+pla29: 1623,
+pla30: 764,
+pla31: 1057,
+pla32: 403,
+pla33: 204,
+pla34: 1273,
+pla35: 1582,
+pla36: 1031,
 
-pla38: 804,     // internal signal: pla outputs block 4
-pla39: 1311,
-pla40: 1428,
-pla41: 492,
-pla42: 1204,
-pla43: 58,
-pla44: 1520,
+                // internal signal: pla outputs block 4
+pla37: 804,
+pla38: 1311,
+pla39: 1428,
+pla40: 492,
+pla41: 1204,
+pla42: 58,
+pla43: 1520,
+pla44: 324,
 pla45: 1259,
 pla46: 342,
-pla47: 712,
-pla48: 857,
-pla49: 712,
-pla50: 1337,
-pla51: 1355,
-pla52: 787,
-pla53: 575,
-pla54: 1466,
+pla47: 857,
+pla48: 712,
+pla49: 1337,
+pla50: 1355,
+pla51: 787,
+pla52: 575,
+pla53: 1466,
 
-pla55: 1381,    // internal signal: pla outputs block 5
-pla56: 546,
-pla57: 776,
-pla58: 157,
-pla59: 257,
-pla60: 1243,
-pla61: 822,
-pla62: 1324,
-pla63: 179,
-pla64: 131,
-pla65: 1420,
-pla66: 1342,
-pla67: 4,
-pla68: 1396,
-pla69: 167,
-pla70: 303,
-pla71: 1504,
-pla72: 354,
-pla73: 1168,
+                // internal signal: pla outputs block 5
+pla54: 1381,
+pla55: 546,
+pla56: 776,
+pla57: 157,
+pla58: 257,
+pla59: 1243,
+pla60: 822,
+pla61: 1324,
+pla62: 179,
+pla63: 131,
+pla64: 1420,
+pla65: 1342,
+pla66: 4,
+pla67: 1396,
+pla68: 167,
+pla69: 303,
+pla70: 1504,
+pla71: 354,
+pla72: 1168,
 
                 // internal signal: pla outputs block 6
-pla74: 1721,    // has extra non-pla input
-pla75: 1086,
-pla76: 1074,
-pla77: 1246,
-pla78: 487,
-pla79: 579,
-pla80: 145,
-pla81: 1239,
-pla82: 285,
-                 // not pla, feed through
-                 // not pla, feed through
-pla83: 1524,
-pla84: 273,      // has extra pulldown: pla100
-pla85: 0,
-pla86: 341,
-pla87: 120,
-pla88: 1478,
-pla89: 594,
-pla90: 1210,
-pla91: 677,      // has extra pulldown: pla100
+pla73: 1721,    // has extra non-pla input
+pla74: 1086,
+pla75: 1074,
+pla76: 1246,
+pla77: 487,
+pla78: 579,
+pla79: 145,
+pla80: 1239,
+pla81: 285,
+                // not pla, feed through
+                // not pla, feed through
+pla82: 1524,
+pla83: 273,     // has extra pulldown: pla100
+pla84: 0,
+pla85: 341,
+pla86: 120,
+pla87: 1478,
+pla88: 594,
+pla89: 1210,
+pla90: 677,     // has extra pulldown: pla100
 
-pla92: 461,      // internal signal: pla outputs block 7
-pla93: 447,
-pla94: 660,
-pla95: 1557,
-pla96: 259,
-pla97: 1052,
-pla98: 791,      // feeds into pla86 and pla93
-pla99: 517,
-pla100: 352,
-pla101: 750,
-pla102: 932,
-pla103: 1589,
-pla104: 446,
-pla105: 528,
+                // internal signal: pla outputs block 7
+pla91: 461,
+pla92: 447,
+pla93: 660,
+pla94: 1557,
+pla95: 259,
+pla96: 1052,
+                // gap
+pla97: 791,     // feeds into pla86 and pla93
+pla98: 517,
+pla99: 352,
+pla100: 750,
+pla101: 932,
+pla102: 1589,
+                // gap
+pla103: 446,
+pla104: 528,
 
-pla106: 309,     // internal signal: pla outputs block 8
-pla107: 1430,
-pla108: 53,
-pla109: 691,
-pla110: 1292,
-pla111: 1646,
-pla112: 1114,
-pla113: 904,
-pla114: 1155,
-pla115: 1476,
-pla116: 1226,
-pla117: 1569,
-pla118: 301,
-pla119: 950,
-pla120: 1665,
-pla121: 1710,
+                // internal signal: pla outputs block 8
+pla105: 309,
+pla106: 1430,
+pla107: 53,
+pla108: 691,
+pla109: 1292,
+                // gap
+pla110: 1646,
+pla111: 1114,
+pla112: 904,
+pla113: 1155,
+pla114: 1476,
+pla115: 1226,
+pla116: 1569,
+pla117: 301,
+pla118: 950,
+pla119: 1665,
 
-                 // internal signal: pla outputs block 9
-pla122: 1050,    // feeds into pla130 (no normal pla output)
-pla123: 840,
-pla124: 607,
-pla125: 219,
-pla126: 1385,
-pla127: 281,
-pla128: 1174,
-pla129: 1164,
-pla130: 1006,    // has extra pulldowns: pla122 and node328 which could be ir0
+                // internal signal: pla outputs block 9
+pla120: 1710,
+pla121: 1050,   // feeds into pla130 (no normal pla output)
+pla122: 840,
+pla123: 607,
+pla124: 219,
+pla125: 1385,
+pla126: 281,
+pla127: 1174,
+pla128: 1164,
+pla129: 1006,   // has extra pulldowns: pla122 and ir0
 }
