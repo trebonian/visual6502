@@ -319,6 +319,16 @@ function findNodeNumber(x,y){
 	return (high<<8)+(mid<<4)+low;
 }
 
+function updateExpertMode(on){
+	if(on){
+		document.getElementById('controlPanel').style.visibility = 'visible';
+		loglevel=4;
+	} else {
+		document.getElementById('controlPanel').style.visibility = 'hidden';
+		loglevel=0;
+	}
+}
+
 function updateShow(layer, on){
 	drawlayers[layer]=on;
 	setupBackground();
