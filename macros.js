@@ -26,6 +26,7 @@ var code = [0xa9, 0x00, 0x20, 0x10, 0x00, 0x4c, 0x02, 0x00,
             0xe8, 0x88, 0xe6, 0x40, 0x38, 0x69, 0x02, 0x60];
 var cycle = 0;
 var trace = Array();
+var logstream = Array();
 var running = false;
 
 function go(n){
@@ -103,9 +104,12 @@ function initChip(){
 	refresh();
 	cycle = 0;
 	trace = Array();
+	initLogbox(logThese);
 	chipStatus();
 	if(ctrace)console.log('initChip done after', now()-start);
 }
+
+var logThese=['sync','irq','nmi','ab','db','rw','pc','a','x','y','s'];
 
 function step(){
 	trace[cycle]= {chip: stateString(), mem: getMem()};
@@ -173,6 +177,24 @@ function readBits(name, n){
 		res+=((isNodeHigh(nn))?1:0)<<i;
 	}
 	return res;
+}
+
+function hexBus(busname){
+	var nodenamelist=[];
+	// console.log('hexBus called: ' + busname);
+	for(i in nodenames){nodenamelist.push(i)};
+	if(busname=='pc')
+		return hexBus('pch') + hexBus('pcl');
+	var width=0;
+	for(var i in nodenamelist){
+		if(nodenamelist[i].search("^"+busname+"[0-9]")==0)
+			width++;
+	}
+	if(width==0)
+		return isNodeHigh(nodenames[busname])?1:0;
+	if(width>16)
+		return -1;
+	return (0x10000+readBits(busname,width)).toString(16).slice(-width/4);
 }
 
 function writeDataBus(x){
@@ -259,29 +281,48 @@ function chipStatus(){
 	        ' Y:' + hexByte(readY()) +
 	        ' SP:' + hexByte(readSP()) +
 	        ' ' + readPstring();
+        setStatus(machine1 + "<br>" + machine2);
+	if (loglevel>1) {
+		updateLogbox(logThese);
+	}
+	selectCell(ab);
+}
+
+function initLogbox(names){
+	logStream = [];
+        logStream.push("<td>" + names.join("</td><td>") + "</td>");
+}
+
+function updateLogbox(names){
+	var logbox=document.getElementById('logstream');
+	var signals=[];
+
+	for(i in names){
+		signals.push(hexBus(names[i]));
+	}
+        logStream.push("<td>" + signals.join("</td><td>") + "</td>");
+
+	logbox.innerHTML = "<tr>"+logStream.join("</tr><tr>")+"</tr>";
+
+
 	var machine3 =
-	        ' Sync:' + readBit('sync')
+	        ' Sync:' + readBit('sync') +
 		' IRQ:' + readBit('irq') +
 	        ' NMI:' + readBit('nmi');
 	var machine4 =
-	        ' IR:' + hexByte(255 - readBits('notir', 8)) +
+	        ' IR:' + hexByte(readBits('ir', 8)) +
 	        ' TCstate:' + readBit('clock1') + readBit('clock2') +
                 	readBit('t2') + readBit('t3') + readBit('t4') + readBit('t5');
         var machine5 =
 		' idl:' + hexByte(readBits('idl', 8)) +
 		' alu:' + hexByte(readBits('alu', 8)) +
-		' idb:' +hexByte(readBits('idb',8)) +
+		' idb:' + hexByte(readBits('idb',8)) +
 		' dor:' + hexByte(readBits('dor',8));
         var machine6 =
                 ' notRdy0:' + readBit('notRdy0') +
                 ' fetch:'   + readBit('fetch') +
                 ' clearIR:' + readBit('clearIR') +
                 ' D1x1:'    + readBit('D1x1');
-        setStatus(machine1 + "<br>" + machine2);
-	if (loglevel>2) {
-		console.log(machine1 + " " + machine2 + " " + machine3 + " " + machine4 + " " + machine5);
-	}
-	selectCell(ab);
 }
 
 function getMem(){

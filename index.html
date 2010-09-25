@@ -65,11 +65,15 @@ Enter your own program into the array of RAM
     <a href ="javascript:resetChip()"><img class="navbutton" src="images/up.png"></a>
     <a href ="javascript:stepBack()"><img class="navbutton" src="images/prev.png"></a>
     <a href ="javascript:stepForward()"><img class="navbutton" src="images/next.png"></a>
+    <div id="expertMode" style="float:left;">Expert:
+      <input type="checkbox" name="0" onchange="updateExpertMode(this.checked)" />
+    </div>
   </div>
 </div>
 <p class="status" id="status">x: 0<br>y: 0</p>
 <table class="memtable" id="memtable"></table>
 </div>
+<div id="controlPanel" style="visibility:hidden">
 <div id="updateShow"> Show:
   <input type="checkbox" name="0" id="updateShow0" onchange="updateShow(this.name,this.checked)" />(metal)
   <input type="checkbox" name="1" id="updateShow1" onchange="updateShow(this.name,this.checked)" />(switched diffusion)
@@ -79,6 +83,8 @@ Enter your own program into the array of RAM
   <input type="checkbox" name="2" id="updateShow2" onchange="updateShow(this.name,this.checked)" />(diode)
 </div>
 <br />
+<table class="logstream" id="logstream"></table>
+</div>
 <br />
 Source code is available on GitHub: <a href="http://github.com/trebonian/visual6502">http://github.com/trebonian/visual6502</a>
 <br />
