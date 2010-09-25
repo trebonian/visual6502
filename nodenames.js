@@ -417,14 +417,14 @@ alub0: 977,
 aluanorb0: 143,
 aluanandb0: 1628,
 aluaorb0: 693,
-aluoutmux0: 957,   // alu result latch input
+notaluoutmux0: 957,   // alu result latch input
 
 alua1: 1248,
 alub1: 1432,
 aluanorb1: 155,
 aluanandb1: 841,
 aluaorb1: 1021,
-aluoutmux1: 250,   // alu result latch input
+notaluoutmux1: 250,   // alu result latch input
 
 // internal signals: datapath control signals
 dpc0: 801,      // drive sb from y
@@ -441,15 +441,16 @@ dpc9: 859,      // alu b side: select idb input
 dpc10: 437,     // alu b side: select adl input
 dpc11: 549,     // alu a side: select sb
 dpc12: 984,     // alu a side: select zero
-dpc13: 59,
-dpc14: 362,     // alu shift
-dpc15: 574,
-dpc16: 1666,
-dpc17: 921,
+dpc13: 59,      // alu op: a or b
+dpc14: 362,     // alu op: logical right shift
+dpc15: 574,     // alu op: a and b
+dpc16: 1666,    // alu op: a xor b (?)
+dpc17: 921,     // alu op: a plus b (?)
+notalucin: 1165,  // alu carry in
 dpc18: 1201,    // decimal related? bits 7 and 3 only
-dpc19: 214,     // bit 7 only
+dpc19: 214,     // alu to sb bit 7 only
 
-dpc20: 129,     // bits 6-0 only
+dpc20: 129,     // alu to sb bits 6-0 only
 dpc21: 1015,    // alu to adl
 dpc22: 725,     // decimal related? bits 3 and 4 only
 dpc23: 534,     // sb to acc
