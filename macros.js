@@ -265,11 +265,14 @@ function chipStatus(){
 	        ' NMI:' + readBit('nmi');
 	var machine4 =
 	        ' IR:' + hexByte(255 - readBits('notir', 8)) +
-	        ' idl:' + hexByte(255 - readBits('idl', 8)) +
-	        ' alu:' + hexByte(255 - readBits('alu', 8)) +
 	        ' TCstate:' + readBit('clock1') + readBit('clock2') +
                 	readBit('t2') + readBit('t3') + readBit('t4') + readBit('t5');
         var machine5 =
+		' idl:' + hexByte(readBits('idl', 8)) +
+		' alu:' + hexByte(readBits('alu', 8)) +
+		' idb:' +hexByte(readBits('idb',8)) +
+		' dor:' + hexByte(readBits('dor',8));
+        var machine6 =
                 ' notRdy0:' + readBit('notRdy0') +
                 ' fetch:'   + readBit('fetch') +
                 ' clearIR:' + readBit('clearIR') +
