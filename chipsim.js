@@ -22,7 +22,7 @@
 
 var ctrace = false;
 var noGraphics = false;
-var loglevel = 3;
+var loglevel = 0;
 var ridx = 0;
 
 function recalcNodeList(list){
