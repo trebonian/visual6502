@@ -82,7 +82,7 @@ x4: 85,
 x5: 589,
 x6: 448,
 x7: 777,
-pcl0: 1139,     // machine state: program counter low
+pcl0: 1139,     // machine state: program counter low (first storage node)
 pcl1: 1022,
 pcl2: 655,
 pcl3: 1359,
@@ -90,14 +90,30 @@ pcl4: 900,
 pcl5: 622,
 pcl6: 377,
 pcl7: 1611,
-pch7: 205,      // machine state: program counter high
-pch6: 1551,
-pch5: 49,
-pch4: 948,
-pch3: 584,
-pch2: 502,
+pclp0: 526,     // machine state: program counter low (pre-incremented?, second storage node)
+pclp1: 1102,
+pclp2: 1411,
+pclp3: 868,
+pclp4: 15,
+pclp5: 1326,
+pclp6: 993,
+pclp7: 536,
+pch0: 1670,     // machine state: program counter high (first storage node)
 pch1: 292,
-pch0: 1670,
+pch2: 502,
+pch3: 584,
+pch4: 948,
+pch5: 49,
+pch6: 1551,
+pch7: 205,
+pchp0: 780,     // machine state: program counter high (pre-incremented?, second storage node)
+pchp1: 126,
+pchp2: 114,
+pchp3: 1061,
+pchp4: 820,
+pchp5: 469,
+pchp6: 751,
+pchp7: 663,
 p0: 687,        // machine state: status register
 p1: 1444,
 p2: 1421,
@@ -145,14 +161,22 @@ nots4: 1603,
 nots5: 601,
 nots6: 1029,
 nots7: 181,
-idl0: 116,      // datapath state: internal data latch
-idl1: 576,
-idl2: 1485,
-idl3: 1284,
-idl4: 1516,
-idl5: 498,
-idl6: 1537,
-idl7: 529,
+notidl0: 116,   // datapath state: internal data latch (first storage node)
+notidl1: 576,
+notidl2: 1485,
+notidl3: 1284,
+notidl4: 1516,
+notidl5: 498,
+notidl6: 1537,
+notidl7: 529,
+idl0: 1597,     // datapath signal: internal data latch (driven output)
+idl1: 870,
+idl2: 1066,
+idl3: 464,
+idl4: 1306,
+idl5: 240,
+idl6: 1116,
+idl7: 391,
 sb0: 54,        // datapath bus: special bus
 sb1: 1150,
 sb2: 1287,
@@ -370,4 +394,69 @@ pla126: 281,
 pla127: 1174,
 pla128: 1164,
 pla129: 1006,   // has extra pulldowns: pla122 and ir0
+
+// internal signals: alu internal (private) busses
+alua0: 1167,
+alub0: 977,
+aluanorb0: 143,
+aluanandb0: 1628,
+aluaorb0: 693,
+aluoutmux0: 957,   // alu result latch input
+
+alua1: 1248,
+alub1: 1432,
+aluanorb1: 155,
+aluanandb1: 841,
+aluaorb1: 1021,
+aluoutmux1: 250,   // alu result latch input
+
+// internal signals: datapath control signals
+dpc0: 801,      // drive sb from y
+dpc1: 325,      // load y from sb
+dpc2: 1263,     // drive sb from x
+dpc3: 1186,     // load x from sb
+dpc4: 1700,     // drive sb from stack pointer
+dpc5: 1468,     // drive adl from stack pointer
+dpc6: 874,      // load stack pointer from sb
+dpc7: 654,      // recirculate stack pointer
+dpc8: 1068,     // alu b side: select not-idb input
+dpc9: 859,      // alu b side: select idb input
+
+dpc10: 437,     // alu b side: select adl input
+dpc11: 549,     // alu a side: select sb
+dpc12: 984,     // alu a side: select zero
+dpc13: 59,
+dpc14: 362,     // alu shift
+dpc15: 574,
+dpc16: 1666,
+dpc17: 921,
+dpc18: 1201,    // decimal related? bits 7 and 3 only
+dpc19: 214,     // bit 7 only
+
+dpc20: 129,     // bits 6-0 only
+dpc21: 1015,    // alu to adl
+dpc22: 725,     // decimal related? bits 3 and 4 only
+dpc23: 534,     // sb to acc
+dpc24: 1698,    // acc to sb
+dpc25: 1060,    // sb pass-connects to idb
+dpc26: 1331,    // acc to idb
+dpc27: 140,     // sb pass-connects to adh
+dpc28: 229,     // zero to adh0 bit0 only
+dpc29: 203,     // zero to adh bits 7-1 only
+
+dpc30: 48,      // load pch from adh
+dpc31: 741,     // load pch from pch incremented
+dpc32: 1235,    // drive adh from pch incremented
+dpc33: 247,     // drive idb from pch incremented
+dpc34: 1704,    // pch carry in and pcl FF detect?
+dpc35: 1334,    // pcl 0x?F detect - half-carry
+dpc36: 379,     // pcl carry in
+dpc37: 283,     // drive idb from pcl incremented
+dpc38: 438,     // drive adl from pcl incremented
+dpc39: 898,     // load pcl from pcl incremented
+
+dpc40: 414,     // load pcl from adl
+dpc41: 1564,    // pass-connect adl to mux node driven by idl
+dpc42: 41,      // pass-connect adh to mux node driven by idl
+dpc43: 863,     // pass-connect idb to mux node driven by idl
 }
