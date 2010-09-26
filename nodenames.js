@@ -135,7 +135,7 @@ ir1: 1626,
 ir2: 1384,
 ir3: 1576,
 ir4: 1112,
-ir5: 1329,
+ir5: 1329,      // ir5 distinguishes branch set from branch clear
 ir6: 337,
 ir7: 1328,
 notir0: 194,    // internal signal: instruction register inverted outputs
@@ -185,7 +185,7 @@ sb4: 1405,
 sb5: 166,
 sb6: 1336,
 sb7: 1001,
-notalu0: 394,      // datapath state: alu output storage node (inverse)
+notalu0: 394,   // datapath state: alu output storage node (inverse)
 notalu1: 697,
 notalu2: 276,
 notalu3: 495,
@@ -258,6 +258,7 @@ D1x1: 827,      // internal signal: interrupt handler related
 H1x1: 1042,     // internal signal: drive status byte onto databus
 
                 // internal signal: pla outputs block 1 (west/left edge of die)
+                // often 130 pla outputs are mentioned - we have 131 here
 pla0: 1601,
 pla1: 60,
 pla2: 1512,
@@ -349,19 +350,19 @@ pla76: 1246,
 pla77: 487,
 pla78: 579,
 pla79: 145,
-pla80: 1239,
+pla80_T2BR: 1239,  // T2BR, 83 for Balazs
 pla81: 285,
                 // not pla, feed through
                 // not pla, feed through
 pla82: 1524,
-pla83: 273,     // has extra pulldown: pla100
+pla83: 273,     // has extra pulldown: pla97
 pla84: 0,
 pla85: 341,
 pla86: 120,
 pla87: 1478,
 pla88: 594,
 pla89: 1210,
-pla90: 677,     // has extra pulldown: pla100
+pla90: 677,     // has extra pulldown: pla97
 
                 // internal signal: pla outputs block 7
 pla91: 461,
@@ -371,7 +372,7 @@ pla94: 1557,
 pla95: 259,
 pla96: 1052,
                 // gap
-pla97: 791,     // feeds into pla86 and pla93
+pla97: 791,     // feeds into pla83 and pla90 (no normal pla output)
 pla98: 517,
 pla99: 352,
 pla100: 750,
@@ -402,14 +403,82 @@ pla119: 1665,
                 // internal signal: pla outputs block 9
 pla120: 1710,
 pla121: 1050,   // feeds into pla130 (no normal pla output)
-pla122: 840,
-pla123: 607,
-pla124: 219,
-pla125: 1385,
-pla126: 281,
-pla127: 1174,
-pla128: 1164,
-pla129: 1006,   // has extra pulldowns: pla122 and ir0
+pla122: 1419,
+pla123: 840,
+pla124: 607,
+pla125: 219,
+pla126: 1385,
+pla127: 281,
+pla128: 1174,
+pla129: 1164,
+pla130: 1006,   // has extra pulldowns: pla121 and ir0
+
+// internal signals: control signals
+nnT2BR: 967,    // doubly inverted
+BRtaken: 1544,
+
+// internal state: misc pipeline state clocked by cclk (phi2)
+pipeBRtaken: 832,
+pipeUNK01: 1530,
+pipeUNK02: 974,
+pipeUNK03: 1436,
+pipeUNK04: 99,
+pipeUNK05: 44,
+pipeUNK06: 443,
+pipeUNK07: 215,
+pipeUNK08: 338,
+pipeUNK09: 199,
+pipeUNK10: 215,
+pipeUNK11: 1011,
+pipeUNK12: 1283,
+pipeUNK13: 1442,
+pipeUNK14: 1607,
+pipeUNK15: 1577, // inverse of H1x1, write P onto idb (PHP, interrupt)
+pipeUNK16: 1051,
+pipeUNK17: 1078,
+pipeUNK18: 899,
+pipeUNK19: 832,
+pipeUNK20: 294,
+pipeUNK21: 1176,
+pipeUNK22: 561,
+pipeUNK23: 596,
+pipeUNK24: 449,
+pipeUNK25: 1036,
+pipeUNK26: 1321,
+pipeUNK27: 73,
+pipeUNK28: 685,
+pipeUNK29: 1008,
+pipeUNK30: 1652,
+pipeUNK31: 614,
+pipeUNK32: 960,
+pipeUNK33: 848,
+pipeUNK34: 56,
+pipeUNK35: 1713,
+pipeUNK36: 729,
+pipeUNK37: 197,
+pipeUNK38: 1131,
+pipeUNK39: 151,
+pipeUNK40: 456,
+pipeUNK41: 1438,
+pipeUNK42: 1104,
+pipeUNK43: 554,
+
+
+
+// internal state: vector address pulldown control
+pipeVectorA0: 357,
+pipeVectorA1: 170,
+pipeVectorA2: 45,
+
+// internal state: datapath control drivers
+pipedpc28: 683,
+
+
+
+
+
+
+
 
 // internal signals: alu internal (private) busses
 alua0: 1167,
@@ -452,6 +521,7 @@ dpc19: 214,     // alu to sb bit 7 only
 
 dpc20: 129,     // alu to sb bits 6-0 only
 dpc21: 1015,    // alu to adl
+alucout: 938,   // alu carry out (latched)
 dpc22: 725,     // decimal related? bits 3 and 4 only
 dpc23: 534,     // sb to acc
 dpc24: 1698,    // acc to sb
