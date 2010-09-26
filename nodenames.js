@@ -317,8 +317,8 @@ pla47: 857,
 pla48: 712,
 pla49: 1337,
 pla50: 1355,
-pla51: 787,
-pla52: 575,
+pla51_T0SBC: 787,       // 52:111XXXXX 1 0 T0SBC
+pla52_T0ADCSBC: 575,    // 51:X11XXXXX 1 0 T0ADCSBC
 pla53: 1466,
 
                 // internal signal: pla outputs block 5
@@ -440,7 +440,7 @@ pipeUNK18: 899,
 pipeUNK19: 832,
 pipeUNK20: 294,
 pipeUNK21: 1176,
-pipeUNK22: 561,
+pipeUNK22: 561, // becomes dpc22
 pipeUNK23: 596,
 pipeUNK24: 449,
 pipeUNK25: 1036,
@@ -516,14 +516,14 @@ dpc15: 574,     // alu op: a and b
 dpc16: 1666,    // alu op: a xor b (?)
 dpc17: 921,     // alu op: a plus b (?)
 notalucin: 1165,  // alu carry in
-dpc18: 1201,    // decimal related? bits 7 and 3 only
+dpc18: 1201,    // decimal related
 dpc19: 214,     // alu to sb bit 7 only
 
 dpc20: 129,     // alu to sb bits 6-0 only
 dpc21: 1015,    // alu to adl
 alucout: 938,   // alu carry out (latched)
-dpc22: 725,     // decimal related? bits 3 and 4 only
-dpc23: 534,     // sb to acc
+dpc22: 725,     // decimal related/SBC only
+dpc23: 534,     // (optionalls decimal-adjusted) sb to acc
 dpc24: 1698,    // acc to sb
 dpc25: 1060,    // sb pass-connects to idb
 dpc26: 1331,    // acc to idb
