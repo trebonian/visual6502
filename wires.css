@@ -82,7 +82,8 @@ img.navstop{
 table.logstream {
  font-family: monospace;
  font-size: 12px;
- border-spacing: 1px;
+ border-spacing: 2px;
+ text-align:center
 }
 
 table.memtable {

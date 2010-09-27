@@ -34,6 +34,7 @@ var drawlayers = [true, true, true, true, true, true];
               
 var nodes = new Array();
 var transistors = {};
+var nodenamelist=[];
 
 var ngnd = nodenames['vss'];
 var npwr = nodenames['vcc'];
@@ -65,6 +66,7 @@ function setup_part2(){
 	recenter();
 	refresh();
 	setupTable();
+	setupNodeNameList();
 	window.onkeypress = function(e){handleKey(e);}
 	hilite.onmousedown = function(e){mouseDown(e);}
 	setStatus('resetting 6502...');
@@ -362,6 +364,11 @@ function setStatus(){
 	var res = '';
 	for(var i=0;i<arguments.length;i++) res=res+arguments[i]+' ';
 	statbox.innerHTML = res;
+}
+
+function setupNodeNameList(){
+	for(var i in nodenames)
+		nodenamelist.push(i);
 }
 
 function nodeName(n) {

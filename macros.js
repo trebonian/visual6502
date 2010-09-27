@@ -86,7 +86,6 @@ function testNMI(n){
         for(var i=0;i<16;i++){step();}
 }
 
-
 function initChip(){
         var start = now();
 	for(var nn in nodes) nodes[nn].state = 'fl';
@@ -109,7 +108,7 @@ function initChip(){
 	if(ctrace)console.log('initChip done after', now()-start);
 }
 
-var logThese=['sync','irq','nmi','ab','db','rw','pc','a','x','y','s'];
+var logThese=['cycle','sync','irq','nmi','ab','db','rw','pc','a','x','y','s','p'];
 
 function step(){
 	trace[cycle]= {chip: stateString(), mem: getMem()};
@@ -179,12 +178,19 @@ function readBits(name, n){
 	return res;
 }
 
-function hexBus(busname){
-	var nodenamelist=[];
-	// console.log('hexBus called: ' + busname);
-	for(i in nodenames){nodenamelist.push(i)};
+function busToString(busname){
+	// takes a signal name or prefix
+	// returns an appropriate string representation
 	if(busname=='pc')
-		return hexBus('pch') + hexBus('pcl');
+		return busToHex('pch') + busToHex('pcl');
+	if(busname=='p')
+		return readPstring();
+	if(busname=='cycle')
+		return cycle>>1;
+	return busToHex(busname);
+}
+
+function busToHex(busname){
 	var width=0;
 	for(var i in nodenamelist){
 		if(nodenamelist[i].search("^"+busname+"[0-9]")==0)
@@ -298,7 +304,7 @@ function updateLogbox(names){
 	var signals=[];
 
 	for(i in names){
-		signals.push(hexBus(names[i]));
+		signals.push(busToString(names[i]));
 	}
         logStream.push("<td>" + signals.join("</td><td>") + "</td>");
 
