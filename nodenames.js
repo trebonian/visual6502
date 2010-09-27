@@ -119,7 +119,7 @@ p1: 1444,
 p2: 1421,
 p3: 439,
 p4: 1119,       // there is no bit4 in the status register!
-p5: 999999,     // there is no bit5 in the status register!
+p5: -1,         // there is no bit5 in the status register!
 p6: 77,
 p7: 1370,
 s0: 1403,       // machine state: stack pointer
@@ -201,6 +201,15 @@ alu4: 606,
 alu5: 314,
 alu6: 331,
 alu7: 765,
+		// datapath signal: decimally adjusted special bus
+dasb0: 54,      // same node as sb0
+dasb1: 1009,
+dasb2: 450,
+dasb3: 1475,
+dasb4: 1405,    // same node as sb4
+dasb5: 263,
+dasb6: 679,
+dasb7: 1494,
 adl0: 413,      // internal state: address latch low
 adl1: 1282,
 adl2: 1242,
@@ -473,76 +482,82 @@ pipeVectorA2: 45,
 // internal state: datapath control drivers
 pipedpc28: 683,
 
-
-
-
-
-
-
-
 // internal signals: alu internal (private) busses
 alua0: 1167,
+alua1: 1248,
+alua2: 1332,
+alua3: 1680,
+alua4: 1142,
+alua5: 530,
+alua6: 1627,
+alua7: 1522,
 alub0: 977,
+alub1: 1432,
+alub2: 704,
+alub3: 96,
+alub4: 1645,
+alub5: 1678,
+alub6: 235,
+alub7: 1535,
+
 aluanorb0: 143,
 aluanandb0: 1628,
 aluaorb0: 693,
 notaluoutmux0: 957,   // alu result latch input
 
-alua1: 1248,
-alub1: 1432,
 aluanorb1: 155,
 aluanandb1: 841,
 aluaorb1: 1021,
 notaluoutmux1: 250,   // alu result latch input
 
 // internal signals: datapath control signals
-dpc0: 801,      // drive sb from y
-dpc1: 325,      // load y from sb
-dpc2: 1263,     // drive sb from x
-dpc3: 1186,     // load x from sb
-dpc4: 1700,     // drive sb from stack pointer
-dpc5: 1468,     // drive adl from stack pointer
-dpc6: 874,      // load stack pointer from sb
-dpc7: 654,      // recirculate stack pointer
-dpc8: 1068,     // alu b side: select not-idb input
-dpc9: 859,      // alu b side: select idb input
+dpc0_YSB: 801,       // drive sb from y
+dpc1_SBY: 325,       // load y from sb
+dpc2_XSB: 1263,      // drive sb from x
+dpc3_SBX: 1186,      // load x from sb
+dpc4_SSB: 1700,      // drive sb from stack pointer
+dpc5_SADL: 1468,     // drive adl from stack pointer
+dpc6_SBS: 874,       // load stack pointer from sb
+dpc7_SS: 654,        // recirculate stack pointer
+dpc8_nDBADD: 1068,   // alu b side: select not-idb input
+dpc9_DBADD: 859,     // alu b side: select idb input
 
-dpc10: 437,     // alu b side: select adl input
-dpc11: 549,     // alu a side: select sb
-dpc12: 984,     // alu a side: select zero
-dpc13: 59,      // alu op: a or b
-dpc14: 362,     // alu op: logical right shift
-dpc15: 574,     // alu op: a and b
-dpc16: 1666,    // alu op: a xor b (?)
-dpc17: 921,     // alu op: a plus b (?)
-notalucin: 1165,  // alu carry in
-dpc18: 1201,    // decimal related
-dpc19: 214,     // alu to sb bit 7 only
+dpc10_ADLADD: 437,   // alu b side: select adl input
+dpc11_SBADD: 549,    // alu a side: select sb
+dpc12_0ADD: 984,     // alu a side: select zero
+dpc13_ORS: 59,       // alu op: a or b
+dpc14_SRS: 362,      // alu op: logical right shift
+dpc15_ANDS: 574,     // alu op: a and b
+dpc16_EORS: 1666,    // alu op: a xor b (?)
+dpc17_SUMS: 921,     // alu op: a plus b (?)
+notalucin: 1165,     // alu carry in
+dpc18_DAA: 1201,     // decimal related
+dpc19_ADDSB7: 214,   // alu to sb bit 7 only
 
-dpc20: 129,     // alu to sb bits 6-0 only
-dpc21: 1015,    // alu to adl
-alucout: 938,   // alu carry out (latched)
-dpc22: 725,     // decimal related/SBC only
-dpc23: 534,     // (optionalls decimal-adjusted) sb to acc
-dpc24: 1698,    // acc to sb
-dpc25: 1060,    // sb pass-connects to idb
-dpc26: 1331,    // acc to idb
-dpc27: 140,     // sb pass-connects to adh
-dpc28: 229,     // zero to adh0 bit0 only
-dpc29: 203,     // zero to adh bits 7-1 only
+dpc20_ADDSB06: 129,  // alu to sb bits 6-0 only
+dpc21_ADDADL: 1015,  // alu to adl
+alucout: 938,        // alu carry out (latched)
+dpc22_DSA: 725,      // decimal related/SBC only
+dpc23_SBAC: 534,     // (optionalls decimal-adjusted) sb to acc
+dpc24_ACSB: 1698,    // acc to sb
+dpc25_SBDB: 1060,    // sb pass-connects to idb
+dpc26_ACDB: 1331,    // acc to idb
+dpc27_SBADH: 140,    // sb pass-connects to adh
+dpc28_0ADH0: 229,    // zero to adh0 bit0 only
+dpc29_0ADH17: 203,   // zero to adh bits 7-1 only
 
-dpc30: 48,      // load pch from adh
-dpc31: 741,     // load pch from pch incremented
-dpc32: 1235,    // drive adh from pch incremented
-dpc33: 247,     // drive idb from pch incremented
-dpc34: 1704,    // pch carry in and pcl FF detect?
-dpc35: 1334,    // pcl 0x?F detect - half-carry
-dpc36: 379,     // pcl carry in
-dpc37: 283,     // drive idb from pcl incremented
-dpc38: 438,     // drive adl from pcl incremented
-dpc39: 898,     // load pcl from pcl incremented
+dpc30_ADHPCH: 48,    // load pch from adh
+dpc31_PCHPCH: 741,   // load pch from pch incremented
+dpc32_PCHADH: 1235,  // drive adh from pch incremented
+dpc33_PCHDB: 247,    // drive idb from pch incremented
+dpc34_PCLC: 1704,    // pch carry in and pcl FF detect?
+dpc35: 1334,         // pcl 0x?F detect - half-carry
+dpc36_IPC: 379,      // pcl carry in
+dpc37_PCLDB: 283,    // drive idb from pcl incremented
+dpc38_PCLADL: 438,   // drive adl from pcl incremented
+dpc39_PCLPCL: 898,   // load pcl from pcl incremented
 
-dpc40: 414,     // load pcl from adl
+dpc40_ADLPCL: 414,   // load pcl from adl
 dpc41: 1564,    // pass-connect adl to mux node driven by idl
 dpc42: 41,      // pass-connect adh to mux node driven by idl
 dpc43: 863,     // pass-connect idb to mux node driven by idl
