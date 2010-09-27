@@ -83,7 +83,7 @@ table.logstream {
  font-family: monospace;
  font-size: 12px;
  border-spacing: 2px;
- text-align:center
+ text-align:center;
 }
 
 table.memtable {

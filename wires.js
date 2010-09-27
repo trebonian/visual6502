@@ -321,14 +321,26 @@ function findNodeNumber(x,y){
 	return (high<<8)+(mid<<4)+low;
 }
 
+function updateLoglevel(delta){
+	loglevel += delta;
+	initLogbox(signalSet(loglevel));
+}
+
 function updateExpertMode(on){
 	if(on){
-		document.getElementById('controlPanel').style.visibility = 'visible';
-		loglevel=4;
+		document.getElementById('controlPanel').style.display = 'block';
+		loglevel=1;
+		initLogbox(signalSet(loglevel));
 	} else {
-		document.getElementById('controlPanel').style.visibility = 'hidden';
+		document.getElementById('controlPanel').style.display = 'none';
 		loglevel=0;
 	}
+}
+
+function clearHighlight(){
+	// remove red/white overlay according to logic value
+	// for easier layout navigation
+	ctx.clearRect(0,0,10000,10000);
 }
 
 function updateShow(layer, on){

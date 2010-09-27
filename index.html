@@ -58,32 +58,37 @@ Enter your own program into the array of RAM
 </div>
 <div class = "buttons">
   <div style="position:relative; float:left;">
-    <a href ="javascript:stopChip()"id="stop"><img class="navstop" src="images/stop.png"></a>
-    <a href ="javascript:runChip()" id="start"><img class="navplay" src="images/play.png"></a>
+    <a href ="javascript:stopChip()"id="stop"><img class="navstop" src="images/stop.png" title="stop"></a>
+    <a href ="javascript:runChip()" id="start"><img class="navplay" src="images/play.png" title="run"></a>
   </div>
   <div style="float:left;">
-    <a href ="javascript:resetChip()"><img class="navbutton" src="images/up.png"></a>
-    <a href ="javascript:stepBack()"><img class="navbutton" src="images/prev.png"></a>
-    <a href ="javascript:stepForward()"><img class="navbutton" src="images/next.png"></a>
-    <div id="expertMode" style="float:left;">Expert:
+    <a href ="javascript:resetChip()"><img class="navbutton" src="images/up.png" title="reset"></a>
+    <a href ="javascript:stepBack()"><img class="navbutton" src="images/prev.png" title="back"></a>
+    <a href ="javascript:stepForward()"><img class="navbutton" src="images/next.png" title="step"></a>
+    <span id="expertMode">Expert:
       <input type="checkbox" name="0" onchange="updateExpertMode(this.checked)" />
-    </div>
+    </span>
   </div>
 </div>
 <p class="status" id="status">x: 0<br>y: 0</p>
 <table class="memtable" id="memtable"></table>
 </div>
-<div id="controlPanel" style="visibility:hidden">
-<div id="updateShow"> Show:
-  <input type="checkbox" name="0" id="updateShow0" onchange="updateShow(this.name,this.checked)" />(metal)
-  <input type="checkbox" name="1" id="updateShow1" onchange="updateShow(this.name,this.checked)" />(switched diffusion)
+<div id="controlPanel" style="display:none">
+  <form id="updateShow"> Show:
+  <input type="checkbox" name="1" id="updateShow1" onchange="updateShow(this.name,this.checked)" />(diffusion)
   <input type="checkbox" name="3" id="updateShow3" onchange="updateShow(this.name,this.checked)" />(grounded diffusion)
   <input type="checkbox" name="4" id="updateShow4" onchange="updateShow(this.name,this.checked)" />(powered diffusion)
   <input type="checkbox" name="5" id="updateShow5" onchange="updateShow(this.name,this.checked)" />(polysilicon)
-  <input type="checkbox" name="2" id="updateShow2" onchange="updateShow(this.name,this.checked)" />(diode)
-</div>
-<br />
-<table class="logstream" id="logstream"></table>
+  <input type="checkbox" name="0" id="updateShow0" onchange="updateShow(this.name,this.checked)" />(metal)
+  <input type="checkbox" name="2" id="updateShow2" onchange="updateShow(this.name,this.checked)" />(protection)
+  </form>
+  <form>
+  <input type="button" value="Clear Highlighting" onclick="clearHighlight()" />
+  <input type="button" value="Trace more" onclick="updateLoglevel(1)" />
+  <input type="button" value="Trace less" onclick="updateLoglevel(-1)" />
+  </form>
+  <br />
+  <table class="logstream" id="logstream"></table>
 </div>
 <br />
 Source code is available on GitHub: <a href="http://github.com/trebonian/visual6502">http://github.com/trebonian/visual6502</a>

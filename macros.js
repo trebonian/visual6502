@@ -99,34 +99,48 @@ function initChip(){
 	recalcNodeList(allNodes()); 
 	for(var i=0;i<8;i++){setHigh('clk0'), setLow('clk0');}
 	setHigh('res');
-	for(var i=0;i<18;i++){resetStep();}
+	for(var i=0;i<18;i++){halfStep();}
 	refresh();
 	cycle = 0;
 	trace = Array();
-	initLogbox(logThese);
+	initLogbox(signalSet(loglevel));
 	chipStatus();
 	if(ctrace)console.log('initChip done after', now()-start);
 }
 
-var logThese=['cycle','sync','irq','nmi','ab','db','rw','pc','a','x','y','s','p'];
+var logThese=[
+		['cycle'],
+		['sync','irq','nmi'],
+		['ab','db','rw','pc','a','x','y','s','p'],
+		['adl','adh','sb','alu'],
+		['notalucin','alucout','alua','alub','dasb'],
+		['idb','dor'],
+		['ir','tcstate','pd'],
+	];
 
+function signalSet(n){
+	var signals=[];
+	for (var i=0; i<=n; i++){
+		for (var j=0; j<logThese[i].length; j++){
+			signals.push(logThese[i][j]);
+		}
+	}
+	return signals;
+}
+
+// simulate a single clock phase, updating trace and highlighting layout
 function step(){
 	trace[cycle]= {chip: stateString(), mem: getMem()};
 	halfStep();
+	refresh();
 	cycle++;
 	chipStatus();
 }
 
+// simulate a single clock phase with no update to graphics or trace
 function halfStep(){
 	var clk = isNodeHigh(nodenames['clk0']);
 	if (clk) {setLow('clk0'); handleBusRead(); } 
-	else {setHigh('clk0'); handleBusWrite();}
-	refresh();
-}
-
-function resetStep(){
-	var clk = isNodeHigh(nodenames['clk0']);
-	if (clk) {setLow('clk0'); handleBusRead(); }
 	else {setHigh('clk0'); handleBusWrite();}
 }
 
@@ -181,26 +195,54 @@ function readBits(name, n){
 function busToString(busname){
 	// takes a signal name or prefix
 	// returns an appropriate string representation
+	if(busname=='cycle')
+		return cycle>>1;
 	if(busname=='pc')
 		return busToHex('pch') + busToHex('pcl');
 	if(busname=='p')
 		return readPstring();
-	if(busname=='cycle')
-		return cycle>>1;
+	if(busname=='tcstate')
+		return busToHex('clock1') + busToHex('clock2') +
+			busToHex('t2') + busToHex('t3') + busToHex('t4') + busToHex('t5');
 	return busToHex(busname);
 }
 
 function busToHex(busname){
+	// may be passed a bus or a signal, so allow multiple signals
+	// signals may have multi-part names like pla51_T0SBC which should match either part
+	// this is quite difficult to deal with, perhaps indicating that it is not such a good idea
 	var width=0;
+	var hit=-1;
+	var r=new RegExp('(\\b|_)' + busname + '([_0-9]|\\b)');
 	for(var i in nodenamelist){
-		if(nodenamelist[i].search("^"+busname+"[0-9]")==0)
+		if(r.test(nodenamelist[i])) {
 			width++;
+			hit=i;
+		}
 	}
-	if(width==0)
-		return isNodeHigh(nodenames[busname])?1:0;
 	if(width>16)
 		return -1;
-	return (0x10000+readBits(busname,width)).toString(16).slice(-width/4);
+	if(hit<0)
+		return -1;
+	// we may have a partial match, so find the full name of the last match
+	// we might have matched the first part, second part, or the whole thing (maybe with a numeric suffix)
+	var match1 = '^(' + busname + '_.*[^0-9])([0-9]*$|$)';
+	var match2 = '^(.*_' + busname + ')([0-9]*$|$)';
+	var match3 = '^(' + busname + ')([0-9]*$|$)';
+	r=new RegExp(match1);
+	var fullname=r.exec(nodenamelist[hit]);
+	if(fullname==undefined){
+		r=new RegExp(match2);
+		fullname=r.exec(nodenamelist[hit]);
+		if(fullname==undefined){
+			r=new RegExp(match3);
+			fullname=r.exec(nodenamelist[hit]);
+		}
+	}
+	// finally, convert from logic values to hex
+	if(width==1)
+		return isNodeHigh(nodenames[fullname[1]])?1:0;
+	return (0x10000+readBits(fullname[1],width)).toString(16).slice(-(width-1)/4-1);
 }
 
 function writeDataBus(x){
@@ -288,15 +330,17 @@ function chipStatus(){
 	        ' SP:' + hexByte(readSP()) +
 	        ' ' + readPstring();
         setStatus(machine1 + "<br>" + machine2);
-	if (loglevel>1) {
-		updateLogbox(logThese);
+	if (loglevel>0) {
+		updateLogbox(signalSet(loglevel));
 	}
 	selectCell(ab);
 }
 
 function initLogbox(names){
+	var logbox=document.getElementById('logstream');
 	logStream = [];
         logStream.push("<td>" + names.join("</td><td>") + "</td>");
+	logbox.innerHTML = "<tr>"+logStream.join("</tr><tr>")+"</tr>";
 }
 
 function updateLogbox(names){
@@ -309,26 +353,6 @@ function updateLogbox(names){
         logStream.push("<td>" + signals.join("</td><td>") + "</td>");
 
 	logbox.innerHTML = "<tr>"+logStream.join("</tr><tr>")+"</tr>";
-
-
-	var machine3 =
-	        ' Sync:' + readBit('sync') +
-		' IRQ:' + readBit('irq') +
-	        ' NMI:' + readBit('nmi');
-	var machine4 =
-	        ' IR:' + hexByte(readBits('ir', 8)) +
-	        ' TCstate:' + readBit('clock1') + readBit('clock2') +
-                	readBit('t2') + readBit('t3') + readBit('t4') + readBit('t5');
-        var machine5 =
-		' idl:' + hexByte(readBits('idl', 8)) +
-		' alu:' + hexByte(readBits('alu', 8)) +
-		' idb:' + hexByte(readBits('idb',8)) +
-		' dor:' + hexByte(readBits('dor',8));
-        var machine6 =
-                ' notRdy0:' + readBit('notRdy0') +
-                ' fetch:'   + readBit('fetch') +
-                ' clearIR:' + readBit('clearIR') +
-                ' D1x1:'    + readBit('D1x1');
 }
 
 function getMem(){
