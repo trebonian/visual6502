@@ -34,6 +34,7 @@ var drawlayers = [true, true, true, true, true, true];
               
 var nodes = new Array();
 var transistors = {};
+var nodenamelist=[];
 
 var ngnd = nodenames['vss'];
 var npwr = nodenames['vcc'];
@@ -65,6 +66,7 @@ function setup_part2(){
 	recenter();
 	refresh();
 	setupTable();
+	setupNodeNameList();
 	window.onkeypress = function(e){handleKey(e);}
 	hilite.onmousedown = function(e){mouseDown(e);}
 	setStatus('resetting 6502...');
@@ -319,14 +321,26 @@ function findNodeNumber(x,y){
 	return (high<<8)+(mid<<4)+low;
 }
 
+function updateLoglevel(delta){
+	loglevel += delta;
+	initLogbox(signalSet(loglevel));
+}
+
 function updateExpertMode(on){
 	if(on){
-		document.getElementById('controlPanel').style.visibility = 'visible';
-		loglevel=4;
+		document.getElementById('controlPanel').style.display = 'block';
+		loglevel=1;
+		initLogbox(signalSet(loglevel));
 	} else {
-		document.getElementById('controlPanel').style.visibility = 'hidden';
+		document.getElementById('controlPanel').style.display = 'none';
 		loglevel=0;
 	}
+}
+
+function clearHighlight(){
+	// remove red/white overlay according to logic value
+	// for easier layout navigation
+	ctx.clearRect(0,0,10000,10000);
 }
 
 function updateShow(layer, on){
@@ -362,6 +376,11 @@ function setStatus(){
 	var res = '';
 	for(var i=0;i<arguments.length;i++) res=res+arguments[i]+' ';
 	statbox.innerHTML = res;
+}
+
+function setupNodeNameList(){
+	for(var i in nodenames)
+		nodenamelist.push(i);
 }
 
 function nodeName(n) {
