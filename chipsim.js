@@ -21,6 +21,8 @@
 */
 
 var ctrace = false;
+var traceTheseNodes = [];
+var traceTheseTransistors = [];
 var noGraphics = false;
 var loglevel = 0;
 var ridx = 0;
@@ -30,7 +32,17 @@ function recalcNodeList(list){
 	var recalclist = new Array();
 	for(var j=0;j<100;j++){		// loop limiter
 		if(list.length==0) return;
-		if(ctrace) console.log(j, list);
+		if(ctrace) {
+			var i;
+			for(i=0;i<traceTheseNodes.length;i++) {
+				if(list.indexOf(traceTheseNodes[i])!=-1) break;
+			}
+			if((traceTheseNodes.length==0)||(list.indexOf(traceTheseNodes[i])==-1)) {
+				console.log('recalcNodeList iteration: ', j, list.length, 'nodes');
+			} else {
+				console.log('recalcNodeList iteration: ', j, list.length, 'nodes', list);
+			}
+		}
 		for(var i in list) recalcNode(list[i], recalclist);
 		list = recalclist;
 		recalclist = new Array();
@@ -43,10 +55,12 @@ function recalcNode(node, recalclist){
 	if(node==npwr) return;
 	var group = getNodeGroup(node);
 	var newv = getNodeValue(group);
-	if(ctrace) console.log('recalc', node, group);
+	if(ctrace && (traceTheseNodes.indexOf(node)!=-1))
+		console.log('recalc', node, group);
 	for(var i in group){
 		var n = nodes[group[i]];
-		if(n.state!=newv && ctrace) console.log(group[i], n.state, newv);
+		if(n.state!=newv && ctrace && (traceTheseNodes.indexOf(n)!=-1))
+			console.log(group[i], n.state, newv);
 		n.state = newv;
 		for(var t in n.gates) recalcTransistor(n.gates[t], recalclist);
 	}
@@ -60,7 +74,8 @@ function recalcTransistor(tn, recalclist){
 
 function turnTransistorOn(t, recalclist){
 	if(t.on) return;
-	if(ctrace) console.log(t.name, 'on', t.gate, t.c1, t.c2);
+	if(ctrace && (traceTheseTransistors.indexOf(t.name)!=-1))
+		console.log(t.name, 'on', t.gate, t.c1, t.c2);
 	t.on = true;
 	addRecalcNode(t.c1, recalclist);
 	addRecalcNode(t.c2, recalclist);
@@ -68,7 +83,8 @@ function turnTransistorOn(t, recalclist){
 
 function turnTransistorOff(t, recalclist){
 	if(!t.on) return;
-	if(ctrace) console.log(t.name, 'off', t.gate, t.c1, t.c2);
+	if(ctrace && (traceTheseTransistors.indexOf(t.name)!=-1))
+		console.log(t.name, 'off', t.gate, t.c1, t.c2);
 	t.on = false;
 	floatnode(t.c1);
 	floatnode(t.c2);
@@ -84,7 +100,8 @@ function floatnode(nn){
 	if(n.state=='pd') n.state = 'fl';
 	if(n.state=='vcc') n.state = 'fh';
 	if(n.state=='pu') n.state = 'fh';
-	if(ctrace) console.log('floating', nn, 'to', n.state);
+	if(ctrace && (traceTheseNodes.indexOf(nn)!=-1))
+		console.log('floating', nn, 'to', n.state);
 }
 
 function addRecalcNode(nn, recalclist){
