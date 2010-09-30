@@ -113,14 +113,14 @@ var logThese=[
 		['sync','irq','nmi'],
 		['ab','db','rw','pc','a','x','y','s','p'],
 		['adl','adh','sb','alu'],
-		['notalucin','alucout','alua','alub','dasb'],
+		['alucin','alua','alub','alucout','aluvout','dasb'],
 		['idb','dor'],
 		['ir','tcstate','pd'],
 	];
 
 function signalSet(n){
 	var signals=[];
-	for (var i=0; i<=n; i++){
+	for (var i=0; (i<=n)&&(i<logThese.length) ; i++){
 		for (var j=0; j<logThese[i].length; j++){
 			signals.push(logThese[i][j]);
 		}

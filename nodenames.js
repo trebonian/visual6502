@@ -534,13 +534,17 @@ dpc14_SRS: 362,      // alu op: logical right shift
 dpc15_ANDS: 574,     // alu op: a and b
 dpc16_EORS: 1666,    // alu op: a xor b (?)
 dpc17_SUMS: 921,     // alu op: a plus b (?)
-notalucin: 1165,     // alu carry in
+alucin: 910,         // alu carry in
+notalucin: 1165,
 dpc18_DAA: 1201,     // decimal related
 dpc19_ADDSB7: 214,   // alu to sb bit 7 only
 
 dpc20_ADDSB06: 129,  // alu to sb bits 6-0 only
 dpc21_ADDADL: 1015,  // alu to adl
-alucout: 938,        // alu carry out (latched)
+alurawcout: 808,     // alu raw carry out (no decimal adjust)
+alucout: 1146,       // alu carry out (latched by phi2)
+notaluvout: 1308,    // alu overflow out
+aluvout: 938,        // alu overflow out (latched by phi2)
 dpc22_DSA: 725,      // decimal related/SBC only
 dpc23_SBAC: 534,     // (optionalls decimal-adjusted) sb to acc
 dpc24_ACSB: 1698,    // acc to sb
