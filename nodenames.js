@@ -259,6 +259,10 @@ pd5: 829,
 pd6: 1669,
 pd7: 1690,
 notRdy0: 248,   // internal signal: global pipeline control
+Reset0: 67,     // internal signal: retimed reset from pin
+C1x5Reset: 926, // retimed and pipelined reset in progress
+notRnWprepad: 187, // internal signal: to pad, yet to be inverted and retimed
+RnWstretched: 353, // internal signal: control datapad output drivers
 cp1: 710,       // internal signal: clock phase 1
 cclk: 943,      // unbonded pad: internal non-overlappying phi2
 fetch: 879,     // internal signal
@@ -451,8 +455,8 @@ pipeUNK20: 294,
 pipeUNK21: 1176,
 pipeUNK22: 561, // becomes dpc22
 pipeUNK23: 596,
-pipeUNK24: 449,
-pipeUNK25: 1036,
+pipephi2Reset0: 449,
+pipephi2Reset0x: 1036, // a second copy of the same latch
 pipeUNK26: 1321,
 pipeUNK27: 73,
 pipeUNK28: 685,
