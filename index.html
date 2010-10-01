@@ -95,7 +95,12 @@ Enter your own program into the array of RAM
   <form>
   <input type="button" value="Hide Chip Layout" onclick="updateChipLayoutVisibility(false)" />
   <input type="button" value="Clear Highlighting" onclick="clearHighlight()" />
-  Animate during simulation: <input type="checkbox" id="animateModeCheckbox" onchange="updateChipLayoutAnimation(this.checked)" />
+  <span style="border:thin solid;padding:2px;border-color:gray">
+    Animate during simulation:
+    <input type="checkbox" id="animateModeCheckbox" onchange="updateChipLayoutAnimation(this.checked)" 
+    /></span>
+  &nbsp;
+  <a href="" style="padding:2px;" id="linkHere" >Link to this location</a>
   </form>
 </div>
 <div id="expertControlPanel" style="display:none">

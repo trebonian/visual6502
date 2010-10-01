@@ -340,6 +340,7 @@ function recenter(){
 		top: top+'px',
 		left: left+'px',
 	});
+	document.getElementById('linkHere').href=location.pathname+"?"+whereAmIAsQuery();
 }
 
 function handleClick(e){
@@ -440,6 +441,10 @@ function setupChipLayoutGraphics(){
 }
 
 // utility function to save graphics pan and zoom
+function whereAmIAsQuery(){
+	var w=whereAmI();
+	return "panx="+w[0]+"&pany="+w[1]+"&zoom="+w[2]
+}
 function whereAmI(){
 	return [centerx, centery, zoom];
 }
