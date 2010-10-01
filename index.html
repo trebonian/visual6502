@@ -56,24 +56,29 @@ Enter your own program into the array of RAM
 <canvas class="chip" id="hilite"></canvas>
 <canvas class="chip" id="hitbuffer"></canvas>
 </div>
+<div class="nochip" id="nochip" style="display:none">
+  <form>
+  <input type="button" value="Show chip layout" onclick="showChipLayout()" />
+  </form>
+</div>
 <div class = "buttons">
   <div style="position:relative; float:left;">
-    <a href ="javascript:stopChip()"id="stop"><img class="navstop" src="images/stop.png" title="stop"></a>
-    <a href ="javascript:runChip()" id="start"><img class="navplay" src="images/play.png" title="run"></a>
+    <a href ="javascript:stopChip()" id="stop"><img class="navstop" src="images/stop.png" title="stop"></a>
+    <a href ="javascript:runChip()"  id="start"><img class="navplay" src="images/play.png" title="run"></a>
   </div>
   <div style="float:left;">
     <a href ="javascript:resetChip()"><img class="navbutton" src="images/up.png" title="reset"></a>
     <a href ="javascript:stepBack()"><img class="navbutton" src="images/prev.png" title="back"></a>
     <a href ="javascript:stepForward()"><img class="navbutton" src="images/next.png" title="step"></a>
-    <span id="expertMode">Expert:
-      <input type="checkbox" name="0" onchange="updateExpertMode(this.checked)" />
+    <span>Expert:
+      <input type="checkbox" id="expertModeCheckbox" name="0" onchange="updateExpertMode(this.checked)" />
     </span>
   </div>
 </div>
 <p class="status" id="status">x: 0<br>y: 0</p>
 <table class="memtable" id="memtable"></table>
 </div>
-<div id="controlPanel" style="display:none">
+<div id="layoutControlPanel" style="display:none">
   <form id="updateShow"> Show:
   <input type="checkbox" name="1" id="updateShow1" onchange="updateShow(this.name,this.checked)" />(diffusion)
   <input type="checkbox" name="3" id="updateShow3" onchange="updateShow(this.name,this.checked)" />(grounded diffusion)
@@ -84,8 +89,12 @@ Enter your own program into the array of RAM
   </form>
   <form>
   <input type="button" value="Clear Highlighting" onclick="clearHighlight()" />
-  <input type="button" value="Trace more" onclick="updateLoglevel(1)" />
-  <input type="button" value="Trace less" onclick="updateLoglevel(-1)" />
+  </form>
+</div>
+<div id="expertControlPanel" style="display:none">
+  <form>
+  <input type="button" value="Trace more" onclick="updateLoglevel(++loglevel)" />
+  <input type="button" value="Trace less" onclick="updateLoglevel(--loglevel)" />
   </form>
   <br />
   <table class="logstream" id="logstream"></table>

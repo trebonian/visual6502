@@ -23,7 +23,6 @@
 var ctrace = false;
 var traceTheseNodes = [];
 var traceTheseTransistors = [];
-var noGraphics = false;
 var loglevel = 0;
 var ridx = 0;
 

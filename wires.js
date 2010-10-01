@@ -39,6 +39,10 @@ var nodenamelist=[];
 var ngnd = nodenames['vss'];
 var npwr = nodenames['vcc'];
 
+// some modes and parameters which can be passed in from the URL query
+var expertMode=false
+var drawGraphics = true;
+var loadCanvas = true;
 
 /////////////////////////
 //
@@ -56,19 +60,16 @@ function setup(){
 function setup_part2(){
 	frame = document.getElementById('frame');
 	statbox = document.getElementById('status');
+	setupParams();
+	updateExpertMode(expertMode);
 	setupNodes();
 	setupTransistors();
-	setupLayerVisibility();
-	setupBackground();
-	setupOverlay();
-	setupHilite();
-	setupHitBuffer();
-	recenter();
-	refresh();
+	if(loadCanvas){
+		showChipLayout();
+	}
 	setupTable();
 	setupNodeNameList();
 	window.onkeypress = function(e){handleKey(e);}
-	hilite.onmousedown = function(e){mouseDown(e);}
 	setStatus('resetting 6502...');
 	setTimeout(setup_part3, 0);
 }
@@ -77,6 +78,45 @@ function setup_part3(){
 	initChip();
 	document.getElementById('stop').style.visibility = 'hidden';
 	go();
+}
+
+function setupParams(){
+	if(location.search=="")
+		return
+	var queryParts=location.search.slice(1).split('&');
+	for(var i=0;i<queryParts.length;i++){
+		var params=queryParts[i].split("=");
+		if(params.length!=2){
+			if(loglevel>0)
+				console.log('malformed parameters',params);
+			break;
+		}
+		var name=params[0];
+		var value=params[1].replace(/\/$/,""); // chrome sometimes adds trailing slash
+		// be (relatively) forgiving in what we accept
+		if(name=="loglevel" && parseInt(value)>0){
+			updateLoglevel(value);
+		} else if(name=="expert" && value.indexOf("t")==0){
+			updateExpertMode(true);
+		} else if(name=="graphics" && value.indexOf("f")==0){
+			setupNoGraphics();
+		} else {
+			if(loglevel>0)
+				console.log('unrecognised parameters:',params);
+			break;
+		}
+	}
+}
+
+function setupNoGraphics(){
+	// if user requests no graphics, we'll do no canvas operations at all
+	// which saves a lot of memory and allows us to run on small systems
+	loadCanvas=false;
+	// should the canvas later be loaded, we don't want to draw to it
+	// which speeds up simulation
+	drawGraphics=false;
+	// we'll also hide or shrink the graphics panel and replace it
+	hideChipLayout();
 }
 
 function setupNodes(){
@@ -185,6 +225,8 @@ function hexdigit(n){return '0123456789ABCDEF'.charAt(n);}
 /////////////////////////
 
 function refresh(){
+	if(!drawGraphics)
+		return;
 	ctx.clearRect(0,0,10000,10000);
 	for(i in nodes){
 		if(isNodeHigh(i)) overlayNode(nodes[i].segs);
@@ -215,7 +257,7 @@ function hiliteNode(n){
 
 
 function drawSeg(ctx, seg){
-	if(noGraphics) return;
+	if(!drawGraphics) return;
 	var dx = 400;
 	ctx.beginPath();
 	ctx.moveTo(seg[0]+dx, 10000-seg[1])
@@ -321,19 +363,21 @@ function findNodeNumber(x,y){
 	return (high<<8)+(mid<<4)+low;
 }
 
-function updateLoglevel(delta){
-	loglevel += delta;
+function updateLoglevel(value){
+	console.log("updateLoglevel:",value,loglevel);
+	loglevel = value;
 	initLogbox(signalSet(loglevel));
 }
 
-function updateExpertMode(on){
-	if(on){
-		document.getElementById('controlPanel').style.display = 'block';
-		loglevel=1;
-		initLogbox(signalSet(loglevel));
+function updateExpertMode(isOn){
+	expertMode=isOn
+	document.getElementById('expertModeCheckbox').checked = expertMode;
+	if(expertMode){
+		document.getElementById('expertControlPanel').style.display = 'block';
+		if(loglevel==0)
+			updateLoglevel(1);
 	} else {
-		document.getElementById('controlPanel').style.display = 'none';
-		loglevel=0;
+		document.getElementById('expertControlPanel').style.display = 'none';
 	}
 }
 
@@ -346,6 +390,30 @@ function clearHighlight(){
 function updateShow(layer, on){
 	drawlayers[layer]=on;
 	setupBackground();
+}
+
+function showChipLayout(){
+	// make the layout display visible and setup the canvas
+	document.getElementById('chip').style.display = 'block';
+	document.getElementById('layoutControlPanel').style.display = 'block';
+	document.getElementById('nochip').style.display = 'none';
+	// experts see the control panel and can enable animation manually
+	drawGraphics=!expertMode;
+	setupLayerVisibility();
+	setupBackground();
+	setupOverlay();
+	setupHilite();
+	setupHitBuffer();
+	recenter();
+	refresh();
+	hilite.onmousedown = function(e){mouseDown(e);}
+}
+
+function hideChipLayout(){
+	// replace the layout display with a button to show it
+	document.getElementById('chip').style.display = 'none';
+	document.getElementById('layoutControlPanel').style.display = 'none';
+	document.getElementById('nochip').style.display = 'block';
 }
 
 /////////////////////////
