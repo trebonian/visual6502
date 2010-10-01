@@ -51,6 +51,7 @@ Enter your own program into the array of RAM
 </span>
 <div class="frame" id="frame">
 <div class="chip" id="chip">
+<span id="waiting">Please wait while graphics is initialising...</span>
 <canvas class="chip" id="chipbg"></canvas>
 <canvas class="chip" id="overlay"></canvas>
 <canvas class="chip" id="hilite"></canvas>
@@ -88,8 +89,10 @@ Enter your own program into the array of RAM
   <input type="checkbox" name="2" id="updateShow2" onchange="updateShow(this.name,this.checked)" />(protection)
   </form>
   <form>
+  <input type="button" value="Hide Chip Layout" onclick="hideChipLayout()" />
   <input type="button" value="Clear Highlighting" onclick="clearHighlight()" />
   </form>
+  Animate during simulation: <input type="checkbox" id="animateModeCheckbox" onchange="updateChipLayoutAnimation(this.checked)" />
 </div>
 <div id="expertControlPanel" style="display:none">
   <form>

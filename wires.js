@@ -41,7 +41,7 @@ var npwr = nodenames['vcc'];
 
 // some modes and parameters which can be passed in from the URL query
 var expertMode=false
-var drawGraphics = true;
+var animateChipLayout = true;
 var loadCanvas = true;
 
 /////////////////////////
@@ -99,7 +99,7 @@ function setupParams(){
 		} else if(name=="expert" && value.indexOf("t")==0){
 			updateExpertMode(true);
 		} else if(name=="graphics" && value.indexOf("f")==0){
-			setupNoGraphics();
+			hideChipLayout();
 		} else {
 			if(loglevel>0)
 				console.log('unrecognised parameters:',params);
@@ -108,15 +108,13 @@ function setupParams(){
 	}
 }
 
-function setupNoGraphics(){
-	// if user requests no graphics, we'll do no canvas operations at all
-	// which saves a lot of memory and allows us to run on small systems
-	loadCanvas=false;
-	// should the canvas later be loaded, we don't want to draw to it
-	// which speeds up simulation
-	drawGraphics=false;
-	// we'll also hide or shrink the graphics panel and replace it
-	hideChipLayout();
+function updateChipLayoutAnimation(isOn){
+	// simulation is much faster if we don't update the chip layout on every step
+	animateChipLayout=isOn;
+	if(animateChipLayout && !loadCanvas) {
+		loadCanvas=true;
+		showChipLayout();
+	}
 }
 
 function setupNodes(){
@@ -225,7 +223,7 @@ function hexdigit(n){return '0123456789ABCDEF'.charAt(n);}
 /////////////////////////
 
 function refresh(){
-	if(!drawGraphics)
+	if(!loadCanvas)
 		return;
 	ctx.clearRect(0,0,10000,10000);
 	for(i in nodes){
@@ -255,9 +253,7 @@ function hiliteNode(n){
 	}
 }
 
-
 function drawSeg(ctx, seg){
-	if(!drawGraphics) return;
 	var dx = 400;
 	ctx.beginPath();
 	ctx.moveTo(seg[0]+dx, 10000-seg[1])
@@ -364,7 +360,6 @@ function findNodeNumber(x,y){
 }
 
 function updateLoglevel(value){
-	console.log("updateLoglevel:",value,loglevel);
 	loglevel = value;
 	initLogbox(signalSet(loglevel));
 }
@@ -397,8 +392,12 @@ function showChipLayout(){
 	document.getElementById('chip').style.display = 'block';
 	document.getElementById('layoutControlPanel').style.display = 'block';
 	document.getElementById('nochip').style.display = 'none';
-	// experts see the control panel and can enable animation manually
-	drawGraphics=!expertMode;
+	// allow the display to update while we load the graphics
+	setStatus('loading graphics...');
+	setTimeout(showChipLayout_part2, 0);
+}
+
+function showChipLayout_part2(){
 	setupLayerVisibility();
 	setupBackground();
 	setupOverlay();
@@ -406,6 +405,8 @@ function showChipLayout(){
 	setupHitBuffer();
 	recenter();
 	refresh();
+	document.getElementById('waiting').style.display = 'none';
+	setStatus('Ready!');  // would prefer chipStatus but it's not idempotent
 	hilite.onmousedown = function(e){mouseDown(e);}
 }
 
@@ -414,7 +415,13 @@ function hideChipLayout(){
 	document.getElementById('chip').style.display = 'none';
 	document.getElementById('layoutControlPanel').style.display = 'none';
 	document.getElementById('nochip').style.display = 'block';
+	// if user requests no chip layout, we can do no canvas operations at all
+	// which saves a lot of memory and allows us to run on small systems
+	loadCanvas=false;
+	// cannot animate the layout if there is no canvas
+	animateChipLayout=false;
 }
+
 
 /////////////////////////
 //

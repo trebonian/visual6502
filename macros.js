@@ -132,7 +132,8 @@ function signalSet(n){
 function step(){
 	trace[cycle]= {chip: stateString(), mem: getMem()};
 	halfStep();
-	refresh();
+	if(animateChipLayout)
+		refresh();
 	cycle++;
 	chipStatus();
 }
