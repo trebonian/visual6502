@@ -59,7 +59,9 @@ function cellKeydown(e){
 }
 
 function setCellValue(n, val){
-	val%=256; 
+	if(val==undefined)
+		val=0x00;
+	val%=256;
 	cellEl(n).val=val;
 	cellEl(n).innerHTML=hexByte(val);
 }

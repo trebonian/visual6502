@@ -44,6 +44,10 @@ var moveHereFirst;
 var expertMode=false
 var animateChipLayout = true;
 var chipLayoutIsVisible = true;
+var userCode=[];
+var userResetLow;
+var userResetHigh;
+var userSteps;
 
 /////////////////////////
 //
@@ -78,6 +82,7 @@ function setup_part2(){
 function setup_part3(){
 	setupTable();
 	setupNodeNameList();
+	loadProgram();
 	initChip();
 	document.getElementById('stop').style.visibility = 'hidden';
 	go();
@@ -90,6 +95,7 @@ function setupParams(){
 	var panx;
 	var pany;
 	var zoom;
+	var userAddress;
 	for(var i=0;i<queryParts.length;i++){
 		var params=queryParts[i].split("=");
 		if(params.length!=2){
@@ -112,6 +118,17 @@ function setupParams(){
 			pany=parseInt(value);
 		} else if(name=="zoom" && parseInt(value)!=NaN){
 			zoom=parseInt(value);
+		} else if(name=="steps" && parseInt(value)!=NaN){
+			userSteps=parseInt(value);
+			running=true;
+		} else if(name=="a" && parseInt(value,16)!=NaN){
+			userAddress=parseInt(value,16);
+		} else if(name=="d" && value.match(/[0-9a-fA-F]*/)[0].length==value.length){
+			for(var j=0;j<value.length;j+=2)
+				userCode[userAddress++]=parseInt(value.slice(j,j+2),16);
+		} else if(name=="r" && parseInt(value,16)!=NaN){
+			userResetLow=parseInt(value,16)%256;
+			userResetHigh=(parseInt(value,16)>>8)%256;
 		} else {
 			if(loglevel>0)
 				console.log('unrecognised parameters:',params);

@@ -29,20 +29,31 @@ var trace = Array();
 var logstream = Array();
 var running = false;
 
-function go(n){
+function loadProgram(){
+	if(userCode.length!=0)
+		code=userCode;
+	// default reset vector will be 0x0000 because undefined memory reads as zero
+	if(userResetLow!=undefined)
+		mWrite(0xfffc, userResetLow);
+	if(userResetHigh!=undefined)
+		mWrite(0xfffd, userResetHigh);
 	for(var i=0;i<code.length;i++){
 		mWrite(i, code[i]);
-		setCellValue(i, code[i]);
+		if(i<0x200)
+			setCellValue(i, code[i]);
 	}
-	mWrite(0xfffc, 0x00);
-	mWrite(0xfffd, 0x00);
-	steps();
 }
 
-function steps(){
+function go(){
+	if(userSteps!=undefined){
+		if(--userSteps==0){
+			running=false;
+			userSteps=undefined;
+		}
+	}
 	if(running) {
            step();
-	   setTimeout(steps, 0); // schedule the next poll
+	   setTimeout(go, 0); // schedule the next poll
         }
 }
 
@@ -99,7 +110,7 @@ function initChip(){
 	recalcNodeList(allNodes()); 
 	for(var i=0;i<8;i++){setHigh('clk0'), setLow('clk0');}
 	setHigh('res');
-	for(var i=0;i<18;i++){halfStep();}
+	for(var i=0;i<18;i++){halfStep();} // avoid updating graphics and trace buffer before user code
 	refresh();
 	cycle = 0;
 	trace = Array();
@@ -284,7 +295,7 @@ function runChip(){
 	start.style.visibility = 'hidden';
 	stop.style.visibility = 'visible';
 	running = true;
-        steps();
+        go();
 }
 
 function stopChip(){
