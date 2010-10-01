@@ -40,6 +40,7 @@ var ngnd = nodenames['vss'];
 var npwr = nodenames['vcc'];
 
 // some modes and parameters which can be passed in from the URL query
+var moveHereFirst;
 var expertMode=false
 var animateChipLayout = true;
 var chipLayoutIsVisible = true;
@@ -69,14 +70,14 @@ function setup_part2(){
 		// which saves a lot of memory and allows us to run on small systems
 		updateChipLayoutVisibility(true);
 	}
-	setupTable();
-	setupNodeNameList();
 	window.onkeypress = function(e){handleKey(e);}
 	setStatus('resetting 6502...');
 	setTimeout(setup_part3, 0);
 }
 
 function setup_part3(){
+	setupTable();
+	setupNodeNameList();
 	initChip();
 	document.getElementById('stop').style.visibility = 'hidden';
 	go();
@@ -86,6 +87,9 @@ function setupParams(){
 	if(location.search=="")
 		return
 	var queryParts=location.search.slice(1).split('&');
+	var panx;
+	var pany;
+	var zoom;
 	for(var i=0;i<queryParts.length;i++){
 		var params=queryParts[i].split("=");
 		if(params.length!=2){
@@ -102,12 +106,20 @@ function setupParams(){
 			updateExpertMode(true);
 		} else if(name=="graphics" && value.indexOf("f")==0){
 			updateChipLayoutVisibility(false);
+		} else if(name=="panx" && parseInt(value)!=NaN){
+			panx=parseInt(value);
+		} else if(name=="pany" && parseInt(value)!=NaN){
+			pany=parseInt(value);
+		} else if(name=="zoom" && parseInt(value)!=NaN){
+			zoom=parseInt(value);
 		} else {
 			if(loglevel>0)
 				console.log('unrecognised parameters:',params);
 			break;
 		}
 	}
+	if(panx!=null && pany!=null && zoom!=null)
+		moveHereFirst=[panx,pany,zoom];
 }
 
 function updateChipLayoutAnimation(isOn){
@@ -422,14 +434,18 @@ function setupChipLayoutGraphics(){
 	refresh();
 	document.getElementById('waiting').style.display = 'none';
 	setStatus('Ready!');  // would prefer chipStatus but it's not idempotent
+	if(moveHereFirst!=null)
+		moveHere(moveHereFirst);
 	hilite.onmousedown = function(e){mouseDown(e);}
 }
 
-function where(){
+// utility function to save graphics pan and zoom
+function whereAmI(){
 	return [centerx, centery, zoom];
 }
 
-function moveto(place){
+// restore graphics pan and zoom (perhaps as given in the URL)
+function moveHere(place){
 	centerx = place[0];
 	centery = place[1];
 	setZoom(place[2]);
