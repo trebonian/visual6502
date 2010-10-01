@@ -42,7 +42,7 @@ var npwr = nodenames['vcc'];
 // some modes and parameters which can be passed in from the URL query
 var expertMode=false
 var animateChipLayout = true;
-var loadCanvas = true;
+var chipLayoutIsVisible = true;
 
 /////////////////////////
 //
@@ -64,8 +64,10 @@ function setup_part2(){
 	updateExpertMode(expertMode);
 	setupNodes();
 	setupTransistors();
-	if(loadCanvas){
-		showChipLayout();
+	if(chipLayoutIsVisible){
+		// if user requests no chip layout, we can do no canvas operations at all
+		// which saves a lot of memory and allows us to run on small systems
+		updateChipLayoutVisibility(true);
 	}
 	setupTable();
 	setupNodeNameList();
@@ -99,7 +101,7 @@ function setupParams(){
 		} else if(name=="expert" && value.indexOf("t")==0){
 			updateExpertMode(true);
 		} else if(name=="graphics" && value.indexOf("f")==0){
-			hideChipLayout();
+			updateChipLayoutVisibility(false);
 		} else {
 			if(loglevel>0)
 				console.log('unrecognised parameters:',params);
@@ -111,10 +113,7 @@ function setupParams(){
 function updateChipLayoutAnimation(isOn){
 	// simulation is much faster if we don't update the chip layout on every step
 	animateChipLayout=isOn;
-	if(animateChipLayout && !loadCanvas) {
-		loadCanvas=true;
-		showChipLayout();
-	}
+	document.getElementById('animateModeCheckbox').checked = animateChipLayout;
 }
 
 function setupNodes(){
@@ -223,7 +222,7 @@ function hexdigit(n){return '0123456789ABCDEF'.charAt(n);}
 /////////////////////////
 
 function refresh(){
-	if(!loadCanvas)
+	if(!chipLayoutIsVisible)
 		return;
 	ctx.clearRect(0,0,10000,10000);
 	for(i in nodes){
@@ -369,10 +368,16 @@ function updateExpertMode(isOn){
 	document.getElementById('expertModeCheckbox').checked = expertMode;
 	if(expertMode){
 		document.getElementById('expertControlPanel').style.display = 'block';
+		document.getElementById('basicModeText1').style.display = 'none';
+		document.getElementById('basicModeText2').style.display = 'none';
 		if(loglevel==0)
 			updateLoglevel(1);
+		if(chipLayoutIsVisible)
+			document.getElementById('layoutControlPanel').style.display = 'block';
 	} else {
 		document.getElementById('expertControlPanel').style.display = 'none';
+		document.getElementById('basicModeText1').style.display = 'block';
+		document.getElementById('basicModeText2').style.display = 'block';
 	}
 }
 
@@ -387,17 +392,27 @@ function updateShow(layer, on){
 	setupBackground();
 }
 
-function showChipLayout(){
-	// make the layout display visible and setup the canvas
-	document.getElementById('chip').style.display = 'block';
-	document.getElementById('layoutControlPanel').style.display = 'block';
-	document.getElementById('nochip').style.display = 'none';
-	// allow the display to update while we load the graphics
-	setStatus('loading graphics...');
-	setTimeout(showChipLayout_part2, 0);
+function updateChipLayoutVisibility(isOn){
+	chipLayoutIsVisible=isOn;
+	if(chipLayoutIsVisible) {
+		document.getElementById('chip').style.display = 'block';
+		if(expertMode)
+			document.getElementById('layoutControlPanel').style.display = 'block';
+		document.getElementById('nochip').style.display = 'none';
+		// allow the display to update while we load the graphics
+		setStatus('loading graphics...');
+		setTimeout(setupChipLayoutGraphics, 0);
+	} else {
+		// cannot animate the layout if there is no canvas
+		updateChipLayoutAnimation(false);
+		// replace the layout display with a button to show it
+		document.getElementById('chip').style.display = 'none';
+		document.getElementById('layoutControlPanel').style.display = 'none';
+		document.getElementById('nochip').style.display = 'block';
+	}
 }
 
-function showChipLayout_part2(){
+function setupChipLayoutGraphics(){
 	setupLayerVisibility();
 	setupBackground();
 	setupOverlay();
@@ -410,18 +425,15 @@ function showChipLayout_part2(){
 	hilite.onmousedown = function(e){mouseDown(e);}
 }
 
-function hideChipLayout(){
-	// replace the layout display with a button to show it
-	document.getElementById('chip').style.display = 'none';
-	document.getElementById('layoutControlPanel').style.display = 'none';
-	document.getElementById('nochip').style.display = 'block';
-	// if user requests no chip layout, we can do no canvas operations at all
-	// which saves a lot of memory and allows us to run on small systems
-	loadCanvas=false;
-	// cannot animate the layout if there is no canvas
-	animateChipLayout=false;
+function where(){
+	return [centerx, centery, zoom];
 }
 
+function moveto(place){
+	centerx = place[0];
+	centery = place[1];
+	setZoom(place[2]);
+}
 
 /////////////////////////
 //

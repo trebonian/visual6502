@@ -28,13 +28,16 @@ function handleOnload() {
 </head>
 
 <body onload="handleOnload();">
+<div id="basicModeText1">
 <br />
 <span id="title"><a href="http://visual6502.org">The Visual 6502</a></span>
-<span id="plain">
 <br />
+</div>
+<span id="plain">
 <a href="http://www.visual6502.org/faq.html">FAQ</a>&nbsp;
 <a href="http://blog.visual6502.org">Blog</a>&nbsp;
 <a href="http://www.visual6502.org/links.html">Links</a>&nbsp
+<div id="basicModeText2">
 <br /><br />
 This simulator uses HTML5 features only found on the latest versions of browsers and needs
 lots of RAM. If you have trouble, please <a href="browsertrouble.html">check compatibility.</a>
@@ -47,7 +50,8 @@ Left-click and drag to scroll around
 <br />
 Enter your own program into the array of RAM
 <br />
-<br /> 
+<br />
+</div>
 </span>
 <div class="frame" id="frame">
 <div class="chip" id="chip">
@@ -59,7 +63,7 @@ Enter your own program into the array of RAM
 </div>
 <div class="nochip" id="nochip" style="display:none">
   <form>
-  <input type="button" value="Show chip layout" onclick="showChipLayout()" />
+  <input type="button" value="Show chip layout" onclick="updateChipLayoutVisibility(true)" />
   </form>
 </div>
 <div class = "buttons">
@@ -89,7 +93,7 @@ Enter your own program into the array of RAM
   <input type="checkbox" name="2" id="updateShow2" onchange="updateShow(this.name,this.checked)" />(protection)
   </form>
   <form>
-  <input type="button" value="Hide Chip Layout" onclick="hideChipLayout()" />
+  <input type="button" value="Hide Chip Layout" onclick="updateChipLayoutVisibility(false)" />
   <input type="button" value="Clear Highlighting" onclick="clearHighlight()" />
   </form>
   Animate during simulation: <input type="checkbox" id="animateModeCheckbox" onchange="updateChipLayoutAnimation(this.checked)" />
