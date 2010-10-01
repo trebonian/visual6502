@@ -86,6 +86,6 @@ function unselectCell(){
 function cellEl(n){
 	var r = n>>4;
 	var c = n%16;
-	var e = table.children[r].children[c+1];
+	var e = table.childNodes[r].childNodes[c+1];
 	return e;
 }
