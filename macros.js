@@ -341,11 +341,33 @@ function chipStatus(){
 	        ' Y:' + hexByte(readY()) +
 	        ' SP:' + hexByte(readSP()) +
 	        ' ' + readPstring();
-        setStatus(machine1 + "<br>" + machine2);
+        setStatus(machine1 + "<br>" + machine2 + "<br>Hz: " + estimatedHz().toFixed(1));
 	if (loglevel>0) {
 		updateLogbox(signalSet(loglevel));
 	}
 	selectCell(ab);
+}
+
+var prevHzTimeStamp=0;
+var prevHzCycleCount=0;
+var prevHzEstimate1=1;
+var prevHzEstimate2=1;
+var HzSamplingRate=10;
+function estimatedHz(){
+	if(cycle%HzSamplingRate!=3)
+		return prevHzEstimate1;
+	var HzTimeStamp = now();
+	var HzEstimate = (cycle-prevHzCycleCount+.01)/(HzTimeStamp-prevHzTimeStamp+.01);
+	HzEstimate=HzEstimate*1000/2; // convert from phases per millisecond to Hz
+	if(HzEstimate<5)
+		HzSamplingRate=5;  // quicker
+	if(HzEstimate>10)
+		HzSamplingRate=10; // smoother
+	prevHzEstimate2=prevHzEstimate1;
+	prevHzEstimate1=(HzEstimate+prevHzEstimate1+prevHzEstimate2)/3; // wrong way to average speeds
+	prevHzTimeStamp=HzTimeStamp;
+	prevHzCycleCount=cycle;
+	return prevHzEstimate1
 }
 
 function initLogbox(names){
