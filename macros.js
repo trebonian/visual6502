@@ -121,12 +121,12 @@ function initChip(){
 
 var logThese=[
 		['cycle'],
-		['sync','irq','nmi'],
-		['ab','db','rw','pc','a','x','y','s','p'],
+		['ab','db','rw','sync','pc','a','x','y','s','p'],
+		['ir','tcstate','pd'],
 		['adl','adh','sb','alu'],
 		['alucin','alua','alub','alucout','aluvout','dasb'],
 		['idb','dor'],
-		['ir','tcstate','pd'],
+		['irq','nmi','res'],
 	];
 
 function signalSet(n){
