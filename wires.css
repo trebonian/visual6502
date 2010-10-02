@@ -23,22 +23,47 @@
 body {
  background: white;
  color: black;
-/* font-family: cursive;*/
  font-family :Verdana, Arial, Helvetica, Sans-Serif;
  font-size: 12px;
 }
 
+#title {
+ font-size: 30px;
+ font-weight: bold;
+}
+
 div.frame {
  margin-left: 10px;
- position: relative;
- width: 1150px;
- height: 600px;
+ min-width: 1120px;  /* ugh - prevent memtable flowing underneath chip */
+}
+
+div.leftcolumn {
+ float: left;
+ width: 804px;       /* ugh - matches the div.chip width + border */
+}
+
+div.rightcolumn {
+ float: left;
+ margin-left: 8px;
+}
+
+div.footer {
+ clear: both;
+ padding-top: 10px;
+}
+
+div.nochip {
+ display:none;
+}
+
+div#chipsurround {
+ height: 600px;      /* matches the div.chip height */
 }
 
 div.chip {
  background: lightgray;
  border: 2px solid gray;
- position: absolute;
+ position: absolute; /* must be absolute to contain the canvas */
  width: 800px;
  height: 600px;
  overflow: hidden;
@@ -46,37 +71,80 @@ div.chip {
 
 canvas.chip {
  position: absolute;
- width: 600px;
- height: 600px;
+ width: 600px;       /* square chip image same height as div.chip */
+ height: 600px;      /* square */
+}
+
+div.twobuttons{
+ position:relative;
+ float:left;
+}
+
+div.threebuttons{
+ float:left;
 }
 
 div.buttons{
- position: absolute;
- top: -5px;
- left: 820px;
+ /* top: -5px; */
 }
 
-p.status {
- position: absolute;
- left: 820px;
- top: 20px;
+div.status {
+ clear: left;
+ padding-top: 10px;
+ padding-bottom: 10px;
  font-family: monospace;
  font-size: 12px;
 }
 
-img.navbutton{
+img.navbutton {
  border: 0px;
 }
 
-img.navplay{
+img.navplay {
  position: relative;
  margin-right: 5px;
  border: 0px;
 }
 
-img.navstop{
+img.navstop {
  position: absolute;
  border: 0px;
+}
+
+span.expertcheckbox {
+ margin-left: 20px;
+}
+
+table.memtable {
+ font-family: monospace;
+ font-size: 12px;
+ border-spacing: 0px;
+}
+
+div#layoutControlPanel{
+ display:none;
+ margin-top: 2px;
+ margin-bottom: 2px;
+}
+
+div#expertControlPanel{
+ display:none;
+}
+
+span.animatebox{
+ border:thin solid;
+ padding:2px;
+ border-color:gray;
+}
+
+a#linkHere{
+ padding:2px;
+}
+
+div#logstreamscroller{
+ height:200px;
+ width:800px;
+ overflow:auto;
 }
 
 table.logstream {
@@ -84,18 +152,4 @@ table.logstream {
  font-size: 12px;
  border-spacing: 2px;
  text-align:center;
-}
-
-table.memtable {
- position: absolute;
- top: 78px;
- left: 820px;
- font-family: monospace;
- font-size: 12px;
- border-spacing: 0px;
-}
-
-#title {
-font-size:30px;
-font-weight:bold;	
 }
