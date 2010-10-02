@@ -341,7 +341,7 @@ function chipStatus(){
 	        ' Y:' + hexByte(readY()) +
 	        ' SP:' + hexByte(readSP()) +
 	        ' ' + readPstring();
-        setStatus(machine1 + "<br>" + machine2 + "<br>Hz: " + estimatedHz().toFixed(1));
+        setStatus(machine1, machine2, "Hz: " + estimatedHz().toFixed(1));
 	if (loglevel>0) {
 		updateLogbox(signalSet(loglevel));
 	}

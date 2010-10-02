@@ -369,11 +369,11 @@ function handleClick(e){
 	var cx = Math.round(x*10000/600);
 	var cy = Math.round(y*10000/600);	
 	if(w==-1) {
-		setStatus('x:',cx,'<br>','y:',cy);
+		setStatus('x: '+cx, 'y: '+cy);
 	} else {
 		var s1='x: ' + cx + ' y: ' + cy;
 		var s2='node: ' + w + ' ' + nodeName(w);
-		setStatus(s1, '<br>', s2);
+		setStatus(s1, s2);
 		if(ctrace) console.log(s1, s2);
 	}
 }
@@ -408,6 +408,8 @@ function updateExpertMode(isOn){
 		document.getElementById('expertControlPanel').style.display = 'none';
 		document.getElementById('basicModeText1').style.display = 'block';
 		document.getElementById('basicModeText2').style.display = 'block';
+		if(chipLayoutIsVisible)
+			document.getElementById('layoutControlPanel').style.display = 'none';
 	}
 }
 
@@ -425,10 +427,11 @@ function updateShow(layer, on){
 function updateChipLayoutVisibility(isOn){
 	chipLayoutIsVisible=isOn;
 	if(chipLayoutIsVisible) {
-		document.getElementById('chip').style.display = 'block';
+		document.getElementById('chipsurround').style.display = 'block';
 		if(expertMode)
 			document.getElementById('layoutControlPanel').style.display = 'block';
 		document.getElementById('nochip').style.display = 'none';
+		document.getElementById('logstreamscroller').style.height="260px";
 		// allow the display to update while we load the graphics
 		setStatus('loading graphics...');
 		setTimeout(setupChipLayoutGraphics, 0);
@@ -436,9 +439,10 @@ function updateChipLayoutVisibility(isOn){
 		// cannot animate the layout if there is no canvas
 		updateChipLayoutAnimation(false);
 		// replace the layout display with a button to show it
-		document.getElementById('chip').style.display = 'none';
+		document.getElementById('chipsurround').style.display = 'none';
 		document.getElementById('layoutControlPanel').style.display = 'none';
 		document.getElementById('nochip').style.display = 'block';
+		document.getElementById('logstreamscroller').style.height="880px";
 	}
 }
 
@@ -499,7 +503,12 @@ function localy(el, gy){
 
 function setStatus(){
 	var res = '';
-	for(var i=0;i<arguments.length;i++) res=res+arguments[i]+' ';
+	// pad the arguments to make this a three-line display
+	// there must be a clean way to do this
+	if(arguments[1]==undefined)arguments[1]="";
+	if(arguments[2]==undefined)arguments[2]="";
+	arguments.length=3;
+	for(var i=0;i<arguments.length;i++) res=res+arguments[i]+'<br>';
 	statbox.innerHTML = res;
 }
 
