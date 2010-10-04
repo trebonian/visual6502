@@ -26,6 +26,25 @@ var zoom=1;
 var dragMouseX, dragMouseY, moved;
 var statbox;
 
+// Some constants for the graphics presentation
+// the canvas is embedded in an 800x600 clipping div
+//   which gives rise to some of the 300 and 400 values in the code
+//   there are also some 600 values
+// the 6502D chip coords are in the box (216,179) to (8983,9807)
+// we have 4 canvases all the same size, now 2000 pixels square
+//   chip background - the layout
+//   overlay - a red/white transparency to show logic high or low
+//   hilite - to show the selected polygon
+//   hitbuffer - abusing color values to return which polygon is under a point
+// we no longer use a scaling transform - we now scale the chip data at 
+//   the point of drawing line segments
+// if the canvas is any smaller than chip coordinates there will be
+//   rounding artifacts, and at high zoom there will be anti-aliasing on edges.
+var grMaxZoom=12;
+var grChipSize=10000;
+var grCanvasSize=2000;
+var grLineWidth=1;
+
 // Index of layerNames corresponds to index into drawLayers
 var layernames = ['metal', 'switched diffusion', 'inputdiode', 'grounded diffusion', 'powered diffusion', 'polysilicon'];
 var colors = ['rgba(128,128,192,0.4)','#FFFF00','#FF00FF','#4DFF4D',
@@ -116,14 +135,13 @@ function setupLayerVisibility(){
 
 function setupBackground(){
 	chipbg = document.getElementById('chipbg');
-	chipbg.width = 4000;
-	chipbg.height = 4000;
+	chipbg.width = grCanvasSize;
+	chipbg.height = grCanvasSize;
 	var ctx = chipbg.getContext('2d');
-	ctx.scale(chipbg.width/10000, chipbg.height/10000);
 	ctx.fillStyle = '#000000';
 	ctx.strokeStyle = 'rgba(255,255,255,0.5)';
-	ctx.lineWidth = 4;
-	ctx.fillRect(0,0,10000,10000);
+	ctx.lineWidth = grLineWidth;
+	ctx.fillRect(0,0,grCanvasSize,grCanvasSize);
 	for(var i in segdefs){
 		var seg = segdefs[i];
 		var c = seg[2];
@@ -138,27 +156,24 @@ function setupBackground(){
 
 function setupOverlay(){
 	overlay = document.getElementById('overlay');
-	overlay.width = 4000;
-	overlay.height = 4000;
+	overlay.width = grCanvasSize;
+	overlay.height = grCanvasSize;
 	ctx = overlay.getContext('2d');
-	ctx.scale(overlay.width/10000, overlay.height/10000);
 }
 
 function setupHilite(){
 	hilite = document.getElementById('hilite');
-	hilite.width = 4000;
-	hilite.height = 4000;
+	hilite.width = grCanvasSize;
+	hilite.height = grCanvasSize;
 	var ctx = hilite.getContext('2d');
-	ctx.scale(hilite.width/10000, hilite.height/10000);
 }
 
 function setupHitBuffer(){
 	hitbuffer = document.getElementById('hitbuffer');
-	hitbuffer.width = 4000;
-	hitbuffer.height = 4000;
+	hitbuffer.width = grCanvasSize;
+	hitbuffer.height = grCanvasSize;
 	hitbuffer.style.visibility = 'hidden';
 	var ctx = hitbuffer.getContext('2d');
-	ctx.scale(hitbuffer.width/10000, hitbuffer.height/10000);
 	for(i in nodes) hitBufferNode(ctx, i, nodes[i].segs);
 }
 
@@ -183,7 +198,7 @@ function hexdigit(n){return '0123456789ABCDEF'.charAt(n);}
 /////////////////////////
 
 function refresh(){
-	ctx.clearRect(0,0,10000,10000);
+        ctx.clearRect(0,0,grCanvasSize,grCanvasSize);
 	for(i in nodes){
 		if(isNodeHigh(i)) overlayNode(nodes[i].segs);
 	}
@@ -199,7 +214,7 @@ function overlayNode(w){
 
 function hiliteNode(n){
 	var ctx = hilite.getContext('2d');
-	ctx.clearRect(0,0,10000,10000);
+	ctx.clearRect(0,0,grCanvasSize,grCanvasSize);
 	ctx.fillStyle = 'rgba(255,255,255,0.7)';
 	if(n==-1) return;
 	if(isNodeHigh(n[0]))
@@ -216,9 +231,9 @@ function drawSeg(ctx, seg){
 	if(noGraphics) return;
 	var dx = 400;
 	ctx.beginPath();
-	ctx.moveTo(seg[0]+dx, 10000-seg[1])
-	for(var i=2;i<seg.length;i+=2) ctx.lineTo(seg[i]+dx, 10000-seg[i+1]);
-	ctx.lineTo(seg[0]+dx, 10000-seg[1])
+	ctx.moveTo(grScale(seg[0]+dx), grScale(grChipSize-seg[1]));
+	for(var i=2;i<seg.length;i+=2) ctx.lineTo(grScale(seg[i]+dx), grScale(grChipSize-seg[i+1]));
+	ctx.lineTo(grScale(seg[0]+dx), grScale(grChipSize-seg[1]));
 }
 
 /////////////////////////
@@ -232,7 +247,7 @@ function handleKey(e){
 	c = String.fromCharCode(c);
 	if('<>?np'.indexOf(c)==-1) return;
 	if(c=='<' && zoom>1) setZoom(zoom/1.2);
-	else if(c=='>' && zoom<16) setZoom(zoom*1.2);
+	else if(c=='>' && zoom<grMaxZoom) setZoom(zoom*1.2);
 	else if(c=='?') setZoom(1);
 	else if(c=='n') stepForward();
 	else if(c=='p') stepBack();
@@ -297,15 +312,15 @@ function handleClick(e){
 	var w = findNodeNumber(x,y);
 	if(e.shiftKey) hiliteNode(getNodeGroup(w));
 	else {var a=new Array(); a.push(w); hiliteNode(a);}
-	var cx = Math.round(x*10000/600);
-	var cy = Math.round(y*10000/600);	
+        var cx = Math.round(x*grChipSize/600);
+        var cy = Math.round(y*grChipSize/600);
 	if(w==-1) setStatus('x:',cx,'<br>','y:',cy);
 	else {setStatus('x:',cx, 'y:', cy,'<br>','node:',w, nodeName(w));}
 }
 
 function findNodeNumber(x,y){
 	var ctx = hitbuffer.getContext('2d');
-	var pixels = ctx.getImageData(x*4000/600, y*4000/600, 2, 2).data;
+	var pixels = ctx.getImageData(x*grCanvasSize/600, y*grCanvasSize/600, 2, 2).data;
 	if(pixels[0]==0) return -1;
 	var high = pixels[0]>>4;
 	var mid = pixels[1]>>4;
@@ -333,6 +348,11 @@ function setChipStyle(props){
 	}
 }
 
+// we draw the chip data scaled down to the canvas
+// and so avoid scaling a large canvas
+function grScale(x){
+	return Math.round(x*grCanvasSize/grChipSize);
+}
 
 function localx(el, gx){
 	return gx-el.getBoundingClientRect().left;
