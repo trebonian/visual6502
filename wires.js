@@ -40,7 +40,7 @@ var statbox;
 //   the point of drawing line segments
 // if the canvas is any smaller than chip coordinates there will be
 //   rounding artifacts, and at high zoom there will be anti-aliasing on edges.
-var grMaxZoom=16;
+var grMaxZoom=12;
 var grChipSize=10000;
 var grCanvasSize=2000;
 var grLineWidth=1;
@@ -315,7 +315,7 @@ function handleKey(e){
 	c = String.fromCharCode(c);
 	if('<>?np'.indexOf(c)==-1) return;
 	if(c=='<' && zoom>1) setZoom(zoom/1.2);
-	else if(c=='>' && zoom<12) setZoom(zoom*1.2);
+	else if(c=='>' && zoom<grMaxZoom) setZoom(zoom*1.2);
 	else if(c=='?') setZoom(1);
 	else if(c=='n') stepForward();
 	else if(c=='p') stepBack();
