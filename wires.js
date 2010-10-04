@@ -184,13 +184,13 @@ function setupLayerVisibility(){
 
 function setupBackground(){
 	chipbg = document.getElementById('chipbg');
-	chipbg.width = 4000;
-	chipbg.height = 4000;
+	chipbg.width = 2000;
+	chipbg.height = 2000;
 	var ctx = chipbg.getContext('2d');
-	ctx.scale(chipbg.width/10000, chipbg.height/10000);
+//	ctx.scale(chipbg.width/10000, chipbg.height/10000);
 	ctx.fillStyle = '#000000';
 	ctx.strokeStyle = 'rgba(255,255,255,0.5)';
-	ctx.lineWidth = 4;
+	ctx.lineWidth = 1;
 	ctx.fillRect(0,0,10000,10000);
 	for(var i in segdefs){
 		var seg = segdefs[i];
@@ -206,27 +206,27 @@ function setupBackground(){
 
 function setupOverlay(){
 	overlay = document.getElementById('overlay');
-	overlay.width = 4000;
-	overlay.height = 4000;
+	overlay.width = 2000;
+	overlay.height = 2000;
 	ctx = overlay.getContext('2d');
-	ctx.scale(overlay.width/10000, overlay.height/10000);
+//	ctx.scale(overlay.width/10000, overlay.height/10000);
 }
 
 function setupHilite(){
 	hilite = document.getElementById('hilite');
-	hilite.width = 4000;
-	hilite.height = 4000;
+	hilite.width = 2000;
+	hilite.height = 2000;
 	var ctx = hilite.getContext('2d');
-	ctx.scale(hilite.width/10000, hilite.height/10000);
+//	ctx.scale(hilite.width/10000, hilite.height/10000);
 }
 
 function setupHitBuffer(){
 	hitbuffer = document.getElementById('hitbuffer');
-	hitbuffer.width = 4000;
-	hitbuffer.height = 4000;
+	hitbuffer.width = 2000;
+	hitbuffer.height = 2000;
 	hitbuffer.style.visibility = 'hidden';
 	var ctx = hitbuffer.getContext('2d');
-	ctx.scale(hitbuffer.width/10000, hitbuffer.height/10000);
+//	ctx.scale(hitbuffer.width/10000, hitbuffer.height/10000);
 	for(i in nodes) hitBufferNode(ctx, i, nodes[i].segs);
 }
 
@@ -284,9 +284,15 @@ function hiliteNode(n){
 function drawSeg(ctx, seg){
 	var dx = 400;
 	ctx.beginPath();
-	ctx.moveTo(seg[0]+dx, 10000-seg[1])
-	for(var i=2;i<seg.length;i+=2) ctx.lineTo(seg[i]+dx, 10000-seg[i+1]);
-	ctx.lineTo(seg[0]+dx, 10000-seg[1])
+	ctx.moveTo(scale(seg[0]+dx), scale(10000-seg[1]));
+	for(var i=2;i<seg.length;i+=2) ctx.lineTo(scale(seg[i]+dx), scale(10000-seg[i+1]));
+	ctx.lineTo(scale(seg[0]+dx), scale(10000-seg[1]));
+}
+
+// we draw the chip data scaled down to the canvas
+// and so avoid scaling a large canvas
+function scale(x){
+	return Math.round(x*2000/10000);
 }
 
 /////////////////////////
@@ -300,7 +306,7 @@ function handleKey(e){
 	c = String.fromCharCode(c);
 	if('<>?np'.indexOf(c)==-1) return;
 	if(c=='<' && zoom>1) setZoom(zoom/1.2);
-	else if(c=='>' && zoom<16) setZoom(zoom*1.2);
+	else if(c=='>' && zoom<12) setZoom(zoom*1.2);
 	else if(c=='?') setZoom(1);
 	else if(c=='n') stepForward();
 	else if(c=='p') stepBack();
@@ -380,7 +386,7 @@ function handleClick(e){
 
 function findNodeNumber(x,y){
 	var ctx = hitbuffer.getContext('2d');
-	var pixels = ctx.getImageData(x*4000/600, y*4000/600, 2, 2).data;
+	var pixels = ctx.getImageData(x*2000/600, y*2000/600, 2, 2).data;
 	if(pixels[0]==0) return -1;
 	var high = pixels[0]>>4;
 	var mid = pixels[1]>>4;
