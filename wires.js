@@ -313,9 +313,9 @@ function drawSeg(ctx, seg){
 function handleKey(e){
 	var c = e.charCode;
 	c = String.fromCharCode(c);
-	if('<>?np'.indexOf(c)==-1) return;
-	if(c=='<' && zoom>1) setZoom(zoom/1.2);
-	else if(c=='>' && zoom<grMaxZoom) setZoom(zoom*1.2);
+	if('<>?npZzx'.indexOf(c)==-1) return;
+	if((c=='Z'||c=='x'||c=='<') && zoom>1) setZoom(zoom/1.2);
+	else if((c=='z'||c=='>') && zoom<grMaxZoom) setZoom(zoom*1.2);
 	else if(c=='?') setZoom(1);
 	else if(c=='n') stepForward();
 	else if(c=='p') stepBack();
