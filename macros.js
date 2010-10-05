@@ -179,7 +179,7 @@ function readPstring(){
    var result;
    result = (isNodeHigh(nodenames['p7'])?'N':'n') +
             (isNodeHigh(nodenames['p6'])?'V':'v') +
-            '-' +
+            '&#8209' +  // non-breaking hyphen
             (isNodeHigh(nodenames['p3'])?'B':'b') +
             (isNodeHigh(nodenames['p3'])?'D':'d') +
             (isNodeHigh(nodenames['p2'])?'I':'i') +
@@ -214,8 +214,7 @@ function busToString(busname){
 	if(busname=='p')
 		return readPstring();
 	if(busname=='tcstate')
-		return busToHex('clock1') + busToHex('clock2') +
-			busToHex('t2') + busToHex('t3') + busToHex('t4') + busToHex('t5');
+		return ['clock1','clock2','t2','t3','t4','t5'].map(busToHex).join("");
 	return busToHex(busname);
 }
 
