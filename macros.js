@@ -139,9 +139,16 @@ function signalSet(n){
 	return signals;
 }
 
+var traceChecksum='';
+var goldenChecksum;
+
 // simulate a single clock phase, updating trace and highlighting layout
 function step(){
-	trace[cycle]= {chip: stateString(), mem: getMem()};
+	var s=stateString();
+	var m=getMem();
+	trace[cycle]= {chip: s, mem: m};
+	if(goldenChecksum != undefined)
+		traceChecksum=adler32(traceChecksum+s+m.slice(0,511).toString(16));
 	halfStep();
 	if(animateChipLayout)
 		refresh();
@@ -340,7 +347,10 @@ function chipStatus(){
 	        ' Y:' + hexByte(readY()) +
 	        ' SP:' + hexByte(readSP()) +
 	        ' ' + readPstring();
-        setStatus(machine1, machine2, "Hz: " + estimatedHz().toFixed(1));
+	var chk='';
+	if(goldenChecksum != undefined)
+		chk=" Chk:" + traceChecksum + ((traceChecksum==goldenChecksum)?" OK":" no match");
+	setStatus(machine1, machine2, "Hz: " + estimatedHz().toFixed(1) + chk);
 	if (loglevel>0) {
 		updateLogbox(signalSet(loglevel));
 	}
@@ -400,3 +410,13 @@ function setMem(arr){
 
 function hexWord(n){return (0x10000+n).toString(16).substring(1)}
 function hexByte(n){return (0x100+n).toString(16).substring(1)}
+
+function adler32(x){
+	var a=1;
+	var b=0;
+	for(var i=0;i<x.length;i++){
+		a=(a+x.charCodeAt(i))%65521;
+		b=(b+a)%65521;
+	}
+	return (0x100000000+(b<<16)+a).toString(16).slice(-8);
+}

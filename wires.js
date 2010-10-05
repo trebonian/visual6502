@@ -125,22 +125,25 @@ function setupParams(){
 		var name=params[0];
 		var value=params[1].replace(/\/$/,""); // chrome sometimes adds trailing slash
 		// be (relatively) forgiving in what we accept
+		//
+		// user interface mode control
 		if(name=="loglevel" && parseInt(value)>0){
 			updateLoglevel(value);
 		} else if(name=="expert" && value.indexOf("t")==0){
 			updateExpertMode(true);
 		} else if(name=="graphics" && value.indexOf("f")==0){
 			updateChipLayoutVisibility(false);
-		} else if(name=="panx" && parseInt(value)!=NaN){
+		} else
+		// place the graphics window at a point of interest
+		if(name=="panx" && parseInt(value)!=NaN){
 			panx=parseInt(value);
 		} else if(name=="pany" && parseInt(value)!=NaN){
 			pany=parseInt(value);
 		} else if(name=="zoom" && parseInt(value)!=NaN){
 			zoom=parseInt(value);
-		} else if(name=="steps" && parseInt(value)!=NaN){
-			userSteps=parseInt(value);
-			running=true;
-		} else if(name=="a" && parseInt(value,16)!=NaN){
+		} else
+		// load a test program: Address, Data and Reset
+		if(name=="a" && parseInt(value,16)!=NaN){
 			userAddress=parseInt(value,16);
 		} else if(name=="d" && value.match(/[0-9a-fA-F]*/)[0].length==value.length){
 			for(var j=0;j<value.length;j+=2)
@@ -148,6 +151,13 @@ function setupParams(){
 		} else if(name=="r" && parseInt(value,16)!=NaN){
 			userResetLow=parseInt(value,16)%256;
 			userResetHigh=(parseInt(value,16)>>8)%256;
+		} else
+		// run a test program, and optionally check against a golden checksum
+		if(name=="steps" && parseInt(value)!=NaN){
+			userSteps=parseInt(value);
+			running=true;
+		} else if(name=="checksum" && parseInt(value,16)!=NaN){
+			goldenChecksum=(0x100000000+parseInt(value,16)).toString(16).slice(-8);
 		} else {
 			if(loglevel>0)
 				console.log('unrecognised parameters:',params);
