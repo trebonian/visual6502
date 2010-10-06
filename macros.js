@@ -64,6 +64,21 @@ function go(){
         }
 }
 
+function goUntilSync(){
+	halfStep();
+	while(!isNodeHigh(nodenames['sync']) || isNodeHigh(nodenames['clk0']))
+		halfStep();
+}
+
+function goUntilSyncOrWrite(){
+	halfStep();
+	while(
+			!isNodeHigh(nodenames['clk0']) ||
+			( !isNodeHigh(nodenames['sync']) && isNodeHigh(nodenames['rw']) )
+	)
+		halfStep();
+}
+
 function testNMI(n){
         initChip();
 
