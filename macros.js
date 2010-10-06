@@ -21,27 +21,34 @@
 */
 
 var memory = Array();
-var code = [0xa9, 0x00, 0x20, 0x10, 0x00, 0x4c, 0x02, 0x00, 
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0xe8, 0x88, 0xe6, 0x40, 0x38, 0x69, 0x02, 0x60];
 var cycle = 0;
 var trace = Array();
 var logstream = Array();
 var running = false;
 
 function loadProgram(){
+	// a moderate size of static testprogram might be loaded
+	if(testprogram.length!=0 && testprogramAddress != undefined)
+		for(var i=0;testprogram[i]!=undefined;i++){
+			var a=testprogramAddress+i;
+			mWrite(a, testprogram[i]);
+			if(a<0x200)
+				setCellValue(a, testprogram[i]);
+		}
+	// a small test program or patch might be passed in the URL
 	if(userCode.length!=0)
-		code=userCode;
+		for(var i=0;i<userCode.length;i++){
+			if(userCode[i] != undefined){
+				mWrite(i, userCode[i]);
+				if(i<0x200)
+					setCellValue(i, userCode[i]);
+			}
+		}
 	// default reset vector will be 0x0000 because undefined memory reads as zero
 	if(userResetLow!=undefined)
 		mWrite(0xfffc, userResetLow);
 	if(userResetHigh!=undefined)
 		mWrite(0xfffd, userResetHigh);
-	for(var i=0;i<code.length;i++){
-		mWrite(i, code[i]);
-		if(i<0x200)
-			setCellValue(i, code[i]);
-	}
 }
 
 function go(){
