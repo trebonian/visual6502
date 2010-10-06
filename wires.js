@@ -67,6 +67,8 @@ var userCode=[];
 var userResetLow;
 var userResetHigh;
 var userSteps;
+var testprogram=[];
+var testprogramAddress;
 
 /////////////////////////
 //
@@ -127,7 +129,7 @@ function setupParams(){
 		// be (relatively) forgiving in what we accept
 		//
 		// user interface mode control
-		if(name=="loglevel" && parseInt(value)>0){
+		if(name=="loglevel" && parseInt(value)!=NaN){
 			updateLoglevel(value);
 		} else if(name=="expert" && value.indexOf("t")==0){
 			updateExpertMode(true);
