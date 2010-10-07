@@ -403,6 +403,8 @@ function estimatedHz(){
 
 function initLogbox(names){
 	var logbox=document.getElementById('logstream');
+	if(logbox==null)return;
+
 	logStream = [];
         logStream.push("<td>" + names.join("</td><td>") + "</td>");
 	logbox.innerHTML = "<tr>"+logStream.join("</tr><tr>")+"</tr>";
