@@ -58,6 +58,7 @@ function recalcNode(node, recalclist){
 		console.log('recalc', node, group);
 	for(var i in group){
 		var n = nodes[group[i]];
+		if(n.state==newv)continue;	/******Performance********/
 		if(n.state!=newv && ctrace && (traceTheseNodes.indexOf(n)!=-1))
 			console.log(group[i], n.state, newv);
 		n.state = newv;
