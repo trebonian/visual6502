@@ -21,27 +21,34 @@
 */
 
 var memory = Array();
-var code = [0xa9, 0x00, 0x20, 0x10, 0x00, 0x4c, 0x02, 0x00, 
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0xe8, 0x88, 0xe6, 0x40, 0x38, 0x69, 0x02, 0x60];
 var cycle = 0;
 var trace = Array();
 var logstream = Array();
 var running = false;
 
 function loadProgram(){
+	// a moderate size of static testprogram might be loaded
+	if(testprogram.length!=0 && testprogramAddress != undefined)
+		for(var i=0;testprogram[i]!=undefined;i++){
+			var a=testprogramAddress+i;
+			mWrite(a, testprogram[i]);
+			if(a<0x200)
+				setCellValue(a, testprogram[i]);
+		}
+	// a small test program or patch might be passed in the URL
 	if(userCode.length!=0)
-		code=userCode;
+		for(var i=0;i<userCode.length;i++){
+			if(userCode[i] != undefined){
+				mWrite(i, userCode[i]);
+				if(i<0x200)
+					setCellValue(i, userCode[i]);
+			}
+		}
 	// default reset vector will be 0x0000 because undefined memory reads as zero
 	if(userResetLow!=undefined)
 		mWrite(0xfffc, userResetLow);
 	if(userResetHigh!=undefined)
 		mWrite(0xfffd, userResetHigh);
-	for(var i=0;i<code.length;i++){
-		mWrite(i, code[i]);
-		if(i<0x200)
-			setCellValue(i, code[i]);
-	}
 }
 
 function go(){
@@ -55,6 +62,21 @@ function go(){
            step();
 	   setTimeout(go, 0); // schedule the next poll
         }
+}
+
+function goUntilSync(){
+	halfStep();
+	while(!isNodeHigh(nodenames['sync']) || isNodeHigh(nodenames['clk0']))
+		halfStep();
+}
+
+function goUntilSyncOrWrite(){
+	halfStep();
+	while(
+			!isNodeHigh(nodenames['clk0']) ||
+			( !isNodeHigh(nodenames['sync']) && isNodeHigh(nodenames['rw']) )
+	)
+		halfStep();
 }
 
 function testNMI(n){
@@ -139,9 +161,16 @@ function signalSet(n){
 	return signals;
 }
 
+var traceChecksum='';
+var goldenChecksum;
+
 // simulate a single clock phase, updating trace and highlighting layout
 function step(){
-	trace[cycle]= {chip: stateString(), mem: getMem()};
+	var s=stateString();
+	var m=getMem();
+	trace[cycle]= {chip: s, mem: m};
+	if(goldenChecksum != undefined)
+		traceChecksum=adler32(traceChecksum+s+m.slice(0,511).toString(16));
 	halfStep();
 	if(animateChipLayout)
 		refresh();
@@ -179,7 +208,7 @@ function readPstring(){
    var result;
    result = (isNodeHigh(nodenames['p7'])?'N':'n') +
             (isNodeHigh(nodenames['p6'])?'V':'v') +
-            '-' +
+            '&#8209' +  // non-breaking hyphen
             (isNodeHigh(nodenames['p3'])?'B':'b') +
             (isNodeHigh(nodenames['p3'])?'D':'d') +
             (isNodeHigh(nodenames['p2'])?'I':'i') +
@@ -214,8 +243,7 @@ function busToString(busname){
 	if(busname=='p')
 		return readPstring();
 	if(busname=='tcstate')
-		return busToHex('clock1') + busToHex('clock2') +
-			busToHex('t2') + busToHex('t3') + busToHex('t4') + busToHex('t5');
+		return ['clock1','clock2','t2','t3','t4','t5'].map(busToHex).join("");
 	return busToHex(busname);
 }
 
@@ -341,7 +369,10 @@ function chipStatus(){
 	        ' Y:' + hexByte(readY()) +
 	        ' SP:' + hexByte(readSP()) +
 	        ' ' + readPstring();
-        setStatus(machine1, machine2, "Hz: " + estimatedHz().toFixed(1));
+	var chk='';
+	if(goldenChecksum != undefined)
+		chk=" Chk:" + traceChecksum + ((traceChecksum==goldenChecksum)?" OK":" no match");
+	setStatus(machine1, machine2, "Hz: " + estimatedHz().toFixed(1) + chk);
 	if (loglevel>0) {
 		updateLogbox(signalSet(loglevel));
 	}
@@ -401,3 +432,13 @@ function setMem(arr){
 
 function hexWord(n){return (0x10000+n).toString(16).substring(1)}
 function hexByte(n){return (0x100+n).toString(16).substring(1)}
+
+function adler32(x){
+	var a=1;
+	var b=0;
+	for(var i=0;i<x.length;i++){
+		a=(a+x.charCodeAt(i))%65521;
+		b=(b+a)%65521;
+	}
+	return (0x100000000+(b<<16)+a).toString(16).slice(-8);
+}
