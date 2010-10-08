@@ -130,6 +130,7 @@ function hexdigit(n){return '0123456789ABCDEF'.charAt(n);}
 /////////////////////////
 
 function refresh(){
+	if(typeof chipLayoutIsVisible == undefined || !chipLayoutIsVisible) return;
 	ctx.clearRect(0,0,grCanvasSize,grCanvasSize);
 	for(i in nodes){
 		if(isNodeHigh(i)) overlayNode(nodes[i].segs);
