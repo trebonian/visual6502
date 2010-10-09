@@ -54,7 +54,6 @@ var drawlayers = [true, true, true, true, true, true];
 var moveHereFirst;
 var expertMode=false
 var animateChipLayout = true;
-var chipLayoutIsVisible = true;
 var userCode=[];
 var userResetLow;
 var userResetHigh;
@@ -338,4 +337,3 @@ function setChipStyle(props){
 		hitbuffer.style[i] = props[i];
 	}
 }
-
