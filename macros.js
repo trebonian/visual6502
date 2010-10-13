@@ -121,9 +121,15 @@ function testNMI(n){
 
 function initChip(){
         var start = now();
-	for(var nn in nodes) nodes[nn].state = 'fl';
-	nodes[ngnd].state = 'gnd';
-	nodes[npwr].state = 'vcc';
+	for(var nn in nodes) {
+		nodes[nn].state = false;
+		nodes[nn].float = true;
+	}
+
+	nodes[ngnd].state = false;
+	nodes[ngnd].float = false;
+	nodes[npwr].state = true;
+	nodes[npwr].float = false;
 	for(var tn in transistors) transistors[tn].on = false;
 	setLow('res');
 	setLow('clk0');

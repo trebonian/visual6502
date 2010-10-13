@@ -54,14 +54,20 @@ function recalcNode(node, recalclist){
 	if(node==npwr) return;
 	var group = getNodeGroup(node);
 	var newv = getNodeValue(group);
+	var newState = (newv[0]=='h');
+	var newFloat = (newv[1]=='f');
 	if(ctrace && (traceTheseNodes.indexOf(node)!=-1))
 		console.log('recalc', node, group);
 	for(var i in group){
 		var n = nodes[group[i]];
-		if(n.state==newv)continue;	/******Performance********/
-		if(n.state!=newv && ctrace && (traceTheseNodes.indexOf(n)!=-1))
+		var oldState = n.state;
+		if(n.state==newState && n.float==newFloat)continue;	/******Performance********/
+		if(n.state!=newState && ctrace && (traceTheseNodes.indexOf(n)!=-1))
 			console.log(group[i], n.state, newv);
-		n.state = newv;
+		n.state = newState;
+		n.float = newFloat;
+		if(n.state==oldState)
+			continue; 
 		for(var t in n.gates) recalcTransistor(n.gates[t], recalclist);
 	}
 }
@@ -96,12 +102,9 @@ function floatnode(nn){
 	if(nn==ngnd) return;
 	if(nn==npwr) return;
 	var n = nodes[nn];
-	if(n.state=='gnd') n.state = 'fl';
-	if(n.state=='pd') n.state = 'fl';
-	if(n.state=='vcc') n.state = 'fh';
-	if(n.state=='pu') n.state = 'fh';
+	n.float = true;
 	if(ctrace && (traceTheseNodes.indexOf(nn)!=-1))
-		console.log('floating', nn, 'to', n.state);
+		console.log('floating', nn, 'at', n.state);
 }
 
 function addRecalcNode(nn, recalclist){
@@ -137,16 +140,16 @@ function addNodeTransistor(node, t, group){
 
 
 function getNodeValue(group){
-	if(arrayContains(group, ngnd)) return 'gnd';
-	if(arrayContains(group, npwr)) return 'vcc';
+	if(arrayContains(group, ngnd)) return 'l ';
+	if(arrayContains(group, npwr)) return 'h ';
 	var flstate;
 	for(var i in group){
 		var nn = group[i];
 		var n = nodes[nn];
-		if(n.pullup) return 'pu';
-		if(n.pulldown) return 'pd';
-		if((n.state=='fl')&&(flstate==undefined)) flstate = 'fl';
-		if(n.state=='fh') flstate = 'fh';
+		if(n.pullup) return 'h ';
+		if(n.pulldown) return 'l ';
+		if((!n.state && n.float)&&(flstate==undefined)) flstate = 'lf';
+		if(n.state && n.float) flstate = 'hf';
 	}
 	if(flstate==undefined && ctrace) console.log(group);
 	return flstate;
@@ -154,7 +157,7 @@ function getNodeValue(group){
 
 
 function isNodeHigh(nn){
-	return arrayContains(['vcc','pu','fh'], nodes[nn].state);
+	return(nodes[nn].state);
 }
 
 function saveString(name, str){
@@ -172,23 +175,24 @@ function allNodes(){
 }
 
 function stateString(){
-	var codes = {gnd: 'g', vcc: 'v', pu: 'p', pd: 'd', fh: 'f', fl: 'l'};
+	var codes = ['g','l','h','f' ];
 	var res = '';
 	for(var i=0;i<1725;i++){
 		var n = nodes[i];
 		if(n==undefined) res+='x';
 		else if(i==ngnd) res+='g';
-		else if(i==npwr) res+='v';
-		else res+= codes[n.state];
+		else if(i==npwr) res+='h';
+		else res+= codes[n.state*2 + n.float];
 	}
 	return res;
 }
 
 function showState(str){
-	var codes = {g: 'gnd', v: 'vcc', p: 'pu', d: 'pd', f: 'fh', l: 'fl'};
+	var codes = {g: 'l ', h: 'h ', f: 'hf', l: 'lf'};
 	for(var i=0;i<str.length;i++){
 		if(str[i]=='x') continue;
-		nodes[i].state = codes[str[i]];
+		nodes[i].state = ((codes[str[i]])[0]=='h');
+		nodes[i].float = ((codes[str[i]])[1]=='f');
 		var gates = nodes[i].gates;
 		for(var t in gates) transistors[gates[t]].on = isNodeHigh(i);
 	}
