@@ -45,7 +45,7 @@ function recalcNodeList(list){
 				console.log('recalcNodeList iteration: ', j, list.length, 'nodes', list);
 			}
 		}
-		for(var i in list) recalcNode(list[i]);
+		list.forEach(recalcNode);
 		list = recalclist;
 		recalclist = new Array();
 		recalcHash = new Array();
@@ -64,16 +64,12 @@ function recalcNode(node){
 		var n = nodes[group[i]];
 		if(n.state==newState)continue;	/******Performance********/
 		n.state = newState;
-		n.gates.forEach(
-			function(t){
-				recalcTransistor(t);
-			});
+		if(n.state){
+			n.gates.forEach(turnTransistorOn);
+		} else {
+			n.gates.forEach(turnTransistorOff);
+		}
 	}
-}
-
-function recalcTransistor(t){
-	if(isNodeHigh(t.gate)) turnTransistorOn(t);
-	else turnTransistorOff(t);
 }
 
 function turnTransistorOn(t){
@@ -135,13 +131,13 @@ function addNodeTransistor(node, tr){
 function getNodeValue(){
 	if(arrayContains(group, ngnd)) return false;
 	if(arrayContains(group, npwr)) return true;
-	for(var i in group){
-		var nn = group[i];
-		var n = nodes[nn];
-		if(n.pullup) return true;
-		if(n.pulldown) return false;
-		if(n.state) return true;
-	}
+        for(var i in group){
+               var nn = group[i];
+               var n = nodes[nn];
+               if(n.pullup) return true;
+               if(n.pulldown) return false;
+               if(n.state) return true;
+        }
 	return false;
 }
 
