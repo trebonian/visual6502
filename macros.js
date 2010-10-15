@@ -172,6 +172,10 @@ var goldenChecksum;
 
 // simulate a single clock phase, updating trace and highlighting layout
 function step(){
+	if(!animateChipLayout){
+		halfStep();
+		return;
+	}
 	var s=stateString();
 	var m=getMem();
 	trace[cycle]= {chip: s, mem: m};
@@ -316,7 +320,7 @@ function clkNodes(){
 	var res = Array();
 	res.push(943);
 	for(var i in nodes[943].gates){
-		var t = transistors[nodes[943].gates[i]];
+		var t = nodes[943].gates[i];
 		if(t.c1==npwr) res.push(t.c2);
 		if(t.c2==npwr) res.push(t.c1);
 	}

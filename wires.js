@@ -51,9 +51,9 @@ function setupTransistors(){
 		var c1 = tdef[2];
 		var c2 = tdef[3];
 		var trans = {name: name, on: false, gate: gate, c1: c1, c2: c2};
-		nodes[gate].gates.push(name);
-		nodes[c1].c1c2s.push(name);
-		nodes[c2].c1c2s.push(name);
+		nodes[gate].gates.push(trans);
+		nodes[c1].c1c2s.push(trans);
+		nodes[c2].c1c2s.push(trans);
 		transistors[name] = trans;
 	}
 }
