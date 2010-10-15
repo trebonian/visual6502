@@ -56,20 +56,18 @@ function recalcNodeList(list){
 function recalcNode(node){
 	if(node==ngnd) return;
 	if(node==npwr) return;
-	group = getNodeGroup(node);
-	var newState = getNodeValue(group);
+	getNodeGroup(node);
+	var newState = getNodeValue();
 	if(ctrace && (traceTheseNodes.indexOf(node)!=-1))
 		console.log('recalc', node, group);
-	for(var i in group){
-		var n = nodes[group[i]];
-		if(n.state==newState)continue;	/******Performance********/
+	group.forEach(function(i){
+		var n = nodes[i];
+		if(n.state==newState) return;
 		n.state = newState;
-		if(n.state){
-			n.gates.forEach(turnTransistorOn);
-		} else {
-			n.gates.forEach(turnTransistorOff);
-		}
-	}
+		n.gates.forEach(function(t){
+			if(n.state) turnTransistorOn(t);
+			else turnTransistorOff(t);});
+	});
 }
 
 function turnTransistorOn(t){
@@ -78,7 +76,6 @@ function turnTransistorOn(t){
 		console.log(t.name, 'on', t.gate, t.c1, t.c2);
 	t.on = true;
 	addRecalcNode(t.c1);
-	addRecalcNode(t.c2);
 }
 
 function turnTransistorOff(t){
@@ -101,7 +98,6 @@ function addRecalcNode(nn){
 function getNodeGroup(i){
 	group = new Array();
 	addNodeToGroup(i);
-	return group;
 }
 
 function addNodeToGroup(i){
@@ -109,35 +105,26 @@ function addNodeToGroup(i){
 	group.push(i);
 	if(i==ngnd) return;
 	if(i==npwr) return;
-	addNodeToGroup1(i);
-}
-
-function addNodeToGroup1(i){
-	var output=nodes[i].c1c2s;
-	output.forEach(
+	nodes[i].c1c2s.forEach(
 		function(t){
-			if(t.on)addNodeTransistor(i,t);
-		});
-}
-
-function addNodeTransistor(node, tr){
-	var other;
-	if(tr.c1==node) other=tr.c2;
-	if(tr.c2==node) other=tr.c1;
-	addNodeToGroup(other);
+			if(!t.on) return;
+			var other;
+			if(t.c1==i) other=t.c2;
+			if(t.c2==i) other=t.c1;
+			addNodeToGroup(other);});
 }
 
 
 function getNodeValue(){
 	if(arrayContains(group, ngnd)) return false;
 	if(arrayContains(group, npwr)) return true;
-        for(var i in group){
-               var nn = group[i];
-               var n = nodes[nn];
-               if(n.pullup) return true;
-               if(n.pulldown) return false;
-               if(n.state) return true;
-        }
+	for(var i in group){
+		var nn = group[i];
+		var n = nodes[nn];
+		if(n.pullup) return true;
+		if(n.pulldown) return false;
+		if(n.state) return true;
+	}
 	return false;
 }
 
