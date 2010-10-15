@@ -57,7 +57,7 @@ var animateChipLayout = true;
 var userCode=[];
 var userResetLow;
 var userResetHigh;
-var userSteps;
+var userSteps=1000;
 var testprogram=[];
 var testprogramAddress;
 
@@ -148,7 +148,7 @@ function setupParams(){
 		// run a test program, and optionally check against a golden checksum
 		if(name=="steps" && parseInt(value)!=NaN){
 			userSteps=parseInt(value);
-			running=true;
+//			running=true;
 		} else if(name=="checksum" && parseInt(value,16)!=NaN){
 			goldenChecksum=(0x100000000+parseInt(value,16)).toString(16).slice(-8);
 		} else {

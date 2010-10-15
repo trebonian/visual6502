@@ -52,12 +52,12 @@ function loadProgram(){
 }
 
 function go(){
-	if(userSteps!=undefined){
-		if(--userSteps==0){
-			running=false;
-			userSteps=undefined;
-		}
-	}
+//	if(userSteps!=undefined){
+//		if(--userSteps==0){
+//			running=false;
+//			userSteps=undefined;
+//		}
+//	}
 	if(running) {
            step();
 	   setTimeout(go, 0); // schedule the next poll
@@ -385,14 +385,30 @@ function chipStatus(){
 	selectCell(ab);
 }
 
+function goFor(){
+	var n = userSteps;
+	estimatedHz1();
+	while(--n){
+		halfStep();
+		cycle++;
+	}
+	estimatedHz1();
+	chipStatus();
+}
+
 var prevHzTimeStamp=0;
 var prevHzCycleCount=0;
 var prevHzEstimate1=1;
 var prevHzEstimate2=1;
 var HzSamplingRate=10;
+
 function estimatedHz(){
 	if(cycle%HzSamplingRate!=3)
 		return prevHzEstimate1;
+	return estimatedHz1();
+}
+
+function estimatedHz1(){
 	var HzTimeStamp = now();
 	var HzEstimate = (cycle-prevHzCycleCount+.01)/(HzTimeStamp-prevHzTimeStamp+.01);
 	HzEstimate=HzEstimate*1000/2; // convert from phases per millisecond to Hz
