@@ -172,10 +172,6 @@ var goldenChecksum;
 
 // simulate a single clock phase, updating trace and highlighting layout
 function step(){
-	if(!animateChipLayout){
-		halfStep();
-		return;
-	}
 	var s=stateString();
 	var m=getMem();
 	trace[cycle]= {chip: s, mem: m};

@@ -57,14 +57,11 @@ function recalcNode(node){
 	if(node==ngnd) return;
 	if(node==npwr) return;
 	group = getNodeGroup(node);
-	var newv = getNodeValue();
-	var newState = (newv[0]=='h');
-	var newFloat = (newv[1]=='f');
+	var newState = getNodeValue(group);
 	if(ctrace && (traceTheseNodes.indexOf(node)!=-1))
 		console.log('recalc', node, group);
 	for(var i in group){
 		var n = nodes[group[i]];
-		n.float = newFloat;
 		if(n.state==newState)continue;	/******Performance********/
 		n.state = newState;
 		n.gates.forEach(
@@ -93,27 +90,16 @@ function turnTransistorOff(t){
 	if(ctrace && (traceTheseTransistors.indexOf(t.name)!=-1))
 		console.log(t.name, 'off', t.gate, t.c1, t.c2);
 	t.on = false;
-	floatnode(t.c1);
-	floatnode(t.c2);
 	addRecalcNode(t.c1);
 	addRecalcNode(t.c2);
 }
 
-function floatnode(nn){
-	if(nn==ngnd) return;
-	if(nn==npwr) return;
-	var n = nodes[nn];
-	n.float = true;
-	if(ctrace && (traceTheseNodes.indexOf(nn)!=-1))
-		console.log('floating', nn, 'at', n.state);
-}
-
 function addRecalcNode(nn){
-	if(nn==ngnd) return;
-	if(nn==npwr) return;
-	if(recalcHash[nn] == 1)return; 
-	recalclist.push(nn);
-	recalcHash[nn] = 1;
+       if(nn==ngnd) return;
+       if(nn==npwr) return;
+       if(recalcHash[nn] == 1)return; 
+       recalclist.push(nn);
+       recalcHash[nn] = 1;
 }
 
 function getNodeGroup(i){
@@ -147,19 +133,16 @@ function addNodeTransistor(node, tr){
 
 
 function getNodeValue(){
-	if(arrayContains(group, ngnd)) return 'l ';
-	if(arrayContains(group, npwr)) return 'h ';
-	var flstate;
+	if(arrayContains(group, ngnd)) return false;
+	if(arrayContains(group, npwr)) return true;
 	for(var i in group){
 		var nn = group[i];
 		var n = nodes[nn];
-		if(n.pullup) return 'h ';
-		if(n.pulldown) return 'l ';
-		if((!n.state && n.float)&&(flstate==undefined)) flstate = 'lf';
-		if(n.state && n.float) flstate = 'hf';
+		if(n.pullup) return true;
+		if(n.pulldown) return false;
+		if(n.state) return true;
 	}
-	if(flstate==undefined && ctrace) console.log(group);
-	return flstate;
+	return false;
 }
 
 
@@ -182,26 +165,26 @@ function allNodes(){
 }
 
 function stateString(){
-	var codes = ['g','l','h','f' ];
+	var codes = ['l','h'];
 	var res = '';
 	for(var i=0;i<1725;i++){
 		var n = nodes[i];
 		if(n==undefined) res+='x';
 		else if(i==ngnd) res+='g';
-		else if(i==npwr) res+='h';
-		else res+= codes[n.state*2 + n.float];
+		else if(i==npwr) res+='v';
+		else res+= codes[0+n.state];
 	}
 	return res;
 }
 
 function showState(str){
-	var codes = {g: 'l ', h: 'h ', f: 'hf', l: 'lf'};
+	var codes = {g: false, h: true, v: true, l: false};
 	for(var i=0;i<str.length;i++){
 		if(str[i]=='x') continue;
-		nodes[i].state = ((codes[str[i]])[0]=='h');
-		nodes[i].float = ((codes[str[i]])[1]=='f');
+		var state = codes[str[i]];
+		nodes[i].state = state;
 		var gates = nodes[i].gates;
-		gates.forEach(function(t){t.on=isNodeHigh(i);});
+		gates.forEach(function(t){t.on=state;});
 	}
 	refresh();
 }
