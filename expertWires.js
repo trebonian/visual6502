@@ -279,6 +279,7 @@ function updateChipLayoutVisibility(isOn){
 		document.getElementById('nochip').style.display = 'none';
 		document.getElementById('logstreamscroller').style.height="260px";
 		// allow the display to update while we load the graphics
+		updateChipLayoutAnimation(true);
 		setStatus('loading graphics...');
 		setTimeout(setupChipLayoutGraphics, 0);
 	} else {
