@@ -58,6 +58,7 @@ var userCode=[];
 var userResetLow;
 var userResetHigh;
 var headlessSteps=1000;
+var noSimulation=false;
 var testprogram=[];
 var testprogramAddress;
 
@@ -81,23 +82,50 @@ function setup_part2(){
 	updateExpertMode(expertMode);
 	setupNodes();
 	setupTransistors();
+	detectOldBrowser();
+	setStatus('loading graphics...');
+	setTimeout(setup_part3, 0);
+}
+
+function setup_part3(){
 	if(chipLayoutIsVisible){
-		// if user requests no chip layout, we can do no canvas operations at all
+		// if user requests no chip layout, we can skip all canvas operations
 		// which saves a lot of memory and allows us to run on small systems
 		updateChipLayoutVisibility(true);
 	}
 	window.onkeypress = function(e){handleKey(e);}
 	setStatus('resetting 6502...');
-	setTimeout(setup_part3, 0);
+	setTimeout(setup_part4, 0);
 }
 
-function setup_part3(){
+function setup_part4(){
 	setupTable();
 	setupNodeNameList();
 	loadProgram();
-	initChip();
-	document.getElementById('stop').style.visibility = 'hidden';
-	go();
+	if(noSimulation){
+		running=undefined;
+		setStatus('Ready!');
+	} else {
+		initChip();
+		document.getElementById('stop').style.visibility = 'hidden';
+		go();
+	}
+}
+
+function detectOldBrowser(){
+	if(!("getBoundingClientRect" in document.documentElement)){
+		// simplify these functions (and adjust layout window position)
+		localx=	function(el, gx){
+				return gx-el.offsetLeft;
+			}
+		localy=	function(el, gy){
+				return gy-el.offsetTop;
+			}
+		document.getElementById('plain').style["float"]="right";
+		document.getElementById('chip').style.left=0;
+		document.getElementById('chip').style.top=0;
+		document.getElementById('chip').style.border=0;
+	}
 }
 
 function setupParams(){
@@ -124,10 +152,15 @@ function setupParams(){
 			updateLoglevel(value);
 		} else if(name=="expert" && value.indexOf("t")==0){
 			updateExpertMode(true);
-		} else if(name=="graphics" && value.indexOf("f")==0){
-			updateChipLayoutVisibility(false);
 		} else if(name=="headlesssteps" && parseInt(value)!=NaN){
 			headlessSteps=parseInt(value);
+		} else if(name=="graphics" && value.indexOf("f")==0){
+			updateChipLayoutVisibility(false);
+		} else if(name=="canvas" && parseInt(value)!=NaN){
+			grCanvasSize=value;
+		// suppress simulation (for layout viewing only on slow browsers)
+		} else if(name=="nosim" && value.indexOf("t")==0){
+			noSimulation=true;
 		} else
 		// place the graphics window at a point of interest
 		if(name=="panx" && parseInt(value)!=NaN){
