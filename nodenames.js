@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2010 Brian Silverman, Barry Silverman, Ed Spittles
+ Copyright (c) 2010 Brian Silverman, Barry Silverman, Ed Spittles, Segher Boessenkool
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -280,159 +280,159 @@ H1x1: 1042,     // internal signal: drive status byte onto databus
 
                 // internal signal: pla outputs block 1 (west/left edge of die)
                 // often 130 pla outputs are mentioned - we have 131 here
-pla0: 1601,
-pla1: 60,
-pla2: 1512,
-pla3: 382,
-pla4: 1173,
-pla5: 1233,
+"op-sty/cpy-mem": 1601,        // pla0
+"op-T3-ind-y": 60,             // pla1
+"op-T2-abs-y": 1512,           // pla2
+"op-T0-iny/dey": 382,          // pla3
+"x-op-T0-tya": 1173,           // pla4
+"op-T0-cpy/iny": 1233,         // pla5
 
                 // internal signal: pla outputs block 2
-pla6: 258,
-pla7: 1562,
-pla8: 84,
-pla9: 1543,
-pla10: 76,
-pla11: 1658,
-pla12: 1540,
-pla13: 245,
-pla14: 985,
-pla15: 786,
-pla16: 1664,
-pla17: 682,
-pla18: 1482,
-pla19: 665,
-pla20: 286,
+"op-T2-idx-x-xy": 258,         // pla6
+"op-xy": 1562,                 // pla7
+"op-T2-ind-x": 84,             // pla8
+"x-op-T0-txa": 1543,           // pla9
+"op-T0-dex": 76,               // pla10
+"op-T0-cpx/inx": 1658,         // pla11
+"op-from-x": 1540,             // pla12
+"op-T0-txs": 245,              // pla13
+"op-T0-ldx/tax/tsx": 985,      // pla14
+"op-T+-dex": 786,              // pla15
+"op-T+-inx": 1664,             // pla16
+"op-T0-tsx": 682,              // pla17
+"op-T+-iny/dey": 1482,         // pla18
+"op-T0-ldy-mem": 665,          // pla19
+"op-T0-tay/ldy-not-idx": 286,  // pla20
 
                 // internal signal: pla outputs block 3
                 // not pla, feed through
-pla21: 271,
-pla22: 370,
-pla23: 552,
-pla24: 1612,
-pla25: 1487,
-pla26: 784,
-pla27: 244,
-pla28: 788,
-pla29: 1623,
-pla30: 764,
-pla31: 1057,
-pla32: 403,
-pla33: 204,
-pla34: 1273,
-pla35: 1582,
-pla36: 1031,
+"op-T0-jsr": 271,              // pla21
+"op-T5-brk": 370,              // pla22
+"op-T0-php/pha": 552,          // pla23
+"op-T4-rts": 1612,             // pla24
+"op-T3-plp/pla": 1487,         // pla25
+"op-T5-rti": 784,              // pla26
+"op-ror": 244,                 // pla27
+"op-T2": 788,                  // pla28
+"op-T0-eor": 1623,             // pla29
+"op-jmp": 764,                 // pla30
+"op-T2-abs": 1057,             // pla31
+"op-T0-ora": 403,              // pla32
+"op-T2-ADL/ADD":204,           // pla33 
+"op-T0":1273,                  // pla34 
+"op-T2-stack":1582,            // pla35 
+"op-T3-stack/bit/jmp":1031,    // pla36 
 
                 // internal signal: pla outputs block 4
-pla37: 804,
-pla38: 1311,
-pla39: 1428,
-pla40: 492,
-pla41: 1204,
-pla42: 58,
-pla43: 1520,
-pla44: 324,
-pla45: 1259,
-pla46: 342,
-pla47: 857,
-pla48: 712,
-pla49: 1337,
-pla50: 1355,
-pla51_T0SBC: 787,       // 52:111XXXXX 1 0 T0SBC
-pla52_T0ADCSBC: 575,    // 51:X11XXXXX 1 0 T0ADCSBC
-pla53: 1466,
+"op-T4-brk/jsr":804,           //  pla37
+"op-T4-rti":1311,              //  pla38
+"op-T3-ind-x":1428,            //  pla39
+"op-T4-ind-y":492,             //  pla40
+"op-T2-ind-y":1204,            //  pla41
+"op-T3-abs-idx":58,            //  pla42
+"op-plp/pla":1520,             //  pla43
+"op-inc/nop":324,              //  pla44
+"op-T4-ind-x":1259,            //  pla45
+"x-op-T3-ind-y":342,           //  pla46
+"op-rti/rts":857,              //  pla47
+"op-T2-jsr":712,               //  pla48
+"op-T0-cpx/cpy/inx/iny":1337,  //  pla49
+"op-T0-cmp":1355,              //  pla50
+"op-T0-sbc":787,               //  pla51   //  52:111XXXXX  1  0  T0SBC
+"op-T0-adc/sbc":575,           //  pla52   //  51:X11XXXXX  1  0  T0ADCSBC
+"op-rol/ror":1466,             //  pla53
 
                 // internal signal: pla outputs block 5
-pla54: 1381,
-pla55: 546,
-pla56: 776,
-pla57: 157,
-pla58: 257,
-pla59: 1243,
-pla60: 822,
-pla61: 1324,
-pla62: 179,
-pla63: 131,
-pla64: 1420,
-pla65: 1342,
-pla66: 4,
-pla67: 1396,
-pla68: 167,
-pla69: 303,
-pla70: 1504,
-pla71: 354,
-pla72: 1168,
+"op-T3-jmp":1381,              //  pla54
+"op-shift":546,                //  pla55
+"op-T5-jsr":776,               //  pla56
+"op-T2-stack-access":157,      //  pla57
+"op-T0-tya":257,               //  pla58
+"op-T+-ora/and/eor/adc":1243,  //  pla59
+"op-T+-adc/sbc":822,           //  pla60
+"op-T+-shift-a":1324,          //  pla61
+"op-T0-txa":179,               //  pla62
+"op-T0-pla":131,               //  pla63
+"op-T0-lda":1420,              //  pla64
+"op-T0-acc":1342,              //  pla65
+"op-T0-tay":4,                 //  pla66
+"op-T0-shift-a":1396,          //  pla67
+"op-T0-tax":167,               //  pla68
+"op-T0-bit":303,               //  pla69
+"op-T0-and":1504,              //  pla70
+"op-T4-abs-idx":354,           //  pla71
+"op-T5-ind-y":1168,            //  pla72
 
                 // internal signal: pla outputs block 6
-pla73: 1721,    // has extra non-pla input
-pla74: 1086,
-pla75: 1074,
-pla76: 1246,
-pla77: 487,
-pla78: 579,
-pla79: 145,
-pla80_T2BR: 1239,  // T2BR, 83 for Balazs
-pla81: 285,
+"op-branch-done":1721,         //  pla73    // has extra non-pla input
+"op-T2-pha":1086,              //  pla74
+"op-T0-shift-right-a":1074,    //  pla75
+"op-shift-right":1246,         //  pla76
+"op-T2-brk":487,               //  pla77
+"op-T3-jsr":579,               //  pla78
+"op-sta/cmp":145,              //  pla79
+"op-T2-branch":1239,           //  pla80      //  T2BR, 83 for Balazs
+"op-T2-zp/zp-idx":285,         //  pla81
                 // not pla, feed through
                 // not pla, feed through
-pla82: 1524,
-pla83: 273,     // has extra pulldown: pla97
-pla84: 0,
-pla85: 341,
-pla86: 120,
-pla87: 1478,
-pla88: 594,
-pla89: 1210,
-pla90: 677,     // has extra pulldown: pla97
+"op-T2-ind":1524,              //  pla82
+"op-T2-abs-access":273,        //  pla83      // has extra pulldown: pla97
+"op-T5-rts":0,                 //  pla84
+"op-T4":341,                   //  pla85
+"op-T3":120,                   //  pla86
+"op-T0-brk/rti":1478,          //  pla87
+"op-T0-jmp":594,               //  pla88
+"op-T5-ind-x":1210,            //  pla89
+"op-T3-abs/idx/ind":677,       //  pla90      // has extra pulldown: pla97
 
                 // internal signal: pla outputs block 7
-pla91: 461,
-pla92: 447,
-pla93: 660,
-pla94: 1557,
-pla95: 259,
-pla96: 1052,
+"x-op-T4-ind-y":461,           //  pla91
+"x-op-T3-abs-idx":447,         //  pla92
+"op-T3-branch":660,            //  pla93
+"op-brk/rti":1557,             //  pla94
+"op-jsr":259,                  //  pla95
+"x-op-jmp":1052,               //  pla96
                 // gap
-pla97: 791,     // feeds into pla83 and pla90 (no normal pla output)
-pla98: 517,
-pla99: 352,
-pla100: 750,
-pla101: 932,
-pla102: 1589,
+"op-push/pull":791,            //  pla97      // feeds into pla83 and pla90 (no normal pla output)
+"op-store":517,                //  pla98
+"op-T4-brk":352,               //  pla99
+"op-T2-php":750,               //  pla100
+"op-T2-php/pha":932,           //  pla101
+"op-T4-jmp":1589,              //  pla102
                 // gap
-pla103: 446,
-pla104: 528,
+"op-T5-rti/rts":446,           //  pla103
+"xx-op-T5-jsr":528,            //  pla104
 
                 // internal signal: pla outputs block 8
-pla105: 309,
-pla106: 1430,
-pla107: 53,
-pla108: 691,
-pla109: 1292,
+"op-T2-jmp-abs":309,           //  pla105
+"x-op-T3-plp/pla":1430,        //  pla106
+"op-lsr/ror/dec/inc":53,       //  pla107
+"op-asl/rol":691,              //  pla108
+"op-T0-cli/sei":1292,          //  pla109
                 // gap
-pla110: 1646,
-pla111: 1114,
-pla112: 904,
-pla113: 1155,
-pla114: 1476,
-pla115: 1226,
-pla116: 1569,
-pla117: 301,
-pla118: 950,
-pla119: 1665,
+"op-T+-bit":1646,              //  pla110
+"op-T0-clc/sec":1114,          //  pla111
+"op-T3-mem-zp-idx":904,        //  pla112
+"x-op-T+-adc/sbc":1155,        //  pla113
+"x-op-T0-bit":1476,            //  pla114
+"op-T0-plp":1226,              //  pla115
+"x-op-T4-rti":1569,            //  pla116
+"op-T+-cmp":301,               //  pla117
+"op-T+-cpx/cpy-abs":950,       //  pla118
+"op-T+-asl/rol-a":1665,        //  pla119
 
                 // internal signal: pla outputs block 9
-pla120: 1710,
-pla121: 1050,   // feeds into pla130 (no normal pla output)
-pla122: 1419,
-pla123: 840,
-pla124: 607,
-pla125: 219,
-pla126: 1385,
-pla127: 281,
-pla128: 1174,
-pla129: 1164,
-pla130: 1006,   // has extra pulldowns: pla121 and ir0
+"op-T+-cpx/cpy-imm/zp":1710,   //  pla120
+"x-op-push/pull":1050,         //  pla121    // feeds into pla130 (no normal pla output)
+"op-T0-cld/sed":1419,          //  pla122
+"#op-branch-bit6":840,         //  pla123
+"op-T3-mem-abs":607,           //  pla124
+"op-T2-mem-zp":219,            //  pla125
+"op-T5-mem-ind-idx":1385,      //  pla126
+"op-T4-mem-abs-idx":281,       //  pla127
+"#op-branch-bit7":1174,        //  pla128
+"op-clv":1164,                 //  pla129
+"op-implied":1006,             //  pla130    // has extra pulldowns: pla121 and ir0
 
 // internal signals: control signals
 nnT2BR: 967,    // doubly inverted
