@@ -2,14 +2,37 @@
 
 <head>
 <title>Visual 6502 in JavaScript</title>
+
 <!-- we now have separate landing pages for kiosk and expert -->
 <!-- sadly this mechanism won't pass on any URL query parameters -->
-<meta http-equiv="REFRESH" content="0;url=expert.html">
+<!-- so it's here only as a fallback (and is deprecated style) -->
+<meta http-equiv="REFRESH" content="3;url=kiosk.html">
+
+<!-- we'll redirect with javascript to the right landing page -->
+<!-- allowing pan+zoom to land in the kiosk, otherwise expert -->
+<!-- (as it happens, kiosk doesn't presently support pan+zoom) -->
+<script type="text/javascript">
+function handleOnload() {
+	var prefix=location.protocol+"//"+location.host+"/";
+	var suffix=location.search;
+	var queryParts=suffix.slice(1).split('&');
+	for(var i=0;i<queryParts.length;i++){
+		var params=queryParts[i].split("=");
+		var name=params[0];
+		if(!(name=="panx" || name=="pany" || name=="zoom")) {
+			window.location.replace(prefix+"expert.html"+suffix);
+			return;
+		}
+	}
+	window.location.replace(prefix+"kiosk.html"+suffix);
+}
+</script>
+
 </head>
 
-<body>
+<body onload="handleOnload();">
 <p style="align:center">
-Please wait while we redirect you, or <a href="expert.html">click here</a>.
+Please wait while we redirect you, or <a href="kiosk.html">click here</a>.
 </p>
 </body>
 </html>
