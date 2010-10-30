@@ -13,13 +13,17 @@
 <!-- (as it happens, kiosk doesn't presently support pan+zoom) -->
 <script type="text/javascript">
 function handleOnload() {
-	var prefix=location.protocol+"//"+location.host+"/";
+	var path=location.pathname
+	// ensure we always have a trailing slash
+	path=path.replace("index.html","").replace(/\/?$/,"/");
+	var prefix=location.protocol+"//"+location.host+path;
 	var suffix=location.search;
+	// check any query string for advanced commands
 	var queryParts=suffix.slice(1).split('&');
 	for(var i=0;i<queryParts.length;i++){
 		var params=queryParts[i].split("=");
 		var name=params[0];
-		if(!(name=="panx" || name=="pany" || name=="zoom")) {
+		if(!(name=="panx" || name=="pany" || name=="zoom" || name=="")) {
 			window.location.replace(prefix+"expert.html"+suffix);
 			return;
 		}
