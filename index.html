@@ -2,102 +2,14 @@
 
 <head>
 <title>Visual 6502 in JavaScript</title>
-<style type="text/css">@import "expert.css";</style>
-<script src="segdefs.js"></script>
-<script src="transdefs.js"></script>
-<script src="nodenames.js"></script>
-<script src="wires.js"></script>
-<script src="expertWires.js"></script>
-<script src="chipsim.js"></script>
-<script src="memtable.js"></script>
-<script src="macros.js"></script>
-<script src="testprogram.js"></script>
-
-<script type="text/javascript">
-function handleOnload() {
-	/MSIE (\d+\.\d+);/.test(navigator.appVersion);
-	IEVersion=Number(RegExp.$1);
-	if((navigator.appName == 'Microsoft Internet Explorer') && (IEVersion<9)){
-		document.getElementById('browsertrouble').innerHTML=
-			'<p>Sorry, '+navigator.appName+' not supported - showing you a picture instead!</p>';
-		document.getElementById('frame').innerHTML='<a href="browsertrouble.html"><img src="images/jssim2.png" style="border:10px"></a>';
-	}else{
-		setTimeout(setup,200);
-	}
-}
-</script>
-
+<!-- we now have separate landing pages for kiosk and expert -->
+<!-- sadly this mechanism won't pass on any URL query parameters -->
+<meta http-equiv="REFRESH" content="0;url=expert.html">
 </head>
 
-<body onload="handleOnload();">
-<span id="plain">
-<a href="http://www.visual6502.org/faq.html">FAQ</a>&nbsp;
-<a href="http://blog.visual6502.org">Blog</a>&nbsp;
-<a href="http://www.visual6502.org/links.html">Links</a>&nbsp
-</span>
-<div class="frame" id="frame">
-<div class="leftcolumn">
-<div id="chipsurround">
-<div class="chip" id="chip">
-<span id="waiting">Please wait, graphics initialising...</span>
-<canvas class="chip" id="chipbg"></canvas>
-<canvas class="chip" id="overlay"></canvas>
-<canvas class="chip" id="hilite"></canvas>
-<canvas class="chip" id="hitbuffer"></canvas>
-</div>
-</div> <!-- chipsurround -->
-<div class="nochip" id="nochip">
-  <form>
-  <input type="button" value="Show chip layout" onclick="updateChipLayoutVisibility(true)" />
-  </form>
-</div>
-<div id="layoutControlPanel">
-  <form id="updateShow"> Show:
-  <input type="checkbox" name="1" id="updateShow1" onchange="updateShow(this.name,this.checked)" />(diffusion)
-  <input type="checkbox" name="3" id="updateShow3" onchange="updateShow(this.name,this.checked)" />(grounded diffusion)
-  <input type="checkbox" name="4" id="updateShow4" onchange="updateShow(this.name,this.checked)" />(powered diffusion)
-  <input type="checkbox" name="5" id="updateShow5" onchange="updateShow(this.name,this.checked)" />(polysilicon)
-  <input type="checkbox" name="0" id="updateShow0" onchange="updateShow(this.name,this.checked)" />(metal)
-  <input type="checkbox" name="2" id="updateShow2" onchange="updateShow(this.name,this.checked)" />(protection)
-  </form>
-  <form>
-  <input type="button" value="Hide Chip Layout" onclick="updateChipLayoutVisibility(false)" />
-  <input type="button" value="Clear Highlighting" onclick="clearHighlight()" />
-  <span class="animatebox">
-    Animate during simulation:
-    <input type="checkbox" id="animateModeCheckbox" onchange="updateChipLayoutAnimation(this.checked)" 
-    /></span>
-  &nbsp;
-  <a href="" id="linkHere" >Link to this location</a>
-  </form>
-</div>
-<div id="expertControlPanel">
-  <form>
-  <input type="button" value="Trace more" onclick="updateLoglevel(++loglevel)" />
-  <input type="button" value="Trace less" onclick="updateLoglevel(--loglevel)" />
-  </form>
-  <br />
-  <div id="logstreamscroller">
-  <table class="logstream" id="logstream"></table>
-  </div>
-</div>
-</div> <!-- closing leftcolumn -->
-<div class="rightcolumn">
-<div class = "buttons">
-  <div class="twobuttons">
-    <a href ="javascript:stopChip()" id="stop"><img class="navstop" src="images/stop.png" title="stop"></a>
-    <a href ="javascript:runChip()"  id="start"><img class="navplay" src="images/play.png" title="run"></a>
-  </div>
-  <div class="threebuttons">
-    <a href ="javascript:resetChip()"><img class="navbutton" src="images/up.png" title="reset"></a>
-    <a href ="javascript:stepBack()"><img class="navbutton" src="images/prev.png" title="back"></a>
-    <a href ="javascript:stepForward()"><img class="navbutton" src="images/next.png" title="step"></a>
-  </div>
-</div>
-<div class="status" id="status"><p>x: 0<br>y: 0</p>
-</div>
-<table class="memtable" id="memtable"></table>
-</div> <!-- closing rightcolumn -->
-</div> <!-- closing 'frame' div -->
+<body>
+<p style="align:center">
+Please wait while we redirect you, or <a href="expert.html">click here</a>.
+</p>
 </body>
 </html>
