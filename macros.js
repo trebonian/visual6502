@@ -52,7 +52,7 @@ function loadProgram(){
 }
 
 function go(){
-	if(userSteps!=undefined){
+	if(typeof userSteps != "undefined"){
 		if(--userSteps==0){
 			running=false;
 			userSteps=undefined;
@@ -258,37 +258,18 @@ function busToHex(busname){
 	// signals may have multi-part names like pla51_T0SBC which should match either part
 	// this is quite difficult to deal with, perhaps indicating that it is not such a good idea
 	var width=0;
-	var hit=-1;
-	var r=new RegExp('(\\b|_)' + busname + '([_0-9]|\\b)');
+	var r=new RegExp('^' + busname + '[0-9]');
 	for(var i in nodenamelist){
 		if(r.test(nodenamelist[i])) {
 			width++;
-			hit=i;
 		}
 	}
+	if(width==0)
+		return isNodeHigh(nodenames[busname])?"1":"0";
 	if(width>16)
 		return -1;
-	if(hit<0)
-		return -1;
-	// we may have a partial match, so find the full name of the last match
-	// we might have matched the first part, second part, or the whole thing (maybe with a numeric suffix)
-	var match1 = '^(' + busname + '_.*[^0-9])([0-9]*$|$)';
-	var match2 = '^(.*_' + busname + ')([0-9]*$|$)';
-	var match3 = '^(' + busname + ')([0-9]*$|$)';
-	r=new RegExp(match1);
-	var fullname=r.exec(nodenamelist[hit]);
-	if(fullname==undefined){
-		r=new RegExp(match2);
-		fullname=r.exec(nodenamelist[hit]);
-		if(fullname==undefined){
-			r=new RegExp(match3);
-			fullname=r.exec(nodenamelist[hit]);
-		}
-	}
 	// finally, convert from logic values to hex
-	if(width==1)
-		return isNodeHigh(nodenames[fullname[1]])?1:0;
-	return (0x10000+readBits(fullname[1],width)).toString(16).slice(-(width-1)/4-1);
+	return (0x10000+readBits(busname,width)).toString(16).slice(-(width-1)/4-1);
 }
 
 function writeDataBus(x){
