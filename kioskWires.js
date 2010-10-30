@@ -24,7 +24,6 @@ var centerx=300, centery=300;
 var zoom=1;
 var dragMouseX, dragMouseY, moved;
 var statbox;
-var userSteps;
 var animateChipLayout = true;
 var userCode=[];
 var userResetLow;
@@ -195,4 +194,3 @@ function setChipStyle(props){
 		hitbuffer.style[i] = props[i];
 	}
 }
-

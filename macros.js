@@ -52,12 +52,12 @@ function loadProgram(){
 }
 
 function go(){
-//	if(userSteps!=undefined){
-//		if(--userSteps==0){
-//			running=false;
-//			userSteps=undefined;
-//		}
-//	}
+	if(userSteps!=undefined){
+		if(--userSteps==0){
+			running=false;
+			userSteps=undefined;
+		}
+	}
 	if(running) {
            step();
 	   setTimeout(go, 0); // schedule the next poll
@@ -386,7 +386,7 @@ function chipStatus(){
 }
 
 function goFor(){
-	var n = userSteps;
+	var n = headlessSteps;
 	estimatedHz1();
 	while(--n){
 		halfStep();

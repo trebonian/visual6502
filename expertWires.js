@@ -57,7 +57,7 @@ var animateChipLayout = true;
 var userCode=[];
 var userResetLow;
 var userResetHigh;
-var userSteps=1000;
+var headlessSteps=1000;
 var testprogram=[];
 var testprogramAddress;
 
@@ -126,6 +126,8 @@ function setupParams(){
 			updateExpertMode(true);
 		} else if(name=="graphics" && value.indexOf("f")==0){
 			updateChipLayoutVisibility(false);
+		} else if(name=="headlesssteps" && parseInt(value)!=NaN){
+			headlessSteps=parseInt(value);
 		} else
 		// place the graphics window at a point of interest
 		if(name=="panx" && parseInt(value)!=NaN){
@@ -148,7 +150,7 @@ function setupParams(){
 		// run a test program, and optionally check against a golden checksum
 		if(name=="steps" && parseInt(value)!=NaN){
 			userSteps=parseInt(value);
-//			running=true;
+			running=true;
 		} else if(name=="checksum" && parseInt(value,16)!=NaN){
 			goldenChecksum=(0x100000000+parseInt(value,16)).toString(16).slice(-8);
 		} else {
