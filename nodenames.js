@@ -147,8 +147,8 @@ notir5: 1394,
 notir6: 895,
 notir7: 1320,
 irline3: 996,   // internal signal: PLA input - ir0 AND ir1
-clock1: 156,    // internal state: timing control
-clock2: 1536,   // internal state: timing control
+clock1: 1536,   // internal state: timing control
+clock2: 156,    // internal state: timing control
 t2: 971,        // internal state: timing control
 t3: 1567,
 t4: 690,
@@ -250,14 +250,22 @@ dor4: 1088,
 dor5: 1453,
 dor6: 1415,
 dor7: 63,
-pd0: 758,       // internal state: predecode register
-pd1: 361,
-pd2: 955,
-pd3: 894,
-pd4: 369,
-pd5: 829,
-pd6: 1669,
-pd7: 1690,
+pd0: 1622,       // internal state: predecode register output (anded with not ClearIR)
+pd1: 809,
+pd2: 1671,
+pd3: 1587,
+pd4: 540,
+pd5: 667,
+pd6: 1460,
+pd7: 1410,
+notpd0: 758,       // internal state: predecode register (storage node)
+notpd1: 361,
+notpd2: 955,
+notpd3: 894,
+notpd4: 369,
+notpd5: 829,
+notpd6: 1669,
+notpd7: 1690,
 notRdy0: 248,   // internal signal: global pipeline control
 Reset0: 67,     // internal signal: retimed reset from pin
 C1x5Reset: 926, // retimed and pipelined reset in progress
