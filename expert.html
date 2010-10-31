@@ -12,6 +12,9 @@
 <script src="memtable.js"></script>
 <script src="macros.js"></script>
 <script src="testprogram.js"></script>
+<script src="3rdparty/jquery-1.3.2.min.js"></script>
+<script src="3rdparty/jquery.cookie.js"></script>
+<script src="3rdparty/splitter.js"></script>
 
 <script type="text/javascript">
 function handleOnload() {
@@ -24,7 +27,25 @@ function handleOnload() {
 	}else{
 		setTimeout(setup,200);
 	}
-}
+};
+
+// initialise splitter (built on jquery)
+$().ready(function(){
+	$("#frame").splitter({
+		type: "v",
+		outline: true,
+		minLeft: 20,
+		sizeLeft: 810,
+		resizeToWidth: true,
+		anchorToWindow: true,
+	});
+	$("#rightcolumn").splitter({
+		type: "h",
+		outline: true,
+		sizeBottom: 180,
+		minTop: 100,
+	});
+});
 </script>
 
 </head>
@@ -75,19 +96,9 @@ function handleOnload() {
   <a href="" id="linkHere" >Link to this location</a>
   </form>
 </div>
-<div id="expertControlPanel">
-  <form>
-  <input type="button" value="Trace more" onclick="updateLoglevel(++loglevel)" />
-  <input type="button" value="Trace less" onclick="updateLoglevel(--loglevel)" />
-  <input type="button" value="Headless Go" onclick="goFor()" />
-  </form>
-  <br />
-  <div id="logstreamscroller">
-  <table class="logstream" id="logstream"></table>
-  </div>
-</div>
 </div> <!-- closing leftcolumn -->
-<div class="rightcolumn">
+<div class="rightcolumn" id="rightcolumn">
+<div id="righttopdiv">
 <div class = "buttons">
   <div class="twobuttons">
     <a href ="javascript:stopChip()" id="stop"><img class="navstop" src="images/stop.png" title="stop"></a>
@@ -98,10 +109,28 @@ function handleOnload() {
     <a href ="javascript:stepBack()"><img class="navbutton" src="images/prev.png" title="back"></a>
     <a href ="javascript:stepForward()"><img class="navbutton" src="images/next.png" title="step"></a>
   </div>
-</div>
+</div>  <!-- buttons -->
 <div class="status" id="status"><p>x: 0<br>y: 0</p>
-</div>
-<table class="memtable" id="memtable"></table>
+</div> <!-- status -->
+
+   <div id="memtablediv">
+	<table class="memtable" id="memtable"></table>
+   </div>
+</div> <!-- righttopdiv -->
+
+   <div id="tracingdiv">
+	<div id="expertControlPanel">
+	  <form>
+	  <input type="button" value="Trace more" onclick="updateLoglevel(++loglevel)" />
+	  <input type="button" value="Trace less" onclick="updateLoglevel(--loglevel)" />
+	  <input type="button" value="Headless Go" onclick="goFor()" />
+	  </form>
+	  <br />
+	</div>
+	<div id="logstreamscroller">
+	       <table class="logstream" id="logstream"></table>
+	</div>
+   </div>
 </div> <!-- closing rightcolumn -->
 </div> <!-- closing 'frame' div -->
 </body>

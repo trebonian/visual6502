@@ -312,7 +312,7 @@ function updateChipLayoutVisibility(isOn){
 		if(expertMode)
 			document.getElementById('layoutControlPanel').style.display = 'block';
 		document.getElementById('nochip').style.display = 'none';
-		document.getElementById('logstreamscroller').style.height="260px";
+		//document.getElementById('logstreamscroller').style.height="260px";
 		// allow the display to update while we load the graphics
 		updateChipLayoutAnimation(true);
 		setStatus('loading graphics...');
@@ -324,7 +324,7 @@ function updateChipLayoutVisibility(isOn){
 		document.getElementById('chipsurround').style.display = 'none';
 		document.getElementById('layoutControlPanel').style.display = 'none';
 		document.getElementById('nochip').style.display = 'block';
-		document.getElementById('logstreamscroller').style.height="880px";
+		//document.getElementById('logstreamscroller').style.height="880px";
 	}
 }
 

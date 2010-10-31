@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2010 Brian Silverman, Barry Silverman
+ Copyright (c) 2010 Brian Silverman, Barry Silverman, Ed Spittles
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -38,13 +38,11 @@ div.frame {
 }
 
 div.leftcolumn {
- float: left;
  width: 804px;       /* ugh - matches the div.chip width + border */
 }
 
 div.rightcolumn {
- float: left;
- margin-left: 8px;
+ padding-left: 8px;
 }
 
 div.footer {
@@ -76,7 +74,6 @@ canvas.chip {
 }
 
 div.twobuttons{
- position:relative;
  float:left;
 }
 
@@ -101,7 +98,6 @@ img.navbutton {
 }
 
 img.navplay {
- position: relative;
  margin-right: 5px;
  border: 0px;
 }
@@ -119,6 +115,7 @@ table.memtable {
  font-family: monospace;
  font-size: 12px;
  border-spacing: 0px;
+ overflow: auto;
 }
 
 div#layoutControlPanel{
@@ -142,8 +139,6 @@ a#linkHere{
 }
 
 div#logstreamscroller{
- height:200px;
- width:800px;
  overflow:auto;
 }
 
@@ -152,4 +147,48 @@ table.logstream {
  font-size: 12px;
  border-spacing: 2px;
  text-align:center;
+}
+
+/* Splitter */
+#frame {
+ height: 750px;
+}
+
+div.leftcolumn, div.rightcolumn, {
+ overflow: auto;
+}
+
+div#righttopdiv, div#tracingdiv {
+ overflow: auto;
+ background-color: white;
+}
+
+div.rightcolumn {
+ background-color: white;
+}
+
+.vsplitbar {
+ width: 5px;
+ background: #aaa;
+}
+
+.vsplitbar {
+ width: 6px;
+ background: #669 url(3rdparty/img/vgrabber.gif) no-repeat center;
+}
+
+.vsplitbar:hover, .vsplitbar.active {
+ background: #c66 url(3rdparty/img/vgrabber.gif) no-repeat center;
+ opacity: 0.7;
+ filter: alpha(opacity=70); /* IE */
+ background: #c99;
+}
+
+.hsplitbar {
+ height: 6px;
+ background: #669 url(3rdparty/img/hgrabber.gif) no-repeat center;
+}
+
+.hsplitbar.active, .hsplitbar:hover {
+ background: #c66 url(3rdparty/img/hgrabber.gif) no-repeat center;
 }
