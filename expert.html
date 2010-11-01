@@ -107,7 +107,9 @@ $().ready(function(){
   <div class="threebuttons">
     <a href ="javascript:resetChip()"><img class="navbutton" src="images/up.png" title="reset"></a>
     <a href ="javascript:stepBack()"><img class="navbutton" src="images/prev.png" title="back"></a>
-    <a href ="javascript:stepForward()"><img class="navbutton" src="images/next.png" title="step"></a>
+    <a href ="javascript:stepForward()"><img class="navbutton" src="images/next.png" title="forward"></a>
+    <a href ="javascript:goUntilSyncOrWrite()"><img class="navbutton" src="images/singlestep.png" title="step"></a>
+    <a href ="javascript:goFor()"><img class="navbutton" src="images/fastforward.png" title="fastforward"></a>
   </div>
 </div>  <!-- buttons -->
 <div class="status" id="status"><p>x: 0<br>y: 0</p>
@@ -124,7 +126,6 @@ $().ready(function(){
 	  <input type="button" value="Trace more" onclick="updateLoglevel(++loglevel)" />
 	  <input type="button" value="Trace less" onclick="updateLoglevel(--loglevel)" />
 	  <input type="button" value="Clear Log"  onclick="updateLoglevel(loglevel)" />
-	  <input type="button" value="Headless Go" onclick="goFor()" />
 	  </form>
 	  <br />
 	</div>
