@@ -425,12 +425,12 @@ H1x1: 1042,     // internal signal: drive status byte onto databus
 "op-T+-cpx/cpy-imm/zp":1710,   //  pla120
 "x-op-push/pull":1050,         //  pla121    // feeds into pla130 (no normal pla output)
 "op-T0-cld/sed":1419,          //  pla122
-"#op-branch-bit6":840,         //  pla123
+"#op-branch-bit6":840,         //  pla123    // IR bit6 used only to detect branch type
 "op-T3-mem-abs":607,           //  pla124
 "op-T2-mem-zp":219,            //  pla125
 "op-T5-mem-ind-idx":1385,      //  pla126
 "op-T4-mem-abs-idx":281,       //  pla127
-"#op-branch-bit7":1174,        //  pla128
+"#op-branch-bit7":1174,        //  pla128    // IR bit7 used only to detect branch type
 "op-clv":1164,                 //  pla129
 "op-implied":1006,             //  pla130    // has extra pulldowns: pla121 and ir0
 
