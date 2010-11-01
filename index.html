@@ -3,40 +3,117 @@
 <head>
 <title>Visual 6502 in JavaScript</title>
 
-<!-- we now have separate landing pages for kiosk and expert -->
-<!-- sadly this mechanism won't pass on any URL query parameters -->
-<!-- so it's here only as a fallback (and is deprecated style) -->
-<meta http-equiv="REFRESH" content="3;url=kiosk.html">
+<!-- by default, index.html will run in kiosk mode -->
+<style type="text/css">@import "kiosk.css";</style>
+<script src="segdefs.js"></script>
+<script src="transdefs.js"></script>
+<script src="nodenames.js"></script>
+<script src="kioskWires.js"></script>
+<script src="wires.js"></script>
+<script src="chipsim.js"></script>
+<script src="memtable.js"></script>
+<script src="testprogram.js"></script>
+<script src="macros.js"></script>
 
-<!-- we'll redirect with javascript to the right landing page -->
-<!-- allowing pan+zoom to land in the kiosk, otherwise expert -->
-<!-- (as it happens, kiosk doesn't presently support pan+zoom) -->
 <script type="text/javascript">
 function handleOnload() {
-	var path=location.pathname
-	// ensure we always have a trailing slash
-	path=path.replace("index.html","").replace(/\/?$/,"/");
-	var prefix=location.protocol+"//"+location.host+path;
-	var suffix=location.search;
-	// check any query string for advanced commands
-	var queryParts=suffix.slice(1).split('&');
-	for(var i=0;i<queryParts.length;i++){
-		var params=queryParts[i].split("=");
-		var name=params[0];
-		if(!(name=="panx" || name=="pany" || name=="zoom" || name=="")) {
+	// two checks and fixes here:
+        //   - replace the dynamic content with an image if running older versions of IE
+        //   - redirect to the expert page if we find any query parameters
+	//
+	/MSIE (\d+\.\d+);/.test(navigator.appVersion);
+	IEVersion=Number(RegExp.$1);
+	if((navigator.appName == 'Microsoft Internet Explorer') && (IEVersion<9)){
+		document.getElementById('browsertrouble').innerHTML=
+			'<p>Sorry, '+navigator.appName+' not supported - showing you a picture instead!</p>';
+		document.getElementById('frame').innerHTML='<a href="browsertrouble.html"><img src="images/jssim2.png" style="border:10px"></a>';
+	}else{
+		var suffix=location.search;
+		var path=location.pathname;
+		// ensure we always have a trailing slash
+		path=path.replace("index.html","").replace(/\/?$/,"/");
+
+		if (suffix != "") {
+			// redirect to the expert page
+			var prefix=location.protocol+"//"+location.host+path;
 			window.location.replace(prefix+"expert.html"+suffix);
 			return;
+		} else {
+			// normal case: start the simulator
+			setTimeout(setup,200);
 		}
 	}
-	window.location.replace(prefix+"kiosk.html"+suffix);
 }
 </script>
 
 </head>
 
 <body onload="handleOnload();">
-<p style="align:center">
-Please wait while we redirect you, or <a href="kiosk.html">click here</a>.
-</p>
+<br />
+<span id="title"><a href="http://visual6502.org">The Visual 6502</a></span>
+<span id="plain">
+<br />
+<a href="http://www.visual6502.org/faq.html">FAQ</a>&nbsp;
+<a href="http://blog.visual6502.org">Blog</a>&nbsp;
+<a href="http://www.visual6502.org/links.html">Links</a>&nbsp
+<br /><br />
+This simulator uses HTML5 features only found on the latest versions of browsers and needs
+lots of RAM. If you have trouble, please <a href="browsertrouble.html">check compatibility.</a>
+<br />
+<span id="browsertrouble"></span>
+<br />
+Hit '>' to zoom in, '<' to zoom out
+<br />
+Left-click and drag to scroll around
+<br />
+Enter your own program into the array of RAM
+<br />
+<br /> 
+</span>
+<div class="frame" id="frame">
+<div class="chip" id="chip">
+<canvas class="chip" id="chipbg"></canvas>
+<canvas class="chip" id="overlay"></canvas>
+<canvas class="chip" id="hilite"></canvas>
+<canvas class="chip" id="hitbuffer"></canvas>
+</div>
+<div class = "buttons">
+  <div style="position:relative; float:left;">
+    <a href ="javascript:stopChip()"id="stop"><img class="navstop" src="images/stop.png"></a>
+    <a href ="javascript:runChip()" id="start"><img class="navplay" src="images/play.png"></a>
+  </div>
+  <div style="float:left;">
+    <a href ="javascript:resetChip()"><img class="navbutton" src="images/up.png"></a>
+    <a href ="javascript:stepBack()"><img class="navbutton" src="images/prev.png"></a>
+    <a href ="javascript:stepForward()"><img class="navbutton" src="images/next.png"></a>
+  </div>
+</div>
+<p class="status" id="status">x: 0<br>y: 0</p>
+<table class="memtable" id="memtable"></table>
+</div>
+<div id="updateShow">
+</div>
+<br />
+<br />
+Source code is available on <a href="http://github.com/trebonian/visual6502">github visual6502</a>.
+Use the online <a href="http://www.6502asm.com/">emulator and assembler</a> from 6502asm.com
+and <a href="http://www.e-tradition.net/bytes/6502/disassembler.html">disassembler</a> from e-tradition.net
+<br />
+For in-depth 6502 investigation and some more advanced features, try our <a href="/JSSim/expert.html">Experimenter's (Beta) version</a>.
+<br />
+<br />
+
+<script type="text/javascript"><!--
+google_ad_client = "pub-9008420149077488";
+/* 728x90, created 9/22/10 */
+google_ad_slot = "4303982675";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+
 </body>
 </html>
