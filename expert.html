@@ -122,10 +122,12 @@ $().ready(function(){
 
    <div id="tracingdiv">
 	<div id="expertControlPanel">
-	  <form>
+	  <form action="javascript:updateLogList()">
 	  <input type="button" value="Trace more" onclick="updateLoglevel(++loglevel)" />
 	  <input type="button" value="Trace less" onclick="updateLoglevel(--loglevel)" />
-	  <input type="button" value="Clear Log"  onclick="updateLoglevel(loglevel)" />
+	  <input type="button" value="Trace these too:" onclick="updateLogList()" />
+            <input type="text" id="LogThese" name="LogThese" value="" />
+	  <input type="button" value="Clear Log" onclick="updateLoglevel(loglevel)" />
 	  </form>
 	  <br />
 	</div>

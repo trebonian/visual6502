@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2010 Brian Silverman, Barry Silverman
+ Copyright (c) 2010 Brian Silverman, Barry Silverman, Ed Spittles
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -101,6 +101,7 @@ function setup_part3(){
 function setup_part4(){
 	setupTable();
 	setupNodeNameList();
+	logThese=signalSet(loglevel);
 	loadProgram();
 	if(noSimulation){
 		running=undefined;
@@ -293,7 +294,8 @@ function handleClick(e){
 
 function updateLoglevel(value){
 	loglevel = value;
-	initLogbox(signalSet(loglevel));
+	logThese = signalSet(loglevel);
+	initLogbox(logThese);
 }
 
 function updateExpertMode(isOn){

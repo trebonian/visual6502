@@ -25,6 +25,17 @@ var cycle = 0;
 var trace = Array();
 var logstream = Array();
 var running = false;
+var logThese=[];
+var presetLogLists=[
+		['cycle'],
+		['ab','db','rw','sync','pc','a','x','y','s','p'],
+		['ir','tcstate','pd'],
+		['adl','adh','sb','alu'],
+		['alucin','alua','alub','alucout','aluvout','dasb'],
+		['plaOutputs'],
+		['idb','dor'],
+		['irq','nmi','res'],
+	];
 
 function loadProgram(){
 	// a moderate size of static testprogram might be loaded
@@ -146,30 +157,30 @@ function initChip(){
 	refresh();
 	cycle = 0;
 	trace = Array();
-	initLogbox(signalSet(loglevel));
+	initLogbox(logThese);
 	chipStatus();
 	if(ctrace)console.log('initChip done after', now()-start);
 }
 
-var logThese=[
-		['cycle'],
-		['ab','db','rw','sync','pc','a','x','y','s','p'],
-		['ir','tcstate','pd'],
-		['adl','adh','sb','alu'],
-		['alucin','alua','alub','alucout','aluvout','dasb'],
-		['plaOutputs'],
-		['idb','dor'],
-		['irq','nmi','res'],
-	];
-
 function signalSet(n){
 	var signals=[];
-	for (var i=0; (i<=n)&&(i<logThese.length) ; i++){
-		for (var j=0; j<logThese[i].length; j++){
-			signals.push(logThese[i][j]);
+	for (var i=0; (i<=n)&&(i<presetLogLists.length) ; i++){
+		for (var j=0; j<presetLogLists[i].length; j++){
+			signals.push(presetLogLists[i][j]);
 		}
 	}
 	return signals;
+}
+
+function updateLogList(){
+	// user supplied a list of signals, which we append to the set defined by loglevel
+	logThese = signalSet(loglevel);
+	var tmplist = document.getElementById('LogThese').value.split(/[\s,]+/);
+	for(var i=0;i<tmplist.length;i++){
+		if(typeof nodes[nodenames[tmplist[i]]] != "undefined")
+			logThese.push(tmplist[i]);
+	}
+	initLogbox(logThese);
 }
 
 var traceChecksum='';
@@ -383,7 +394,7 @@ function chipStatus(){
 		chk=" Chk:" + traceChecksum + ((traceChecksum==goldenChecksum)?" OK":" no match");
 	setStatus(machine1, machine2, "Hz: " + estimatedHz().toFixed(1) + chk);
 	if (loglevel>0) {
-		updateLogbox(signalSet(loglevel));
+		updateLogbox(logThese);
 	}
 	selectCell(ab);
 }
