@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2010 Brian Silverman, Barry Silverman
+ Copyright (c) 2010 Brian Silverman, Barry Silverman, Ed Spittles
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -153,6 +153,7 @@ var logThese=[
 		['ir','tcstate','pd'],
 		['adl','adh','sb','alu'],
 		['alucin','alua','alub','alucout','aluvout','dasb'],
+		['plaOutputs'],
 		['idb','dor'],
 		['irq','nmi','res'],
 	];
@@ -227,6 +228,20 @@ function readPC(){return (readBits('pch', 8)<<8) + readBits('pcl', 8);}
 function readPCL(){return readBits('pcl', 8);}
 function readPCH(){return readBits('pch', 8);}
 
+function listActivePlaOutputs(){
+	// PLA outputs are mostly ^op- but some have a prefix too
+	//    - we'll allow the x and xx prefix but ignore the #
+	var r=new RegExp('^([x]?x-)?op-');
+	var pla=[];
+	for(var i in nodenamelist){
+		if(r.test(nodenamelist[i])) {
+			if(isNodeHigh(nodenames[nodenamelist[i]]))
+				pla.push(nodenamelist[i]);
+		}
+	}
+	return pla;
+}
+
 function readBit(name){
         return isNodeHigh(nodenames[name])?1:0;
 }
@@ -250,6 +265,8 @@ function busToString(busname){
 		return readPstring();
 	if(busname=='tcstate')
 		return ['clock1','clock2','t2','t3','t4','t5'].map(busToHex).join("");
+	if(busname=='plaOutputs')
+		return listActivePlaOutputs();
 	return busToHex(busname);
 }
 
@@ -291,7 +308,6 @@ function mRead(a){
 }
 
 function mWrite(a, d){memory[a]=d;}
-
 
 function clkNodes(){
 	var res = Array();
