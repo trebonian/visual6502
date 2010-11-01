@@ -391,7 +391,7 @@ function chipStatus(){
 function goFor(){
 	var n = headlessSteps;
 	estimatedHz1();
-	while(--n){
+	while(n--){
 		halfStep();
 		cycle++;
 	}
