@@ -85,14 +85,17 @@ $().ready(function(){
   <input type="checkbox" name="0" id="updateShow0" onchange="updateShow(this.name,this.checked)" />(metal)
   <input type="checkbox" name="2" id="updateShow2" onchange="updateShow(this.name,this.checked)" />(protection)
   </form>
-  <form>
-  <input type="button" value="Hide Chip Layout" onclick="updateChipLayoutVisibility(false)" />
-  <input type="button" value="Clear Highlighting" onclick="clearHighlight()" />
+  <form action="javascript:hiliteNodeList();" />
+  <input type="button" value="Highlight:" onclick="hiliteNodeList();" />
+  <input type="text" id="HighlightThese" name="HighlightThese" value="" />
+  <input type="button" value="Clear Highlighting" onclick="clearHighlight();" />
   <span class="animatebox">
     Animate during simulation:
     <input type="checkbox" id="animateModeCheckbox" onchange="updateChipLayoutAnimation(this.checked)" 
     /></span>
-  &nbsp;
+  </form>
+  <form>
+  <input type="button" value="Hide Chip Layout" onclick="updateChipLayoutVisibility(false)" />
   <a href="" id="linkHere" >Link to this location</a>
   </form>
 </div>

@@ -279,6 +279,39 @@ function recenter(){
 	document.getElementById('linkHere').href=location.pathname+"?"+whereAmIAsQuery();
 }
 
+var highlightThese;
+
+// flash some set of nodes according to user input
+function hiliteNodeList(){
+	var tmplist = document.getElementById('HighlightThese').value.split(/[\s,]+/);
+	if(tmplist.length==0){
+		// request to highlight nothing, so switch off any signal highlighting
+		hiliteNode(-1);
+		return;
+	}
+	highlightThese = [];
+	for(var i=0;i<tmplist.length;i++){
+		// get a node number from a signal name or a node number
+		var name = tmplist[i];
+		var value = parseInt(tmplist[i]);
+		if((value!=NaN) && (typeof nodes[name] != "undefined")) {
+			highlightThese.push(value);
+		} else if(typeof nodenames[name] != "undefined") {
+			highlightThese.push(nodenames[name]);
+		}
+		// invalid input: how to tell the user?
+	}
+	if(highlightThese.length==0){
+		// all input rejected: how to tell the user?
+		return;
+	}
+	clearHighlight();  // nullify the simulation overlay (orange/purple)
+	hiliteNode(-1);    // unhighlight all nodes
+	setTimeout("hiliteNode(highlightThese);", 400);
+	setTimeout("hiliteNode(-1);", 800);
+	setTimeout("hiliteNode(highlightThese);", 1200);
+}
+
 function handleClick(e){
 	var x = localx(hilite, e.clientX)/zoom;
 	var y = localy(hilite, e.clientY)/zoom;
