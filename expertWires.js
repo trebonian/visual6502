@@ -93,7 +93,6 @@ function setup_part3(){
 		// which saves a lot of memory and allows us to run on small systems
 		updateChipLayoutVisibility(true);
 	}
-	window.onkeypress = function(e){handleKey(e);}
 	setStatus('resetting 6502...');
 	setTimeout(setup_part4, 0);
 }
@@ -209,6 +208,8 @@ function updateChipLayoutAnimation(isOn){
 //
 /////////////////////////
 
+
+// these keyboard actions are primarily for the chip display
 function handleKey(e){
 	var c = e.charCode;
 	c = String.fromCharCode(c);
@@ -216,17 +217,21 @@ function handleKey(e){
 	if((c=='Z'||c=='x'||c=='<') && zoom>1) setZoom(zoom/1.2);
 	else if((c=='z'||c=='>') && zoom<grMaxZoom) setZoom(zoom*1.2);
 	else if(c=='?') setZoom(1);
+	// FIXME these keys are for the simulator (but not when focus is in a textbox)
 	else if(c=='n') stepForward();
 	else if(c=='p') stepBack();
 }
 
+//  handler for mousedown events over chip display
+//  must handle click-to-select (and focus), and drag to pan
 function mouseDown(e){
+	chipsurround.focus();
 	e.preventDefault();
 	moved=false;	
 	dragMouseX = e.clientX;	
 	dragMouseY = e.clientY;
-	window.onmousemove = function(e){mouseMove(e)};
-	window.onmouseup = function(e){mouseUp(e)};
+	chipsurround.onmousemove = function(e){mouseMove(e)};
+	chipsurround.onmouseup = function(e){mouseUp(e)};
 }
 
 function mouseMove(e){
@@ -247,8 +252,8 @@ function mouseMove(e){
 
 function mouseUp(e){
 	if(!moved) handleClick(e);	
-	window.onmousemove = undefined;
-	window.onmouseup = undefined;
+	chipsurround.onmousemove = undefined;
+	chipsurround.onmouseup = undefined;
 }
 
 function setZoom(n){
@@ -307,17 +312,20 @@ function updateExpertMode(isOn){
 		document.getElementById('layoutControlPanel').style.display = 'block';
 }
 
+var chipsurround;
+
 function updateChipLayoutVisibility(isOn){
 	chipLayoutIsVisible=isOn;
 	if(chipLayoutIsVisible) {
-		document.getElementById('chipsurround').style.display = 'block';
+		chipsurround=document.getElementById('chipsurround');
+		chipsurround.style.display = 'block';
 		if(expertMode)
 			document.getElementById('layoutControlPanel').style.display = 'block';
 		document.getElementById('nochip').style.display = 'none';
 		//document.getElementById('logstreamscroller').style.height="260px";
-		// allow the display to update while we load the graphics
 		updateChipLayoutAnimation(true);
 		setStatus('loading graphics...');
+		// allow the browser to respond while we load the graphics
 		setTimeout(setupChipLayoutGraphics, 0);
 	} else {
 		// cannot animate the layout if there is no canvas
@@ -342,7 +350,10 @@ function setupChipLayoutGraphics(){
 	setStatus('Ready!');  // would prefer chipStatus but it's not idempotent
 	if(moveHereFirst!=null)
 		moveHere(moveHereFirst);
-	hilite.onmousedown = function(e){mouseDown(e);}
+	// grant focus to the chip display to enable zoom keys
+	chipsurround.focus();
+	chipsurround.onmousedown = function(e){mouseDown(e);};
+	chipsurround.onkeypress = function(e){handleKey(e);};
 }
 
 // utility function to save graphics pan and zoom

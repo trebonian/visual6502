@@ -73,7 +73,7 @@ function selectCell(n){
 	if(n>=0x200) return;
 	cellEl(n).style.background = '#ff8';
 	selected = n;
-	window.onkeydown = function(e){cellKeydown(e);};
+	table.onkeydown = function(e){cellKeydown(e);};
 }
 
 function unselectCell(){

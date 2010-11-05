@@ -60,8 +60,8 @@ $().ready(function(){
 <a href="http://www.e-tradition.net/bytes/6502/disassembler.html">e-tradition disassembler</a>&nbsp;
 </span>
 <div class="frame" id="frame">
-<div class="leftcolumn">
-<div id="chipsurround">
+<div class="leftcolumn" id="leftcolumn">
+<div id="chipsurround" tabindex="1">
 <div class="chip" id="chip">
 <span id="waiting">Please wait, graphics initialising...</span>
 <canvas class="chip" id="chipbg"></canvas>
@@ -116,7 +116,7 @@ $().ready(function(){
 </div> <!-- status -->
 
    <div id="memtablediv">
-	<table class="memtable" id="memtable"></table>
+	<table class="memtable" id="memtable" tabindex="2"></table>
    </div>
 </div> <!-- righttopdiv -->
 
