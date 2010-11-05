@@ -103,6 +103,7 @@ function setup_part4(){
 	logThese=signalSet(loglevel);
 	loadProgram();
 	if(noSimulation){
+		stopChip();
 		running=undefined;
 		setStatus('Ready!');
 	} else {
