@@ -451,6 +451,24 @@ function initLogbox(names){
 	logbox.innerHTML = "<tr>"+logStream.join("</tr><tr>")+"</tr>";
 }
 
+var logboxAppend=true;
+
+// can append or prepend new states to the log table
+// when we reverse direction we need to reorder the log stream
+function updateLogDirection(){
+	logboxAppend=!logboxAppend;
+	var logbox=document.getElementById('logstream');
+	var loglines=[];
+	// the first element is the header so we can't reverse()
+	for (var i=1;i<logStream.length;i++) {
+		loglines.unshift(logStream[i]);
+	}
+	loglines.unshift(logStream[0]);
+	logStream=loglines;
+	logbox.innerHTML = "<tr>"+logStream.join("</tr><tr>")+"</tr>";
+}
+
+// update the table of signal values, by prepending or appending
 function updateLogbox(names){
 	var logbox=document.getElementById('logstream');
 	var signals=[];
@@ -458,7 +476,10 @@ function updateLogbox(names){
 	for(i in names){
 		signals.push(busToString(names[i]));
 	}
-        logStream.push("<td>" + signals.join("</td><td>") + "</td>");
+	if(logboxAppend)
+	        logStream.push("<td>" + signals.join("</td><td>") + "</td>");
+	else
+		logStream.splice(1,0,"<td>" + signals.join("</td><td>") + "</td>");
 
 	logbox.innerHTML = "<tr>"+logStream.join("</tr><tr>")+"</tr>";
 }
