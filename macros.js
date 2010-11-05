@@ -177,7 +177,8 @@ function updateLogList(){
 	logThese = signalSet(loglevel);
 	var tmplist = document.getElementById('LogThese').value.split(/[\s,]+/);
 	for(var i=0;i<tmplist.length;i++){
-		if(typeof nodes[nodenames[tmplist[i]]] != "undefined")
+		// could be a signal name, a node number, or a special name
+		if(typeof busToString(tmplist[i]) != "undefined")
 			logThese.push(tmplist[i]);
 	}
 	initLogbox(logThese);
@@ -287,8 +288,6 @@ function busToString(busname){
 
 function busToHex(busname){
 	// may be passed a bus or a signal, so allow multiple signals
-	// signals may have multi-part names like pla51_T0SBC which should match either part
-	// this is quite difficult to deal with, perhaps indicating that it is not such a good idea
 	var width=0;
 	var r=new RegExp('^' + busname + '[0-9]');
 	for(var i in nodenamelist){
@@ -296,10 +295,16 @@ function busToHex(busname){
 			width++;
 		}
 	}
-	if(width==0)
-		return isNodeHigh(nodenames[busname])?"1":"0";
+	if(width==0) {
+		// not a bus, so could be a signal, a nodenumber or a mistake
+		if(typeof nodenames[busname] != "undefined")
+			return isNodeHigh(nodenames[busname])?"1":"0";
+		if((parseInt(busname)!=NaN) && (typeof nodes[busname] != "undefined"))
+			return isNodeHigh(busname)?"1":"0";
+		return undefined;
+	}
 	if(width>16)
-		return -1;
+		return undefined;
 	// finally, convert from logic values to hex
 	return (0x10000+readBits(busname,width)).toString(16).slice(-(width-1)/4-1);
 }
