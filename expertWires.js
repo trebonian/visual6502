@@ -78,10 +78,11 @@ function setup(){
 function setup_part2(){
 	frame = document.getElementById('frame');
 	statbox = document.getElementById('status');
-	setupParams();
-	updateExpertMode(expertMode);
+	// load the circuit before acting on URL parameters
 	setupNodes();
 	setupTransistors();
+	setupParams();
+	updateExpertMode(expertMode);
 	detectOldBrowser();
 	setStatus('loading graphics...');
 	setTimeout(setup_part3, 0);
@@ -151,6 +152,8 @@ function setupParams(){
 		// user interface mode control
 		if(name=="loglevel" && parseInt(value)!=NaN){
 			updateLoglevel(value);
+		} else if(name=="logmore" && value!=""){
+			updateLogList(value);
 		} else if(name=="expert" && value.indexOf("t")==0){
 			updateExpertMode(true);
 		} else if(name=="headlesssteps" && parseInt(value)!=NaN){
