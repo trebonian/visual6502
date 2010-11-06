@@ -181,6 +181,12 @@ function setupParams(){
 			userResetLow=parseInt(value,16)%256;
 			userResetHigh=(parseInt(value,16)>>8)%256;
 		} else
+		// setup input pin events, breakpoints, watchpoints
+		if(name=="reset0" && parseInt(value)!=NaN){
+			clockTriggers[value]="setLow('res');";
+		} else if(name=="reset1" && parseInt(value)!=NaN){
+			clockTriggers[value]="setHigh('res');";
+		} else
 		// run a test program, and optionally check against a golden checksum
 		if(name=="steps" && parseInt(value)!=NaN){
 			userSteps=parseInt(value);

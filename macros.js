@@ -201,9 +201,13 @@ function step(){
 	chipStatus();
 }
 
+// triggers for breakpoints, watchpoints, input pin events
+clockTriggers={};
+
 // simulate a single clock phase with no update to graphics or trace
 function halfStep(){
 	var clk = isNodeHigh(nodenames['clk0']);
+	eval(clockTriggers[cycle]);  // usually undefined, no measurable performance loss
 	if (clk) {setLow('clk0'); handleBusRead(); } 
 	else {setHigh('clk0'); handleBusWrite();}
 }
