@@ -124,7 +124,10 @@ $().ready(function(){
 </div> <!-- righttopdiv -->
 
    <div id="tracingdiv">
-	<div id="expertControlPanel">
+        <textarea id="consolebox">
+click here and type if your program handles input
+        </textarea>
+	<div id="expertControlPanel" tabindex="3">
 	  <form action="javascript:updateLogList()">
 	  <input type="button" value="Trace more" onclick="updateLoglevel(++loglevel)" />
 	  <input type="button" value="Trace less" onclick="updateLoglevel(--loglevel)" />

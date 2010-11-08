@@ -209,24 +209,42 @@ function step(){
 }
 
 // triggers for breakpoints, watchpoints, input pin events
+// almost always are undefined when tested, so minimal impact on performance
 clockTriggers={};
+writeTriggers={};
+readTriggers={};
+fetchTriggers={};
+
+// example instruction tracing triggers
+// fetchTriggers[0x20]="console.log('0x'+readAddressBus().toString(16)+': JSR');";
+// fetchTriggers[0x60]="console.log('0x'+readAddressBus().toString(16)+': RTS');";
+// fetchTriggers[0x4c]="console.log('0x'+readAddressBus().toString(16)+': JMP');";
 
 // simulate a single clock phase with no update to graphics or trace
 function halfStep(){
 	var clk = isNodeHigh(nodenames['clk0']);
-	eval(clockTriggers[cycle]);  // usually undefined, no measurable performance loss
+	eval(clockTriggers[cycle]);
 	if (clk) {setLow('clk0'); handleBusRead(); } 
 	else {setHigh('clk0'); handleBusWrite();}
 }
 
 function handleBusRead(){
-	if(isNodeHigh(nodenames['rw'])) writeDataBus(mRead(readAddressBus()));
+	if(isNodeHigh(nodenames['rw'])){
+		var a = readAddressBus();
+		var d = eval(readTriggers[a]);
+		if(d == undefined)
+			d = mRead(readAddressBus());
+		if(isNodeHigh(nodenames['sync']))
+			eval(fetchTriggers[d]);
+		writeDataBus(d);
+	}
 }
 
 function handleBusWrite(){
 	if(!isNodeHigh(nodenames['rw'])){
 		var a = readAddressBus();
 		var d = readDataBus();
+		eval(writeTriggers[a]);
 		mWrite(a,d);
 		if(a<0x200) setCellValue(a,d);
 	}
@@ -455,8 +473,9 @@ function estimatedHz1(){
 	return prevHzEstimate1
 }
 
+var logbox;
 function initLogbox(names){
-	var logbox=document.getElementById('logstream');
+	logbox=document.getElementById('logstream');
 	if(logbox==null)return;
 
 	logStream = [];
@@ -469,9 +488,8 @@ var logboxAppend=true;
 // can append or prepend new states to the log table
 // when we reverse direction we need to reorder the log stream
 function updateLogDirection(){
-	logboxAppend=!logboxAppend;
-	var logbox=document.getElementById('logstream');
 	var loglines=[];
+	logboxAppend=!logboxAppend;
 	// the first element is the header so we can't reverse()
 	for (var i=1;i<logStream.length;i++) {
 		loglines.unshift(logStream[i]);
@@ -483,7 +501,6 @@ function updateLogDirection(){
 
 // update the table of signal values, by prepending or appending
 function updateLogbox(names){
-	var logbox=document.getElementById('logstream');
 	var signals=[];
 
 	for(i in names){
