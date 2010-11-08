@@ -157,7 +157,8 @@ function initChip(){
 	refresh();
 	cycle = 0;
 	trace = Array();
-	updateLogList();
+	if(typeof expertMode != "undefined")
+		updateLogList();
 	chipStatus();
 	if(ctrace)console.log('initChip done after', now()-start);
 }
@@ -187,7 +188,6 @@ function updateLogList(names){
 		if(typeof busToString(names[i]) != "undefined")
 			logThese.push(names[i]);
 	}
-console.log(logThese);
 	initLogbox(logThese);
 }
 
