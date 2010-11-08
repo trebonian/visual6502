@@ -188,7 +188,6 @@ function updateLogList(names){
 		if(typeof busToString(names[i]) != "undefined")
 			logThese.push(names[i]);
 	}
-console.log(logThese);
 	initLogbox(logThese);
 }
 

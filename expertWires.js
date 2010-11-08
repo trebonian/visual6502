@@ -82,6 +82,7 @@ function setup_part2(){
 	setupNodes();
 	setupTransistors();
 	setupParams();
+	setupExpertMode();
 	detectOldBrowser();
 	setStatus('loading graphics...');
 	setTimeout(setup_part3, 0);
@@ -341,6 +342,14 @@ function updateLoglevel(value){
 	loglevel = value;
 	logThese = signalSet(loglevel);
 	initLogbox(logThese);
+}
+
+function setupExpertMode(isOn){
+	document.getElementById('expertControlPanel').style.display = 'block';
+	if(loglevel==0)
+		updateLoglevel(1);
+	if(chipLayoutIsVisible)
+		document.getElementById('layoutControlPanel').style.display = 'block';
 }
 
 var chipsurround;
