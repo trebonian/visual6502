@@ -82,7 +82,6 @@ function setup_part2(){
 	setupNodes();
 	setupTransistors();
 	setupParams();
-	updateExpertMode(expertMode);
 	detectOldBrowser();
 	setStatus('loading graphics...');
 	setTimeout(setup_part3, 0);
@@ -154,8 +153,6 @@ function setupParams(){
 			updateLoglevel(value);
 		} else if(name=="logmore" && value!=""){
 			updateLogList(value);
-		} else if(name=="expert" && value.indexOf("t")==0){
-			updateExpertMode(true);
 		} else if(name=="headlesssteps" && parseInt(value)!=NaN){
 			headlessSteps=parseInt(value);
 		} else if(name=="graphics" && value.indexOf("f")==0){
@@ -346,15 +343,6 @@ function updateLoglevel(value){
 	initLogbox(logThese);
 }
 
-function updateExpertMode(isOn){
-	expertMode=true
-	document.getElementById('expertControlPanel').style.display = 'block';
-	if(loglevel==0)
-		updateLoglevel(1);
-	if(chipLayoutIsVisible)
-		document.getElementById('layoutControlPanel').style.display = 'block';
-}
-
 var chipsurround;
 
 function updateChipLayoutVisibility(isOn){
@@ -367,8 +355,7 @@ function updateChipLayoutVisibility(isOn){
 		// replace the Show Chip button with the chip graphics
 		chipsurround=document.getElementById('chipsurround');
 		chipsurround.style.display = 'block';
-		if(expertMode)
-			document.getElementById('layoutControlPanel').style.display = 'block';
+		document.getElementById('layoutControlPanel').style.display = 'block';
 		document.getElementById('nochip').style.display = 'none';
 		// allow the browser to respond while we load the graphics
 		setStatus('loading graphics...');
