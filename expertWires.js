@@ -52,7 +52,7 @@ var drawlayers = [true, true, true, true, true, true];
               
 // some modes and parameters which can be passed in from the URL query
 var moveHereFirst;
-var expertMode=false
+var expertMode=true;
 var animateChipLayout = true;
 var userCode=[];
 var userResetLow;
