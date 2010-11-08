@@ -138,6 +138,14 @@ a#linkHere{
  padding:2px;
 }
 
+textarea#consolebox{
+ font-family:courier,monospace;
+ border: 1px solid gray;
+ margin: 2px;
+ padding: 2px;
+ width: 80em;
+}
+
 div#logstreamscroller{
  overflow:auto;
 }

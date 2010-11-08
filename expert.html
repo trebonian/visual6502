@@ -85,7 +85,7 @@ $().ready(function(){
   <input type="checkbox" name="0" id="updateShow0" onchange="updateShow(this.name,this.checked)" />(metal)
   <input type="checkbox" name="2" id="updateShow2" onchange="updateShow(this.name,this.checked)" />(protection)
   </form>
-  <form action="javascript:hiliteNodeList();" />
+  <form action="javascript:hiliteNodeList();">
   <input type="button" value="Highlight:" onclick="hiliteNodeList();" />
   <input type="text" id="HighlightThese" name="HighlightThese" value="" />
   <input type="button" value="Clear Highlighting" onclick="clearHighlight();" />
@@ -124,7 +124,10 @@ $().ready(function(){
 </div> <!-- righttopdiv -->
 
    <div id="tracingdiv">
-	<div id="expertControlPanel">
+        <textarea id="consolebox">
+click here and type if your program handles input
+        </textarea>
+	<div id="expertControlPanel" tabindex="3">
 	  <form action="javascript:updateLogList()">
 	  <input type="button" value="Trace more" onclick="updateLoglevel(++loglevel)" />
 	  <input type="button" value="Trace less" onclick="updateLoglevel(--loglevel)" />

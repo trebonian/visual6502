@@ -103,6 +103,7 @@ function setup_part4(){
 	setupNodeNameList();
 	logThese=signalSet(loglevel);
 	loadProgram();
+	setupConsole();
 	if(noSimulation){
 		stopChip();
 		running=undefined;
@@ -350,6 +351,14 @@ function setupExpertMode(isOn){
 		updateLoglevel(1);
 	if(chipLayoutIsVisible)
 		document.getElementById('layoutControlPanel').style.display = 'block';
+}
+
+var consolegetc;    // global variable to hold last keypress in the console area
+var consolebox;
+
+function setupConsole(){
+	consolebox=document.getElementById('consolebox');
+	consolebox.onkeypress=function(e){consolegetc=e.charCode;};
 }
 
 var chipsurround;
