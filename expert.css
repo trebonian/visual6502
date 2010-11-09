@@ -200,3 +200,10 @@ div.rightcolumn {
 .hsplitbar.active, .hsplitbar:hover {
  background: #c66 url(3rdparty/img/hgrabber.gif) no-repeat center;
 }
+
+span#plain {
+ display: block;
+ margin-bottom: 4px;
+}
+
+
