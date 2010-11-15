@@ -435,15 +435,40 @@ function chipStatus(){
 	selectCell(ab);
 }
 
+// run for an extended number of cycles, with low overhead, for interactive programs or for benchmarking
+//    note: to run an interactive program, use an URL like
+//    http://visual6502.org/JSSim/expert.html?graphics=f&loglevel=-1&headlesssteps=-500
 function goFor(){
-	var n = headlessSteps;
-	estimatedHz1();
+	var n = headlessSteps;  //  a negative value is a request to free-run
+	if(headlessSteps<0)
+		n=-n;
+	var start = document.getElementById('start');
+	var stop = document.getElementById('stop');
+	start.style.visibility = 'hidden';
+	stop.style.visibility = 'visible';
+	if(typeof running == "undefined") {
+		initChip();
+	}
+	running = true;
+	setTimeout("instantaneousHz(); goForN("+n+")",0);
+}
+
+// helper function: allows us to poll 'running' without resetting it when we're re-scheduled
+function goForN(n){
+	var n2=n;  // save our parameter so we can re-submit ourselves
 	while(n--){
 		halfStep();
 		cycle++;
 	}
-	estimatedHz1();
+	instantaneousHz();
 	chipStatus();
+	if((headlessSteps<0) && running){
+		setTimeout("goForN("+n2+")",0); // re-submit ourselves if we are meant to free-run
+		return;
+	}
+	running = false;
+	start.style.visibility = 'visible';
+	stop.style.visibility = 'hidden';
 }
 
 var prevHzTimeStamp=0;
@@ -452,13 +477,10 @@ var prevHzEstimate1=1;
 var prevHzEstimate2=1;
 var HzSamplingRate=10;
 
+// return an averaged speed: called periodically during normal running
 function estimatedHz(){
 	if(cycle%HzSamplingRate!=3)
 		return prevHzEstimate1;
-	return estimatedHz1();
-}
-
-function estimatedHz1(){
 	var HzTimeStamp = now();
 	var HzEstimate = (cycle-prevHzCycleCount+.01)/(HzTimeStamp-prevHzTimeStamp+.01);
 	HzEstimate=HzEstimate*1000/2; // convert from phases per millisecond to Hz
@@ -468,6 +490,18 @@ function estimatedHz1(){
 		HzSamplingRate=10; // smoother
 	prevHzEstimate2=prevHzEstimate1;
 	prevHzEstimate1=(HzEstimate+prevHzEstimate1+prevHzEstimate2)/3; // wrong way to average speeds
+	prevHzTimeStamp=HzTimeStamp;
+	prevHzCycleCount=cycle;
+	return prevHzEstimate1
+}
+
+// return instantaneous speed: called twice, before and after a timed run using goFor()
+function instantaneousHz(){
+	var HzTimeStamp = now();
+	var HzEstimate = (cycle-prevHzCycleCount+.01)/(HzTimeStamp-prevHzTimeStamp+.01);
+	HzEstimate=HzEstimate*1000/2; // convert from phases per millisecond to Hz
+	prevHzEstimate1=HzEstimate;
+	prevHzEstimate2=prevHzEstimate1;
 	prevHzTimeStamp=HzTimeStamp;
 	prevHzCycleCount=cycle;
 	return prevHzEstimate1
