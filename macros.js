@@ -29,7 +29,7 @@ var logThese=[];
 var presetLogLists=[
 		['cycle'],
 		['ab','db','rw','sync','pc','a','x','y','s','p'],
-		['ir','tcstate','pd'],
+		['ir','tcstate','-pd'],
 		['adl','adh','sb','alu'],
 		['alucin','alua','alub','alucout','aluvout','dasb'],
 		['plaOutputs'],
@@ -273,18 +273,19 @@ function readPC(){return (readBits('pch', 8)<<8) + readBits('pcl', 8);}
 function readPCL(){return readBits('pcl', 8);}
 function readPCH(){return readBits('pch', 8);}
 
-function listActivePlaOutputs(){
-	// PLA outputs are mostly ^op- but some have a prefix too
-	//    - we'll allow the x and xx prefix but ignore the #
-	var r=new RegExp('^([x]?x-)?op-');
-	var pla=[];
+// for one-hot or few-hot signal collections we want to list the active ones
+// and for brevity we remove the common prefix
+function listActiveSignals(pattern){
+	var r=new RegExp(pattern);
+	var list=[];
 	for(var i in nodenamelist){
 		if(r.test(nodenamelist[i])) {
 			if(isNodeHigh(nodenames[nodenamelist[i]]))
-				pla.push(nodenamelist[i]);
+				// also map hyphen to a non-breaking version
+				list.push(nodenamelist[i].replace(r,'').replace(/-/g,'&#8209'));
 		}
 	}
-	return pla;
+	return list;
 }
 
 function readBit(name){
@@ -311,14 +312,27 @@ function busToString(busname){
 	if(busname=='tcstate')
 		return ['clock1','clock2','t2','t3','t4','t5'].map(busToHex).join("");
 	if(busname=='plaOutputs')
-		return listActivePlaOutputs();
-	return busToHex(busname);
+		// PLA outputs are mostly ^op- but some have a prefix too
+		//    - we'll allow the x and xx prefix but ignore the #
+		return listActiveSignals('^([x]?x-)?op-');
+	if(busname=='DPControl')
+		return listActiveSignals('^dpc[0-9]+_');
+	if(busname[0]=="-"){
+		// invert the value of the bus for display
+		var value=busToHex(busname.slice(1))
+		if(typeof value != "undefined")
+			return value.replace(/./g,function(x){return (15-parseInt(x,16)).toString(16)});
+		else
+			return undefined;;
+	} else {
+		return busToHex(busname);
+	}
 }
 
 function busToHex(busname){
 	// may be passed a bus or a signal, so allow multiple signals
 	var width=0;
-	var r=new RegExp('^' + busname + '[0-9]');
+	var r=new RegExp('^' + busname + '[0-9]+$');
 	for(var i in nodenamelist){
 		if(r.test(nodenamelist[i])) {
 			width++;
@@ -435,15 +449,40 @@ function chipStatus(){
 	selectCell(ab);
 }
 
+// run for an extended number of cycles, with low overhead, for interactive programs or for benchmarking
+//    note: to run an interactive program, use an URL like
+//    http://visual6502.org/JSSim/expert.html?graphics=f&loglevel=-1&headlesssteps=-500
 function goFor(){
-	var n = headlessSteps;
-	estimatedHz1();
+	var n = headlessSteps;  //  a negative value is a request to free-run
+	if(headlessSteps<0)
+		n=-n;
+	var start = document.getElementById('start');
+	var stop = document.getElementById('stop');
+	start.style.visibility = 'hidden';
+	stop.style.visibility = 'visible';
+	if(typeof running == "undefined") {
+		initChip();
+	}
+	running = true;
+	setTimeout("instantaneousHz(); goForN("+n+")",0);
+}
+
+// helper function: allows us to poll 'running' without resetting it when we're re-scheduled
+function goForN(n){
+	var n2=n;  // save our parameter so we can re-submit ourselves
 	while(n--){
 		halfStep();
 		cycle++;
 	}
-	estimatedHz1();
+	instantaneousHz();
 	chipStatus();
+	if((headlessSteps<0) && running){
+		setTimeout("goForN("+n2+")",0); // re-submit ourselves if we are meant to free-run
+		return;
+	}
+	running = false;
+	start.style.visibility = 'visible';
+	stop.style.visibility = 'hidden';
 }
 
 var prevHzTimeStamp=0;
@@ -452,13 +491,10 @@ var prevHzEstimate1=1;
 var prevHzEstimate2=1;
 var HzSamplingRate=10;
 
+// return an averaged speed: called periodically during normal running
 function estimatedHz(){
 	if(cycle%HzSamplingRate!=3)
 		return prevHzEstimate1;
-	return estimatedHz1();
-}
-
-function estimatedHz1(){
 	var HzTimeStamp = now();
 	var HzEstimate = (cycle-prevHzCycleCount+.01)/(HzTimeStamp-prevHzTimeStamp+.01);
 	HzEstimate=HzEstimate*1000/2; // convert from phases per millisecond to Hz
@@ -473,11 +509,24 @@ function estimatedHz1(){
 	return prevHzEstimate1
 }
 
+// return instantaneous speed: called twice, before and after a timed run using goFor()
+function instantaneousHz(){
+	var HzTimeStamp = now();
+	var HzEstimate = (cycle-prevHzCycleCount+.01)/(HzTimeStamp-prevHzTimeStamp+.01);
+	HzEstimate=HzEstimate*1000/2; // convert from phases per millisecond to Hz
+	prevHzEstimate1=HzEstimate;
+	prevHzEstimate2=prevHzEstimate1;
+	prevHzTimeStamp=HzTimeStamp;
+	prevHzCycleCount=cycle;
+	return prevHzEstimate1
+}
+
 var logbox;
 function initLogbox(names){
 	logbox=document.getElementById('logstream');
 	if(logbox==null)return;
 
+	names=names.map(function(x){return x.replace(/^-/,'')});
 	logStream = [];
         logStream.push("<td>" + names.join("</td><td>") + "</td>");
 	logbox.innerHTML = "<tr>"+logStream.join("</tr><tr>")+"</tr>";
