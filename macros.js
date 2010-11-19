@@ -273,18 +273,19 @@ function readPC(){return (readBits('pch', 8)<<8) + readBits('pcl', 8);}
 function readPCL(){return readBits('pcl', 8);}
 function readPCH(){return readBits('pch', 8);}
 
-function listActivePlaOutputs(){
-	// PLA outputs are mostly ^op- but some have a prefix too
-	//    - we'll allow the x and xx prefix but ignore the #
-	var r=new RegExp('^([x]?x-)?op-');
-	var pla=[];
+// for one-hot or few-hot signal collections we want to list the active ones
+// and for brevity we remove the common prefix
+function listActiveSignals(pattern){
+	var r=new RegExp(pattern);
+	var list=[];
 	for(var i in nodenamelist){
 		if(r.test(nodenamelist[i])) {
 			if(isNodeHigh(nodenames[nodenamelist[i]]))
-				pla.push(nodenamelist[i]);
+				// also map hyphen to a non-breaking version
+				list.push(nodenamelist[i].replace(r,'').replace(/-/g,'&#8209'));
 		}
 	}
-	return pla;
+	return list;
 }
 
 function readBit(name){
@@ -311,7 +312,11 @@ function busToString(busname){
 	if(busname=='tcstate')
 		return ['clock1','clock2','t2','t3','t4','t5'].map(busToHex).join("");
 	if(busname=='plaOutputs')
-		return listActivePlaOutputs();
+		// PLA outputs are mostly ^op- but some have a prefix too
+		//    - we'll allow the x and xx prefix but ignore the #
+		return listActiveSignals('^([x]?x-)?op-');
+	if(busname=='DPControl')
+		return listActiveSignals('^dpc[0-9]+_');
 	if(busname[0]=="-"){
 		// invert the value of the bus for display
 		var value=busToHex(busname.slice(1))
