@@ -29,7 +29,7 @@ var logThese=[];
 var presetLogLists=[
 		['cycle'],
 		['ab','db','rw','sync','pc','a','x','y','s','p'],
-		['ir','tcstate','pd'],
+		['ir','tcstate','-pd'],
 		['adl','adh','sb','alu'],
 		['alucin','alua','alub','alucout','aluvout','dasb'],
 		['plaOutputs'],
@@ -312,13 +312,22 @@ function busToString(busname){
 		return ['clock1','clock2','t2','t3','t4','t5'].map(busToHex).join("");
 	if(busname=='plaOutputs')
 		return listActivePlaOutputs();
-	return busToHex(busname);
+	if(busname[0]=="-"){
+		// invert the value of the bus for display
+		var value=busToHex(busname.slice(1))
+		if(typeof value != "undefined")
+			return value.replace(/./g,function(x){return (15-parseInt(x,16)).toString(16)});
+		else
+			return undefined;;
+	} else {
+		return busToHex(busname);
+	}
 }
 
 function busToHex(busname){
 	// may be passed a bus or a signal, so allow multiple signals
 	var width=0;
-	var r=new RegExp('^' + busname + '[0-9]');
+	var r=new RegExp('^' + busname + '[0-9]+$');
 	for(var i in nodenamelist){
 		if(r.test(nodenamelist[i])) {
 			width++;
@@ -512,6 +521,7 @@ function initLogbox(names){
 	logbox=document.getElementById('logstream');
 	if(logbox==null)return;
 
+	names=names.map(function(x){return x.replace(/^-/,'')});
 	logStream = [];
         logStream.push("<td>" + names.join("</td><td>") + "</td>");
 	logbox.innerHTML = "<tr>"+logStream.join("</tr><tr>")+"</tr>";
