@@ -28,11 +28,12 @@ var running = false;
 var logThese=[];
 var presetLogLists=[
 		['cycle'],
-		['ab','db','rw','sync','pc','a','x','y','s','p'],
+		['ab','db','rw','Fetch','pc','a','x','y','s','p'],
+		['Execute','State'],
 		['ir','tcstate','-pd'],
 		['adl','adh','sb','alu'],
 		['alucin','alua','alub','alucout','aluvout','dasb'],
-		['plaOutputs'],
+		['plaOutputs','DPControl'],
 		['idb','dor'],
 		['irq','nmi','res'],
 	];
@@ -315,6 +316,7 @@ function readBits(name, n){
 function busToString(busname){
 	// takes a signal name or prefix
 	// returns an appropriate string representation
+	// some 'signal names' are CPU-specific aliases to user-friendly string output
 	if(busname=='cycle')
 		return cycle>>1;
 	if(busname=='pc')
@@ -323,6 +325,12 @@ function busToString(busname){
 		return readPstring();
 	if(busname=='tcstate')
 		return ['clock1','clock2','t2','t3','t4','t5'].map(busToHex).join("");
+	if(busname=='State')
+		return listActiveTCStates();
+	if(busname=='Execute')
+		return dis6502[readBits('ir',8)];
+	if(busname=='Fetch')
+		return isNodeHigh(nodenames['sync'])?dis6502[readDataBus()]:'';
 	if(busname=='plaOutputs')
 		// PLA outputs are mostly ^op- but some have a prefix too
 		//    - we'll allow the x and xx prefix but ignore the #
@@ -451,18 +459,14 @@ function chipStatus(){
 	        ' Y:' + hexByte(readY()) +
 	        ' SP:' + hexByte(readSP()) +
 	        ' ' + readPstring();
-	var machine3 = '';
-	machine3 += 'State: ' + listActiveTCStates() + ' ';
-	machine3 += 'Execute: ' + dis6502[readBits('ir',8)];
+	var machine3 = 
+		'Hz: ' + estimatedHz().toFixed(1) +
+		' Exec: ' + busToString('Execute') + '(' + busToString('State') + ')';
 	if(isNodeHigh(nodenames['sync']))
-		machine3 += ' (Fetch: ' + dis6502[readDataBus()] + ')';
-	var chk='';
+		machine3 += ' (Fetch: ' + busToString('Fetch') + ')';
 	if(goldenChecksum != undefined)
-		chk=" Chk:" + traceChecksum + ((traceChecksum==goldenChecksum)?" OK":" no match");
-	setStatus(
-			machine1, machine2, machine3,
-			"Hz: " + estimatedHz().toFixed(1) + chk
-		);
+		machine3 += " Chk:" + traceChecksum + ((traceChecksum==goldenChecksum)?" OK":" no match");
+	setStatus(machine1, machine2, machine3);
 	if (loglevel>0) {
 		updateLogbox(logThese);
 	}
