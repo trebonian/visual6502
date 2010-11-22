@@ -460,12 +460,14 @@ function chipStatus(){
 	        ' SP:' + hexByte(readSP()) +
 	        ' ' + readPstring();
 	var machine3 = 
-		'Hz: ' + estimatedHz().toFixed(1) +
-		' Exec: ' + busToString('Execute') + '(' + busToString('State') + ')';
-	if(isNodeHigh(nodenames['sync']))
-		machine3 += ' (Fetch: ' + busToString('Fetch') + ')';
-	if(goldenChecksum != undefined)
-		machine3 += " Chk:" + traceChecksum + ((traceChecksum==goldenChecksum)?" OK":" no match");
+		'Hz: ' + estimatedHz().toFixed(1);
+	if(typeof expertMode != "undefined") {
+		machine3 += ' Exec: ' + busToString('Execute') + '(' + busToString('State') + ')';
+		if(isNodeHigh(nodenames['sync']))
+			machine3 += ' (Fetch: ' + busToString('Fetch') + ')';
+		if(goldenChecksum != undefined)
+			machine3 += " Chk:" + traceChecksum + ((traceChecksum==goldenChecksum)?" OK":" no match");
+	}
 	setStatus(machine1, machine2, machine3);
 	if (loglevel>0) {
 		updateLogbox(logThese);
