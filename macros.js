@@ -288,6 +288,18 @@ function listActiveSignals(pattern){
 	return list;
 }
 
+// The 6502 TCState is almost but not quite an inverted one-hot shift register
+function listActiveTCStates() {
+	var s=[];
+	if(!isNodeHigh(nodenames['clock1']))	s.push("T0");
+	if(!isNodeHigh(nodenames['clock2']))	s.push("T1");
+	if(!isNodeHigh(nodenames['t2']))	s.push("T2");
+	if(!isNodeHigh(nodenames['t3']))	s.push("T3");
+	if(!isNodeHigh(nodenames['t4']))	s.push("T4");
+	if(!isNodeHigh(nodenames['t5']))	s.push("T5");
+	return s.join("+");
+}
+
 function readBit(name){
         return isNodeHigh(nodenames[name])?1:0;
 }
@@ -440,6 +452,7 @@ function chipStatus(){
 	        ' SP:' + hexByte(readSP()) +
 	        ' ' + readPstring();
 	var machine3 = '';
+	machine3 += 'State: ' + listActiveTCStates() + ' ';
 	machine3 += 'Execute: ' + dis6502[readBits('ir',8)];
 	if(isNodeHigh(nodenames['sync']))
 		machine3 += ' (Fetch: ' + dis6502[readDataBus()] + ')';
