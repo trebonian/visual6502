@@ -153,12 +153,13 @@ div#logstreamscroller{
 table.logstream {
  font-family: monospace;
  font-size: 12px;
- border-spacing: 2px;
+ border-collapse: collapse;
  text-align:center;
 }
 
 td {
- # background-color: rgb(237, 240, 249);  /* very pale blue */
+ padding-left: 3px;
+ padding-right: 3px;
 }
 
 td.header {
