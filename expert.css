@@ -157,6 +157,26 @@ table.logstream {
  text-align:center;
 }
 
+td {
+ # background-color: rgb(237, 240, 249);  /* very pale blue */
+}
+
+td.header {
+ background-color: rgb(187, 204, 255);  /* medium-dark blue */
+}
+
+td.oddcol {
+ background-color: rgb(227, 233, 255);  /* light blue */
+}
+
+td.oddrow {
+ background-color: rgb(207, 218, 255);  /* medium blue */
+}
+
+td.oddrowcol {
+ background-color: rgb(227, 233, 255);  /* light blue */
+}
+
 /* Splitter */
 #frame {
  height: 750px;
@@ -205,5 +225,3 @@ span#plain {
  display: block;
  margin-bottom: 4px;
 }
-
-

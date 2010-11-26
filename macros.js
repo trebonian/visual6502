@@ -554,7 +554,7 @@ function initLogbox(names){
 
 	names=names.map(function(x){return x.replace(/^-/,'')});
 	logStream = [];
-        logStream.push("<td>" + names.join("</td><td>") + "</td>");
+	logStream.push("<td class=header>" + names.join("</td><td class=header>") + "</td>");
 	logbox.innerHTML = "<tr>"+logStream.join("</tr><tr>")+"</tr>";
 }
 
@@ -577,16 +577,26 @@ function updateLogDirection(){
 // update the table of signal values, by prepending or appending
 function updateLogbox(names){
 	var signals=[];
+	var odd=true;
+	var bg;
+	var row;
 
-	for(i in names){
-		signals.push(busToString(names[i]));
+	for(var i in names){
+		if(cycle % 4 < 2){
+			bg = odd ? " class=oddcol":"";
+		} else {
+			bg = odd ? " class=oddrow":" class=oddrowcol";
+		}
+		signals.push("<td" + bg + ">" + busToString(names[i]) + "</td>");
+		odd =! odd;
 	}
+	row = "<tr>" + signals.join("") + "</tr>";
 	if(logboxAppend)
-	        logStream.push("<td>" + signals.join("</td><td>") + "</td>");
+	        logStream.push(row);
 	else
-		logStream.splice(1,0,"<td>" + signals.join("</td><td>") + "</td>");
+		logStream.splice(1,0,row);
 
-	logbox.innerHTML = "<tr>"+logStream.join("</tr><tr>")+"</tr>";
+	logbox.innerHTML = logStream.join("");
 }
 
 function getMem(){
