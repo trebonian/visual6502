@@ -328,9 +328,9 @@ function busToString(busname){
 	if(busname=='State')
 		return listActiveTCStates();
 	if(busname=='Execute')
-		return dis6502[readBits('ir',8)];
+		return dis6502[readBits('ir',8)].replace(/ /,'&nbsp;');
 	if(busname=='Fetch')
-		return isNodeHigh(nodenames['sync'])?dis6502[readDataBus()]:'';
+		return isNodeHigh(nodenames['sync'])?dis6502[readDataBus()].replace(/ /,'&nbsp;'):'';
 	if(busname=='plaOutputs')
 		// PLA outputs are mostly ^op- but some have a prefix too
 		//    - we'll allow the x and xx prefix but ignore the #
