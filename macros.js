@@ -328,9 +328,9 @@ function busToString(busname){
 	if(busname=='State')
 		return listActiveTCStates();
 	if(busname=='Execute')
-		return dis6502[readBits('ir',8)].replace(/ /,'&nbsp;');
+		return dis6502toHTML(readBits('ir',8));
 	if(busname=='Fetch')
-		return isNodeHigh(nodenames['sync'])?dis6502[readDataBus()].replace(/ /,'&nbsp;'):'';
+		return isNodeHigh(nodenames['sync'])?dis6502toHTML(readDataBus()):"";
 	if(busname=='plaOutputs')
 		// PLA outputs are mostly ^op- but some have a prefix too
 		//    - we'll allow the x and xx prefix but ignore the #
@@ -620,6 +620,14 @@ function adler32(x){
 		b=(b+a)%65521;
 	}
 	return (0x100000000+(b<<16)+a).toString(16).slice(-8);
+}
+
+// sanitised opcode for HTML output
+function dis6502toHTML(byte){
+	var opcode=dis6502[byte];
+	if(typeof opcode == "undefined")
+		return "unknown"
+	return opcode.replace(/ /,'&nbsp;');
 }
 
 // opcode lookup for 6502 - not quite a disassembly
