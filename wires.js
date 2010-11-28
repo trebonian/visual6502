@@ -50,9 +50,10 @@ function setupTransistors(){
 		var gate = tdef[1];
 		var c1 = tdef[2];
 		var c2 = tdef[3];
+		var bb = tdef[4];
 		if(c1==ngnd) {c1=c2;c2=ngnd;}
 		if(c1==npwr) {c1=c2;c2=npwr;}
-		var trans = {name: name, on: false, gate: gate, c1: c1, c2: c2};
+		var trans = {name: name, on: false, gate: gate, c1: c1, c2: c2, bb: bb};
 		nodes[gate].gates.push(trans);
 		nodes[c1].c1c2s.push(trans);
 		nodes[c2].c1c2s.push(trans);
@@ -160,6 +161,19 @@ function hiliteNode(n){
 	for(var i in n){
 		var segs = nodes[n[i]].segs;
 		for(var s in segs){drawSeg(ctx, segs[s]); ctx.fill();}
+	}
+}
+
+function hiliteTrans(n){
+	var ctx = hilite.getContext('2d');
+	ctx.clearRect(0,0,grCanvasSize,grCanvasSize);
+	ctx.strokeStyle = 'rgba(255,255,255,1.0)';
+	ctx.lineWidth = 4
+	if(n==-1) return;
+	for(var t in n){
+		var bb = transistors[n[t]].bb
+		var segs = [[bb[0], bb[2], bb[1], bb[2], bb[1], bb[3], bb[0], bb[3]]] 
+		for(var s in segs){drawSeg(ctx, segs[s]); ctx.stroke();}
 	}
 }
 
