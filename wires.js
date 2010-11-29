@@ -150,31 +150,48 @@ function overlayNode(w){
 	}
 }
 
+// originally to highlight using a list of node numbers
+//   but can now include transistor names
 function hiliteNode(n){
 	var ctx = hilite.getContext('2d');
 	ctx.clearRect(0,0,grCanvasSize,grCanvasSize);
-	ctx.fillStyle = 'rgba(255,255,255,0.7)';
 	if(n==-1) return;
-	if(isNodeHigh(n[0]))
-		ctx.fillStyle = 'rgba(255,0,0,0.7)';
 
 	for(var i in n){
+		if(typeof n[i] != "number") {
+			hiliteTrans([n[i]]);
+			continue;
+		}
+		if(isNodeHigh(n[i])) {
+			ctx.fillStyle = 'rgba(255,0,0,0.7)';
+		} else {
+			ctx.fillStyle = 'rgba(255,255,255,0.7)';
+		}
 		var segs = nodes[n[i]].segs;
 		for(var s in segs){drawSeg(ctx, segs[s]); ctx.fill();}
 	}
 }
 
+// highlight a single transistor (additively - does not clear highlighting)
 function hiliteTrans(n){
 	var ctx = hilite.getContext('2d');
-	ctx.clearRect(0,0,grCanvasSize,grCanvasSize);
-	ctx.strokeStyle = 'rgba(255,255,255,1.0)';
+	ctx.strokeStyle = 'rgba(255,255,255,0.7)';
 	ctx.lineWidth = 4
-	if(n==-1) return;
 	for(var t in n){
 		var bb = transistors[n[t]].bb
 		var segs = [[bb[0], bb[2], bb[1], bb[2], bb[1], bb[3], bb[0], bb[3]]] 
 		for(var s in segs){drawSeg(ctx, segs[s]); ctx.stroke();}
 	}
+}
+
+// takes a bounding box in chip coords and centres the display over it
+function zoomToBox(xmin,xmax,ymin,ymax){
+	var xmid=(xmin+xmax)/2;
+	var ymid=(ymin+ymax)/2;
+	var x=xmid/grChipSize*600;
+	var y=600-ymid/grChipSize*600;
+	var zoom=5;  // pending a more careful calculation
+	moveHere([x,y,zoom]);
 }
 
 function drawSeg(ctx, seg){
