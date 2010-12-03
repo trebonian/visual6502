@@ -608,8 +608,9 @@ C56: 500,
 C67: 1314,
 C78: 808,
 "C78.phi2": 560,
-DC34: 1372,
-DC78: 333,
+DC34: 1372,   // lower nibble decimal carry
+DC78: 333,    // carry for decimal mode
+"DC78.phi2": 164,
 "#C01": 1506,
 "#C12": 1122,
 "#C23": 1003,
@@ -626,6 +627,34 @@ DC78: 333,
 "#DA-ADD2": 699,
 
 // misc alu internals
+"#(AxBxC)0": 371,
+"#(AxBxC)1": 965,
+"#(AxBxC)2": 22,
+"#(AxBxC)3": 274,
+"#(AxBxC)4": 651,
+"#(AxBxC)5": 486,
+"#(AxBxC)6": 1197,
+"#(AxBxC)7": 532,
+AxB1: 425,
+AxB3: 640,
+AxB5: 1220,
+AxB7: 1241,
+"#(AxB)0": 1525,
+"#(AxB)2": 701,
+"#(AxB)4": 308,
+"#(AxB)6": 1459,
+"(AxB)0.#C0in": 555,
+"(AxB)2.#C12": 193,
+"(AxB)4.#C34": 65,
+"(AxB)6.#C56": 174,
+"#(AxB1).C01": 295,
+"#(AxB3).C23": 860,
+"#(AxB5).C45": 817,
+"#(AxB7).C67": 1217,
+"A+B1": 1021,
+"A+B3": 1313,
+"A+B5": 1236,
+"A+B7": 117,
 
 aluanorb0: 143,
 aluanandb0: 1628,
@@ -669,6 +698,7 @@ dpc19_ADDSB7: 214,   // alu to sb bit 7 only
 dpc20_ADDSB06: 129,  // alu to sb bits 6-0 only
 dpc21_ADDADL: 1015,  // alu to adl
 alurawcout: 808,     // alu raw carry out (no decimal adjust)
+notalucout: 412,     // alu carry out (inverted)
 alucout: 1146,       // alu carry out (latched by phi2)
 notaluvout: 1308,    // alu overflow out
 aluvout: 938,        // alu overflow out (latched by phi2)
