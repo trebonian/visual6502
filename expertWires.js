@@ -309,31 +309,38 @@ function hiliteNodeList(){
 	}
 	highlightThese = [];
 	var seglist=[];
+	var report="";
 	for(var i=0;i<tmplist.length;i++){
 		// get a node number from a signal name or a node number
 		var name = tmplist[i];
 		var value = parseInt(tmplist[i]);
 		if((value!=NaN) && (typeof nodes[value] != "undefined")) {
 			highlightThese.push(value);
+			report="node: " + value + ' ' + nodeName(value);
 			for(var s in nodes[value].segs)
 				seglist.push(nodes[value].segs[s]);
 		} else if(typeof nodenames[name] != "undefined") {
 			highlightThese.push(nodenames[name]);
+			report="node: " + nodenames[name] + ' ' + name;
 			for(var s in nodes[nodenames[name]].segs)
 				seglist.push(nodes[nodenames[name]].segs[s]);
 		} else if(typeof transistors[name] != "undefined") {
 			// normally we push numbers: a non-number is a transistor name
 			highlightThese.push(name);
+			report="transistor: " + name;
 			seglist.push([
 				transistors[name].bb[0],transistors[name].bb[2],
 				transistors[name].bb[1],transistors[name].bb[3]
 			]);
 		}
-		// invalid input: how to tell the user?
 	}
 	if(highlightThese.length==0){
-		// all input rejected: how to tell the user?
+		setStatus('Find: nothing found!','(Enter a list of nodenumbers, names or transistor names)');
 		return;
+	} else if (highlightThese.length==1){
+		setStatus('Find results:',report);
+	} else {
+		setStatus('Find: multiple objects found','(' + highlightThese.length + ' objects)');
 	}
 	var xmin=seglist[0][0], xmax=seglist[0][0];
 	var ymin=seglist[0][1], ymax=seglist[0][1];
