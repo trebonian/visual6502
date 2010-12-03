@@ -24,6 +24,7 @@ var centerx=300, centery=300;
 var zoom=1;
 var dragMouseX, dragMouseY, moved;
 var statbox;
+var findThese;
 
 // Some constants for the graphics presentation
 // the canvas is embedded in an 800x600 clipping div
@@ -113,6 +114,9 @@ function setup_part4(){
 		document.getElementById('stop').style.visibility = 'hidden';
 		go();
 	}
+	// perform any user-specified search for nodes or transistors
+	if(chipLayoutIsVisible)
+		hiliteNodeList();
 }
 
 function detectOldBrowser(){
@@ -172,6 +176,10 @@ function setupParams(){
 			pany=parseInt(value);
 		} else if(name=="zoom" && parseInt(value)!=NaN){
 			zoom=parseInt(value);
+		} else
+		// perform a search, highlight and zoom to object(s)
+		if(name=="find" && value.length>0){
+			findThese=value;
 		} else
 		// load a test program: Address, Data and Reset
 		if(name=="a" && parseInt(value,16)!=NaN){
@@ -440,6 +448,10 @@ function setupChipLayoutGraphics(){
 	refresh();
 	document.getElementById('waiting').style.display = 'none';
 	setStatus('Ready!');  // would prefer chipStatus but it's not idempotent
+	// pre-fill the Find box if parameters supplied
+	if(typeof findThese != "undefined")
+		document.getElementById('HighlightThese').value = findThese;
+	// pre-pan and zoom if requested
 	if(moveHereFirst!=null)
 		moveHere(moveHereFirst);
 	// grant focus to the chip display to enable zoom keys
