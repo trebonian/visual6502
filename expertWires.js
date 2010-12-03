@@ -310,7 +310,7 @@ var highlightThese;
 // also zoom to fit those nodes (not presently optional)
 function hiliteNodeList(){
 	var tmplist = document.getElementById('HighlightThese').value.split(/[\s,]+/);
-	if(tmplist.length==0){
+	if(tmplist.join("").length==0){
 		// request to highlight nothing, so switch off any signal highlighting
 		hiliteNode(-1);
 		return;
