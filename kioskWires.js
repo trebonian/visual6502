@@ -102,7 +102,7 @@ function setup_part3(){
 /////////////////////////
 
 function handleKey(e){
-	var c = e.charCode;
+	var c = e.charCode || e.keyCode;
 	c = String.fromCharCode(c);
 	if('zx<>?np'.indexOf(c)==-1) return;
 	if((c=='x' || c=='<') && zoom>1) setZoom(zoom/1.2);
