@@ -236,7 +236,7 @@ function updateChipLayoutAnimation(isOn){
 
 // these keyboard actions are primarily for the chip display
 function handleKey(e){
-	var c = e.charCode;
+	var c = e.charCode || e.keyCode;
 	c = String.fromCharCode(c);
 	if('<>?npZzx'.indexOf(c)==-1) return;
 	if((c=='Z'||c=='x'||c=='<') && zoom>1) setZoom(zoom/1.2);
@@ -405,7 +405,7 @@ var consolebox;
 
 function setupConsole(){
 	consolebox=document.getElementById('consolebox');
-	consolebox.onkeypress=function(e){consolegetc=e.charCode;};
+	consolebox.onkeypress=function(e){consolegetc=e.charCode || e.keyCode;};
 }
 
 var chipsurround;
