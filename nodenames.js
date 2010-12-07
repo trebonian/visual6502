@@ -699,14 +699,14 @@ AxB7: 1241,
 "#(AxB)3": 884,
 "#(AxB)5": 1469,
 "#(AxB)7": 177,
-"#aluresult": 957,   // alu result latch input
-"#aluresult": 250,
-"#aluresult": 740,
-"#aluresult": 1071,
-"#aluresult": 296,
-"#aluresult": 277,
-"#aluresult": 722,
-"#aluresult": 304,
+"#aluresult0": 957,   // alu result latch input
+"#aluresult1": 250,
+"#aluresult2": 740,
+"#aluresult3": 1071,
+"#aluresult4": 296,
+"#aluresult5": 277,
+"#aluresult6": 722,
+"#aluresult7": 304,
 
 // internal signals: datapath control signals
 
