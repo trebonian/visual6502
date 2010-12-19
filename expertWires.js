@@ -372,18 +372,34 @@ function handleClick(e){
 	var x = localx(hilite, e.clientX)/zoom;
 	var y = localy(hilite, e.clientY)/zoom;
 	var w = findNodeNumber(x,y);
-	if(e.shiftKey) hiliteNode(getNodeGroup(w));
-	else {var a=new Array(); a.push(w); hiliteNode(a);}
+	// convert to chip coordinates
 	var cx = Math.round(x*grChipSize/600);
-	var cy = Math.round(y*grChipSize/600);	
+	var cy = Math.round(y*grChipSize/600);
+	// prepare two lines of status report
+	var s1='x: ' + cx + ' y: ' + cy;
+	var s2='node: ' + w + ' ' + nodeName(w);
 	if(w==-1) {
-		setStatus('x: '+cx, 'y: '+cy);
-	} else {
-		var s1='x: ' + cx + ' y: ' + cy;
-		var s2='node: ' + w + ' ' + nodeName(w);
-		setStatus(s1, s2);
-		if(ctrace) console.log(s1, s2);
+		setStatus(s1); // no node found, so report only coordinates
+		return;
 	}
+	// we have a node, but maybe we clicked over a transistor
+	var nodelist=[w];
+	if(e.shiftKey) nodelist=getNodeGroup(w);
+	// match the coordinate against transistor gate bounding boxes
+	x=cx-400;
+	y=grChipSize-cy;
+	for(var i=0;i<nodes[w].gates.length;i++){
+		var xmin=nodes[w].gates[i].bb[0], xmax=nodes[w].gates[i].bb[1];
+		var ymin=nodes[w].gates[i].bb[2], ymax=nodes[w].gates[i].bb[3];
+		if((x >= xmin) && (x <= xmax) && (y >= ymin) && (y <= ymax)){
+			// only one match at most, so we replace rather than push
+			nodelist=[nodes[w].gates[i].name];
+			s2='transistor: ' + nodes[w].gates[i].name + ' on ' + s2;
+		}
+	}
+	hiliteNode(nodelist);
+	setStatus(s1, s2);
+	if(ctrace) console.log(s1, s2);
 }
 
 function updateLoglevel(value){
