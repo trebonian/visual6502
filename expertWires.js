@@ -346,6 +346,20 @@ function hiliteNodeList(){
 				transistors[name].bb[0],transistors[name].bb[2],
 				transistors[name].bb[1],transistors[name].bb[3]
 			]);
+		} else {
+			// allow match of underscore-delimited components, so
+			// SUMS and dpc17 both match the node dpc17_SUMS
+			for(var i in nodenames){
+				re=new RegExp("(^" + name + "_|_" + name + "$)");
+				if (re.test(i)){
+					value = nodenames[i];
+					highlightThese.push(value);
+					report="node: " + value + ' ' + nodeName(value);
+					for(var s in nodes[value].segs)
+						seglist.push(nodes[value].segs[s]);
+					break;
+				}
+			}
 		}
 	}
 	if(highlightThese.length==0){
