@@ -169,7 +169,10 @@ function handleClick(e){
 	var x = localx(hilite, e.clientX)/zoom;
 	var y = localy(hilite, e.clientY)/zoom;
 	var w = findNodeNumber(x,y);
-	if(e.shiftKey) hiliteNode(getNodeGroup(w));
+	if(e.shiftKey) {
+		getNodeGroup(w);
+		hiliteNode(group);
+	}
 	else {var a=new Array(); a.push(w); hiliteNode(a);}
         var cx = Math.round(x*grChipSize/600);
         var cy = Math.round(y*grChipSize/600);

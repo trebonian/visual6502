@@ -384,7 +384,10 @@ function handleClick(e){
 	}
 	// we have a node, but maybe we clicked over a transistor
 	var nodelist=[w];
-	if(e.shiftKey) nodelist=getNodeGroup(w);
+	if(e.shiftKey) {
+		getNodeGroup(w);
+		nodelist = group;
+	}
 	// match the coordinate against transistor gate bounding boxes
 	x=cx-400;
 	y=grChipSize-cy;
