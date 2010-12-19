@@ -114,9 +114,6 @@ function setup_part4(){
 		document.getElementById('stop').style.visibility = 'hidden';
 		go();
 	}
-	// perform any user-specified search for nodes or transistors
-	if(chipLayoutIsVisible)
-		hiliteNodeList();
 }
 
 function detectOldBrowser(){
@@ -301,7 +298,16 @@ function recenter(){
 		top: top+'px',
 		left: left+'px',
 	});
-	document.getElementById('linkHere').href=location.pathname+"?"+whereAmIAsQuery();
+	updateLinkHere();
+}
+
+function updateLinkHere(){
+	var target = location.pathname + "?nosim=t&";
+	var findlist = document.getElementById('HighlightThese').value.split(/[\s,]+/).join(",");
+	if (findlist != "")
+		target = target + "find=" + findlist + "&";
+	target = target + whereAmIAsQuery();
+	document.getElementById('linkHere').href=target;
 }
 
 var highlightThese;
@@ -361,6 +367,7 @@ function hiliteNodeList(){
 		}
 	}
 	zoomToBox(xmin,xmax,ymin,ymax);
+	updateLinkHere();
 	clearHighlight();  // nullify the simulation overlay (orange/purple)
 	hiliteNode(-1);    // unhighlight all nodes
 	setTimeout("hiliteNode(highlightThese);", 400);
@@ -468,9 +475,11 @@ function setupChipLayoutGraphics(){
 	document.getElementById('waiting').style.display = 'none';
 	setStatus('Ready!');  // would prefer chipStatus but it's not idempotent
 	// pre-fill the Find box if parameters supplied
-	if(typeof findThese != "undefined")
+	if(typeof findThese != "undefined") {
 		document.getElementById('HighlightThese').value = findThese;
-	// pre-pan and zoom if requested
+		hiliteNodeList(); // will pan and zoom to fit
+	}
+	// pre-pan and zoom if requested (will override any zoom-to-fit by hiliteNodeList)
 	if(moveHereFirst!=null)
 		moveHere(moveHereFirst);
 	// grant focus to the chip display to enable zoom keys
