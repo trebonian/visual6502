@@ -188,7 +188,7 @@ function hiliteTrans(n){
 function zoomToBox(xmin,xmax,ymin,ymax){
 	var xmid=(xmin+xmax)/2;
 	var ymid=(ymin+ymax)/2;
-	var x=xmid/grChipSize*600;
+	var x=(xmid+400)/grChipSize*600;
 	var y=600-ymid/grChipSize*600;
 	var zoom=5;  // pending a more careful calculation
 	moveHere([x,y,zoom]);
