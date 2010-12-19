@@ -391,10 +391,6 @@ function handleClick(e){
 	}
 	// we have a node, but maybe we clicked over a transistor
 	var nodelist=[w];
-	if(e.shiftKey) {
-		getNodeGroup(w);
-		nodelist = group;
-	}
 	// match the coordinate against transistor gate bounding boxes
 	x=cx-400;
 	y=grChipSize-cy;
@@ -406,6 +402,12 @@ function handleClick(e){
 			nodelist=[nodes[w].gates[i].name];
 			s2='transistor: ' + nodes[w].gates[i].name + ' on ' + s2;
 		}
+	}
+	// if this is a shift-click, just find and highlight the pass-connected group
+	if(e.shiftKey) {
+		getNodeGroup(w);
+		nodelist = group;
+		s2 = "nodegroup from " + s2
 	}
 	hiliteNode(nodelist);
 	setStatus(s1, s2);
