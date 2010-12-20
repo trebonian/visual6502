@@ -25,6 +25,7 @@ var zoom=1;
 var dragMouseX, dragMouseY, moved;
 var statbox;
 var findThese;
+var labelThese=[];
 
 // Some constants for the graphics presentation
 // the canvas is embedded in an 800x600 clipping div
@@ -177,6 +178,10 @@ function setupParams(){
 		// perform a search, highlight and zoom to object(s)
 		if(name=="find" && value.length>0){
 			findThese=value;
+		} else
+		// affix label with optional box to highlight an area of interest
+		if(name=="label" && value.length>0){
+			labelThese.push(value.split(","));
 		} else
 		// load a test program: Address, Data and Reset
 		if(name=="a" && parseInt(value,16)!=NaN){
@@ -555,6 +560,11 @@ function setupChipLayoutGraphics(){
 	// pre-pan and zoom if requested (will override any zoom-to-fit by hiliteNodeList)
 	if(moveHereFirst!=null)
 		moveHere(moveHereFirst);
+	// draw any URL-requested labels and boxes
+	if(labelThese.length>0) {
+		for(var i=0;i<labelThese.length;i+=1)
+			flashBoxLabel(labelThese[i]);
+	}
 	// grant focus to the chip display to enable zoom keys
 	chipsurround.focus();
 	chipsurround.onmousedown = function(e){mouseDown(e);};
