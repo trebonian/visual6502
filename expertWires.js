@@ -310,6 +310,57 @@ function updateLinkHere(){
 	document.getElementById('linkHere').href=target;
 }
 
+// place a text label on the highlight layer
+// with an optional box around an area of interest
+// coordinates used are those reported by a click
+// for example:
+//   boxLabel(['PD',   50, 8424, 3536, 9256, 2464])
+//   boxLabel(['IR',   50, 8432, 2332, 9124,  984])
+//   boxLabel(['PLA', 100, 1169, 2328, 8393,  934])
+//   boxLabel(['Y',    50, 2143, 8820, 2317, 5689])  
+//   boxLabel(['X',    50, 2317, 8820, 2490, 5689])  
+//   boxLabel(['S',    50, 2490, 8820, 2814, 5689])
+//   boxLabel(['ALU',  50, 2814, 8820, 4525, 5689])
+//   boxLabel(['DAdj', 40, 4525, 8820, 5040, 5689])
+//   boxLabel(['A',    50, 5040, 8820, 5328, 5689])
+//   boxLabel(['PC',   50, 5559, 8820, 6819, 5689])
+//   boxLabel(['ID',   50, 7365, 8820, 7676, 5689])
+//   boxLabel(['TimC', 40,  600, 1926, 1174,  604])
+
+function flashBoxLabel(args) {
+	clearHighlight();
+	var callBack = function(){boxLabel(args);};
+	setTimeout(callBack, 400);
+	setTimeout(clearHighlight,  800);
+	setTimeout(callBack, 1200);
+}
+
+function boxLabel(args) {
+	var text = args[0];
+	var textsize = args[1];
+	var thickness = 1+ textsize / 20;
+	var boxXmin = args[2] * grCanvasSize / grChipSize;
+	var boxYmin = args[3] * grCanvasSize / grChipSize;
+	var boxXmax = args[4] * grCanvasSize / grChipSize;
+	var boxYmax = args[5] * grCanvasSize / grChipSize;
+	ctx.lineWidth   = thickness;
+	ctx.font        = textsize + 'px sans-serif';
+	ctx.fillStyle   = '#ff0';  // yellow
+	ctx.fillStyle   = '#f8f';  // magenta
+	ctx.fillStyle   = '#fff';  // white
+	ctx.strokeStyle = '#fff';  // white
+	if(args.length>4){
+		ctxDrawBox(ctx, boxXmin, boxYmin, boxXmax, boxYmax);
+		// offset the text label to the interior of the box
+		boxYmin -= thickness * 2;
+	}
+	ctx.strokeStyle = '#fff';  // white
+	ctx.strokeStyle = '#000';  // black
+	ctx.lineWidth   = thickness*2;
+	ctx.strokeText(text, boxXmin, boxYmin);
+	ctx.fillText(text, boxXmin, boxYmin);
+}
+
 var highlightThese;
 
 // flash some set of nodes according to user input
@@ -388,6 +439,12 @@ function hiliteNodeList(){
 	setTimeout("hiliteNode(-1);", 800);
 	setTimeout("hiliteNode(highlightThese);", 1200);
 }
+
+// some notes on coordinates:
+// the localx and localy functions return canvas coordinate offsets from the canvas window top left corner
+// we divide the results by 'zoom' to get drawn coordinates useful in findNodeNumber
+// to convert to reported user chip coordinates we multiply by grChipSize/600
+// to compare to segdefs and transdefs coordinates we subtract 400 from x and subtract y from grChipSize
 
 function handleClick(e){
 	var x = localx(hilite, e.clientX)/zoom;
