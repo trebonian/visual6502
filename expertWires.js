@@ -460,7 +460,7 @@ function handleClick(e){
 	var cy = Math.round(y*grChipSize/600);
 	// prepare two lines of status report
 	var s1='x: ' + cx + ' y: ' + cy;
-	var s2='node: ' + w + ' ' + nodeName(w);
+	var s2='node:&nbsp;' + w + '&nbsp;' + nodeName(w);
 	if(w==-1) {
 		setStatus(s1); // no node found, so report only coordinates
 		return;
@@ -483,7 +483,7 @@ function handleClick(e){
 	if(e.shiftKey) {
 		getNodeGroup(w);
 		nodelist = group;
-		s2 = "nodegroup from " + s2
+		s2 = "nodegroup from&nbsp;" + s2 + " (nodes:&nbsp;" + group.join(",") + ")";
 	}
 	hiliteNode(nodelist);
 	setStatus(s1, s2);
