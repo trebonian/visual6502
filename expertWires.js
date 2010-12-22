@@ -480,10 +480,14 @@ function handleClick(e){
 		}
 	}
 	// if this is a shift-click, just find and highlight the pass-connected group
+	// and list the nodes (or nodenames, preferably)
 	if(e.shiftKey) {
 		getNodeGroup(w);
 		nodelist = group;
-		s2 = "nodegroup from&nbsp;" + s2 + " (nodes:&nbsp;" + group.join(",") + ")";
+		s2 = "nodegroup from&nbsp;" + s2 +
+			" (nodes:&nbsp;" +
+				group.map(function(x){return nodeName(x)?nodeName(x):x;}).join(",") +
+			")";
 	}
 	hiliteNode(nodelist);
 	setStatus(s1, s2);
