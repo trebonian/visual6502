@@ -24,8 +24,6 @@ var centerx=300, centery=300;
 var zoom=1;
 var dragMouseX, dragMouseY, moved;
 var statbox;
-var findThese;
-var labelThese=[];
 
 // Some constants for the graphics presentation
 // the canvas is embedded in an 800x600 clipping div
@@ -175,14 +173,6 @@ function setupParams(){
 		} else if(name=="zoom" && parseInt(value)!=NaN){
 			zoom=parseInt(value);
 		} else
-		// perform a search, highlight and zoom to object(s)
-		if(name=="find" && value.length>0){
-			findThese=value;
-		} else
-		// affix label with optional box to highlight an area of interest
-		if(name=="label" && value.length>0){
-			labelThese.push(value.split(","));
-		} else
 		// load a test program: Address, Data and Reset
 		if(name=="a" && parseInt(value,16)!=NaN){
 			userAddress=parseInt(value,16);
@@ -238,7 +228,7 @@ function updateChipLayoutAnimation(isOn){
 
 // these keyboard actions are primarily for the chip display
 function handleKey(e){
-	var c = e.charCode || e.keyCode;
+	var c = e.charCode;
 	c = String.fromCharCode(c);
 	if('<>?npZzx'.indexOf(c)==-1) return;
 	if((c=='Z'||c=='x'||c=='<') && zoom>1) setZoom(zoom/1.2);
@@ -303,141 +293,35 @@ function recenter(){
 		top: top+'px',
 		left: left+'px',
 	});
-	updateLinkHere();
-}
-
-function updateLinkHere(){
-	var target = location.pathname + "?nosim=t&";
-	var findlist = document.getElementById('HighlightThese').value.split(/[\s,]+/).join(",");
-	if (findlist != "")
-		target = target + "find=" + findlist + "&";
-	target = target + whereAmIAsQuery();
-	document.getElementById('linkHere').href=target;
-}
-
-// place a text label on the highlight layer
-// with an optional box around an area of interest
-// coordinates used are those reported by a click
-// for example:
-//   boxLabel(['PD',   50, 8424, 3536, 9256, 2464])
-//   boxLabel(['IR',   50, 8432, 2332, 9124,  984])
-//   boxLabel(['PLA', 100, 1169, 2328, 8393,  934])
-//   boxLabel(['Y',    50, 2143, 8820, 2317, 5689])  
-//   boxLabel(['X',    50, 2317, 8820, 2490, 5689])  
-//   boxLabel(['S',    50, 2490, 8820, 2814, 5689])
-//   boxLabel(['ALU',  50, 2814, 8820, 4525, 5689])
-//   boxLabel(['DAdj', 40, 4525, 8820, 5040, 5689])
-//   boxLabel(['A',    50, 5040, 8820, 5328, 5689])
-//   boxLabel(['PC',   50, 5559, 8820, 6819, 5689])
-//   boxLabel(['ID',   50, 7365, 8820, 7676, 5689])
-//   boxLabel(['TimC', 40,  600, 1926, 1174,  604])
-
-function flashBoxLabel(args) {
-	clearHighlight();
-	var callBack = function(){boxLabel(args);};
-	setTimeout(callBack, 400);
-	setTimeout(clearHighlight,  800);
-	setTimeout(callBack, 1200);
-}
-
-function boxLabel(args) {
-	var text = args[0];
-	var textsize = args[1];
-	var thickness = 1+ textsize / 20;
-	var boxXmin = args[2] * grCanvasSize / grChipSize;
-	var boxYmin = args[3] * grCanvasSize / grChipSize;
-	var boxXmax = args[4] * grCanvasSize / grChipSize;
-	var boxYmax = args[5] * grCanvasSize / grChipSize;
-	ctx.lineWidth   = thickness;
-	ctx.font        = textsize + 'px sans-serif';
-	ctx.fillStyle   = '#ff0';  // yellow
-	ctx.fillStyle   = '#f8f';  // magenta
-	ctx.fillStyle   = '#fff';  // white
-	ctx.strokeStyle = '#fff';  // white
-	if(args.length>4){
-		ctxDrawBox(ctx, boxXmin, boxYmin, boxXmax, boxYmax);
-		// offset the text label to the interior of the box
-		boxYmin -= thickness * 2;
-	}
-	ctx.strokeStyle = '#fff';  // white
-	ctx.strokeStyle = '#000';  // black
-	ctx.lineWidth   = thickness*2;
-	ctx.strokeText(text, boxXmin, boxYmin);
-	ctx.fillText(text, boxXmin, boxYmin);
+	document.getElementById('linkHere').href=location.pathname+"?"+whereAmIAsQuery();
 }
 
 var highlightThese;
 
 // flash some set of nodes according to user input
-// also zoom to fit those nodes (not presently optional)
 function hiliteNodeList(){
 	var tmplist = document.getElementById('HighlightThese').value.split(/[\s,]+/);
-	if(tmplist.join("").length==0){
+	if(tmplist.length==0){
 		// request to highlight nothing, so switch off any signal highlighting
 		hiliteNode(-1);
 		return;
 	}
 	highlightThese = [];
-	var seglist=[];
-	var report="";
 	for(var i=0;i<tmplist.length;i++){
 		// get a node number from a signal name or a node number
 		var name = tmplist[i];
 		var value = parseInt(tmplist[i]);
-		if((value!=NaN) && (typeof nodes[value] != "undefined")) {
+		if((value!=NaN) && (typeof nodes[name] != "undefined")) {
 			highlightThese.push(value);
-			report="node: " + value + ' ' + nodeName(value);
-			for(var s in nodes[value].segs)
-				seglist.push(nodes[value].segs[s]);
 		} else if(typeof nodenames[name] != "undefined") {
 			highlightThese.push(nodenames[name]);
-			report="node: " + nodenames[name] + ' ' + name;
-			for(var s in nodes[nodenames[name]].segs)
-				seglist.push(nodes[nodenames[name]].segs[s]);
-		} else if(typeof transistors[name] != "undefined") {
-			// normally we push numbers: a non-number is a transistor name
-			highlightThese.push(name);
-			report="transistor: " + name;
-			seglist.push([
-				transistors[name].bb[0],transistors[name].bb[2],
-				transistors[name].bb[1],transistors[name].bb[3]
-			]);
-		} else {
-			// allow match of underscore-delimited components, so
-			// SUMS and dpc17 both match the node dpc17_SUMS
-			for(var i in nodenames){
-				re=new RegExp("(^" + name + "_|_" + name + "$)");
-				if (re.test(i)){
-					value = nodenames[i];
-					highlightThese.push(value);
-					report="node: " + value + ' ' + nodeName(value);
-					for(var s in nodes[value].segs)
-						seglist.push(nodes[value].segs[s]);
-					break;
-				}
-			}
 		}
+		// invalid input: how to tell the user?
 	}
 	if(highlightThese.length==0){
-		setStatus('Find: nothing found!','(Enter a list of nodenumbers, names or transistor names)');
+		// all input rejected: how to tell the user?
 		return;
-	} else if (highlightThese.length==1){
-		setStatus('Find results:',report);
-	} else {
-		setStatus('Find: multiple objects found','(' + highlightThese.length + ' objects)');
 	}
-	var xmin=seglist[0][0], xmax=seglist[0][0];
-	var ymin=seglist[0][1], ymax=seglist[0][1];
-	for(var s in seglist){
-		for(var i=0;i<seglist[s].length;i+=2){
-			if(seglist[s][i]<xmin) xmin=seglist[s][i];
-			if(seglist[s][i]>xmax) xmax=seglist[s][i];
-			if(seglist[s][i+1]<ymin) ymin=seglist[s][i+1];
-			if(seglist[s][i+1]>ymax) ymax=seglist[s][i+1];
-		}
-	}
-	zoomToBox(xmin,xmax,ymin,ymax);
-	updateLinkHere();
 	clearHighlight();  // nullify the simulation overlay (orange/purple)
 	hiliteNode(-1);    // unhighlight all nodes
 	setTimeout("hiliteNode(highlightThese);", 400);
@@ -445,53 +329,22 @@ function hiliteNodeList(){
 	setTimeout("hiliteNode(highlightThese);", 1200);
 }
 
-// some notes on coordinates:
-// the localx and localy functions return canvas coordinate offsets from the canvas window top left corner
-// we divide the results by 'zoom' to get drawn coordinates useful in findNodeNumber
-// to convert to reported user chip coordinates we multiply by grChipSize/600
-// to compare to segdefs and transdefs coordinates we subtract 400 from x and subtract y from grChipSize
-
 function handleClick(e){
 	var x = localx(hilite, e.clientX)/zoom;
 	var y = localy(hilite, e.clientY)/zoom;
 	var w = findNodeNumber(x,y);
-	// convert to chip coordinates
+	if(e.shiftKey) hiliteNode(getNodeGroup(w));
+	else {var a=new Array(); a.push(w); hiliteNode(a);}
 	var cx = Math.round(x*grChipSize/600);
-	var cy = Math.round(y*grChipSize/600);
-	// prepare two lines of status report
-	var s1='x: ' + cx + ' y: ' + cy;
-	var s2='node:&nbsp;' + w + '&nbsp;' + nodeName(w);
+	var cy = Math.round(y*grChipSize/600);	
 	if(w==-1) {
-		setStatus(s1); // no node found, so report only coordinates
-		return;
+		setStatus('x: '+cx, 'y: '+cy);
+	} else {
+		var s1='x: ' + cx + ' y: ' + cy;
+		var s2='node: ' + w + ' ' + nodeName(w);
+		setStatus(s1, s2);
+		if(ctrace) console.log(s1, s2);
 	}
-	// we have a node, but maybe we clicked over a transistor
-	var nodelist=[w];
-	// match the coordinate against transistor gate bounding boxes
-	x=cx-400;
-	y=grChipSize-cy;
-	for(var i=0;i<nodes[w].gates.length;i++){
-		var xmin=nodes[w].gates[i].bb[0], xmax=nodes[w].gates[i].bb[1];
-		var ymin=nodes[w].gates[i].bb[2], ymax=nodes[w].gates[i].bb[3];
-		if((x >= xmin) && (x <= xmax) && (y >= ymin) && (y <= ymax)){
-			// only one match at most, so we replace rather than push
-			nodelist=[nodes[w].gates[i].name];
-			s2='transistor: ' + nodes[w].gates[i].name + ' on ' + s2;
-		}
-	}
-	// if this is a shift-click, just find and highlight the pass-connected group
-	// and list the nodes (or nodenames, preferably)
-	if(e.shiftKey) {
-		getNodeGroup(w);
-		nodelist = group;
-		s2 = "nodegroup from&nbsp;" + s2 +
-			" (nodes:&nbsp;" +
-				group.map(function(x){return nodeName(x)?nodeName(x):x;}).join(",") +
-			")";
-	}
-	hiliteNode(nodelist);
-	setStatus(s1, s2);
-	if(ctrace) console.log(s1, s2);
 }
 
 function updateLoglevel(value){
@@ -513,7 +366,7 @@ var consolebox;
 
 function setupConsole(){
 	consolebox=document.getElementById('consolebox');
-	consolebox.onkeypress=function(e){consolegetc=e.charCode || e.keyCode;};
+	consolebox.onkeypress=function(e){consolegetc=e.charCode;};
 }
 
 var chipsurround;
@@ -556,19 +409,8 @@ function setupChipLayoutGraphics(){
 	refresh();
 	document.getElementById('waiting').style.display = 'none';
 	setStatus('Ready!');  // would prefer chipStatus but it's not idempotent
-	// pre-fill the Find box if parameters supplied
-	if(typeof findThese != "undefined") {
-		document.getElementById('HighlightThese').value = findThese;
-		hiliteNodeList(); // will pan and zoom to fit
-	}
-	// pre-pan and zoom if requested (will override any zoom-to-fit by hiliteNodeList)
 	if(moveHereFirst!=null)
 		moveHere(moveHereFirst);
-	// draw any URL-requested labels and boxes
-	if(labelThese.length>0) {
-		for(var i=0;i<labelThese.length;i+=1)
-			flashBoxLabel(labelThese[i]);
-	}
 	// grant focus to the chip display to enable zoom keys
 	chipsurround.focus();
 	chipsurround.onmousedown = function(e){mouseDown(e);};

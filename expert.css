@@ -153,29 +153,8 @@ div#logstreamscroller{
 table.logstream {
  font-family: monospace;
  font-size: 12px;
- border-collapse: collapse;
+ border-spacing: 2px;
  text-align:center;
-}
-
-td {
- padding-left: 3px;
- padding-right: 3px;
-}
-
-td.header {
- background-color: rgb(187, 204, 255);  /* medium-dark blue */
-}
-
-td.oddcol {
- background-color: rgb(227, 233, 255);  /* light blue */
-}
-
-td.oddrow {
- background-color: rgb(207, 218, 255);  /* medium blue */
-}
-
-td.oddrowcol {
- background-color: rgb(227, 233, 255);  /* light blue */
 }
 
 /* Splitter */
@@ -226,3 +205,5 @@ span#plain {
  display: block;
  margin-bottom: 4px;
 }
+
+
