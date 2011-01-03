@@ -29,6 +29,7 @@ var ngnd = nodenames['vss'];
 var npwr = nodenames['vcc'];
 
 var chipLayoutIsVisible = true;  // only modified in expert mode
+var hilited = [];
 
 function setupNodes(){
 	for(var i in segdefs){
@@ -140,6 +141,7 @@ function refresh(){
 	for(i in nodes){
 		if(isNodeHigh(i)) overlayNode(nodes[i].segs);
 	}
+	hiliteNode(hilited);
 }
 
 function overlayNode(w){
@@ -156,6 +158,7 @@ function hiliteNode(n){
 	var ctx = hilite.getContext('2d');
 	ctx.clearRect(0,0,grCanvasSize,grCanvasSize);
 	if(n==-1) return;
+	hilited = n;
 
 	for(var i in n){
 		if(typeof n[i] != "number") {
