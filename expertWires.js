@@ -210,6 +210,10 @@ function setupParams(){
 			clockTriggers[value]=[clockTriggers[value],"setLow('rdy');"].join("");
 		} else if(name=="rdy1" && parseInt(value)!=NaN){
 			clockTriggers[value]=[clockTriggers[value],"setHigh('rdy');"].join("");
+		} else if(name=="time" && parseInt(value)!=NaN){
+			eventTime=value;
+		} else if(name=="databus" && parseInt(value)!=NaN){
+			clockTriggers[eventTime]=[clockTriggers[eventTime],"writeDataBus(0x"+value+");"].join("");
 		} else
 		// run a test program, and optionally check against a golden checksum
 		if(name=="steps" && parseInt(value)!=NaN){
