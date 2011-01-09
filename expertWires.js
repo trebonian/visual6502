@@ -206,6 +206,10 @@ function setupParams(){
 			clockTriggers[value]=[clockTriggers[value],"setLow('nmi');"].join("");
 		} else if(name=="nmi1" && parseInt(value)!=NaN){
 			clockTriggers[value]=[clockTriggers[value],"setHigh('nmi');"].join("");
+		} else if(name=="rdy0" && parseInt(value)!=NaN){
+			clockTriggers[value]=[clockTriggers[value],"setLow('rdy');"].join("");
+		} else if(name=="rdy1" && parseInt(value)!=NaN){
+			clockTriggers[value]=[clockTriggers[value],"setHigh('rdy');"].join("");
 		} else
 		// run a test program, and optionally check against a golden checksum
 		if(name=="steps" && parseInt(value)!=NaN){
