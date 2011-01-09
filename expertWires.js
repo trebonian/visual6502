@@ -195,17 +195,17 @@ function setupParams(){
 		} else
 		// setup input pin events, breakpoints, watchpoints
 		if(name=="reset0" && parseInt(value)!=NaN){
-			clockTriggers[value]="setLow('res');";
+			clockTriggers[value]=[clockTriggers[value],"setLow('res');"].join("");
 		} else if(name=="reset1" && parseInt(value)!=NaN){
-			clockTriggers[value]="setHigh('res');";
+			clockTriggers[value]=[clockTriggers[value],"setHigh('res');"].join("");
 		} else if(name=="irq0" && parseInt(value)!=NaN){
-			clockTriggers[value]="setLow('irq');";
+			clockTriggers[value]=[clockTriggers[value],"setLow('irq');"].join("");
 		} else if(name=="irq1" && parseInt(value)!=NaN){
-			clockTriggers[value]="setHigh('irq');";
+			clockTriggers[value]=[clockTriggers[value],"setHigh('irq');"].join("");
 		} else if(name=="nmi0" && parseInt(value)!=NaN){
-			clockTriggers[value]="setLow('nmi');";
+			clockTriggers[value]=[clockTriggers[value],"setLow('nmi');"].join("");
 		} else if(name=="nmi1" && parseInt(value)!=NaN){
-			clockTriggers[value]="setHigh('nmi');";
+			clockTriggers[value]=[clockTriggers[value],"setHigh('nmi');"].join("");
 		} else
 		// run a test program, and optionally check against a golden checksum
 		if(name=="steps" && parseInt(value)!=NaN){
