@@ -347,10 +347,7 @@ cp1: 710,       // internal signal: clock phase 1
 cclk: 943,      // unbonded pad: internal non-overlappying phi2
 fetch: 879,     // internal signal
 clearIR: 1077,  // internal signal
-D1x1: 827,      // internal signal: interrupt handler related
 H1x1: 1042,     // internal signal: drive status byte onto databus
-"brk-done": 1382,  // internal signal: interrupt handler related
-INTG: 1350,     // internal signal: interrupt handler related
 
                 // internal signal: pla outputs block 1 (west/left edge of die)
                 // often 130 pla outputs are mentioned - we have 131 here
@@ -519,17 +516,33 @@ INTG: 1350,     // internal signal: interrupt handler related
 "#WR": 1352,
 "op-rmw": 434,
 "short-circuit-idx-add": 1185,
+"short-circuit-branch-add": 430,
 "#op-set-C": 252,
 
 // internal signals: control signals
 nnT2BR: 967,    // doubly inverted
 BRtaken: 1544,  // aka #TAKEN
 
-// interrupt and vector related
+// internal signals and state: interrupt and vector related
+// segher says:
+//   "P" are the latched external signals.
+//   "G" are the signals that actually trigger the interrupt.
+//   "NMIL" is to do the edge detection -- it's pretty much just a delayed NMIG.
+//   INTG is IRQ and NMI taken together.
+IRQP: 675,
+"#IRQP": 888,
 NMIP: 1032,
+"#NMIP": 297,
+"#NMIG": 264,
+NMIL: 1374,
+RESP: 67,
+RESG: 926,
 VEC0: 1465,
 VEC1: 1481,
 "#VEC": 1134,
+D1x1: 827,         // internal signal: interrupt handler related
+"brk-done": 1382,  // internal signal: interrupt handler related
+INTG: 1350,        // internal signal: interrupt handler related
 
 // internal state: misc pipeline state clocked by cclk (phi2)
 "pipe#VEC": 1431,     // latched #VEC
@@ -764,7 +777,7 @@ dpc32_PCHADH: 1235,  // drive adh from pch incremented
 dpc33_PCHDB: 247,    // drive idb from pch incremented
 dpc34_PCLC: 1704,    // pch carry in and pcl FF detect?
 dpc35_PCHC: 1334,    // pcl 0x?F detect - half-carry
-dpc36_IPC: 379,      // pcl carry in
+"dpc36_#IPC": 379,   // pcl carry in (inverted)
 dpc37_PCLDB: 283,    // drive idb from pcl incremented
 dpc38_PCLADL: 438,   // drive adl from pcl incremented
 dpc39_PCLPCL: 898,   // load pcl from pcl incremented
