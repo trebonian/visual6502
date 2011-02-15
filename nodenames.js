@@ -311,7 +311,7 @@ abl3: 1250,
 abl4: 1232,
 abl5: 234,
 abl6: 178,
-abl7: 178,
+abl7: 567,
 "#ABL0": 153,   // internal state: address bus low latched data out (storage node, inverted)
 "#ABL1": 107,
 "#ABL2": 707,
