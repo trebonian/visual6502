@@ -353,7 +353,13 @@ abh7: 489,
 "#ABH6": 289,
 "#ABH7": 429,
 
-notRdy0: 248,   // internal signal: global pipeline control
+"branch-back": 626,           // distinguish forward from backward branches
+"branch-forward.phi1": 1110,  // distinguish forward from backward branches
+"branch-back.phi1": 771,      // distinguish forward from backward branches in IPC logic
+notRdy0: 248,           // internal signal: global pipeline control
+"notRdy0.phi1": 1272,   // delayed pipeline control
+"notRdy0.delay": 770,   // global pipeline control latched by phi1 and then phi2
+"#notRdy0.delay": 559,  // global pipeline control latched by phi1 and then phi2 (storage node)
 Reset0: 67,     // internal signal: retimed reset from pin
 C1x5Reset: 926, // retimed and pipelined reset in progress
 notRnWprepad: 187, // internal signal: to pad, yet to be inverted and retimed
@@ -523,6 +529,7 @@ H1x1: 1042,     // internal signal: drive status byte onto databus
 
 // internal signals: derived from pla outputs
 "#op-branch-done": 1048,
+"#op-T3-branch": 1708,
 "op-ANDS": 1228,
 "op-EORS": 1689,
 "op-ORS": 522,
@@ -567,7 +574,7 @@ pipeT2out: 40,
 pipeT3out: 706,
 pipeT4out: 1373,
 pipeT5out: 940,
-pipeBRtaken: 832,
+pipeIPCrelated: 832,
 pipeUNK01: 1530,
 pipeUNK02: 974,
 pipeUNK03: 1436,
@@ -771,6 +778,8 @@ dpc21_ADDADL: 1015,  // alu to adl
 alurawcout: 808,     // alu raw carry out (no decimal adjust)
 notalucout: 412,     // alu carry out (inverted)
 alucout: 1146,       // alu carry out (latched by phi2)
+"#alucout": 206,
+"##alucout": 465,
 notaluvout: 1308,    // alu overflow out
 aluvout: 938,        // alu overflow out (latched by phi2)
 
