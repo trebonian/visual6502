@@ -14,8 +14,8 @@ nodenamereset = 'reset';
 presetLogLists=[
                 ['cycle','phi1','phi2'],
                 ['ab','db','rw','pc','a','b'],
-                ['ir'],
-                ['irq','nmi',nodenamereset],
+                ['ir','vma','ba'],
+                ['irq','nmi',nodenamereset,'tsc','dbe','halt'],
         ];
 
 function setupTransistors(){
@@ -43,8 +43,8 @@ function setupTransistors(){
 function halfStep(){
 	var clk = isNodeHigh(nodenames['phi2']);
 	eval(clockTriggers[cycle]);
-	if (clk) {setLow('phi2'); handleBusRead(); setHigh('phi1'); }
-	else {setHigh('phi1'); setLow('phi1'); setHigh('phi2'); handleBusWrite();}
+	if (clk) {setLow('phi2'); setLow('dbe'); handleBusRead(); setHigh('phi1'); }
+	else {setHigh('phi1'); setLow('phi1'); setHigh('phi2'); setHigh('dbe'); handleBusWrite();}
 }
 
 function initChip(){
@@ -60,11 +60,16 @@ function initChip(){
 	nodes[npwr].float = false;
 	for(var tn in transistors) transistors[tn].on = false;
 	setLow(nodenamereset);
-	setHigh('phi1'); setLow('phi2');
+	setHigh('phi1'); setLow('phi2'); setLow('dbe');
 	setHigh('dbe'); setLow('tsc'); setHigh('halt');
 	setHigh('irq'); setHigh('nmi');
 	recalcNodeList(allNodes()); 
-	for(var i=0;i<8;i++){setLow('phi1'); setHigh('phi2'); setLow('phi2'); setHigh('phi1');}
+	for(var i=0;i<8;i++){
+		setLow('phi1');
+		setHigh('phi2'); setHigh('dbe');
+		setLow('phi2'); setLow('dbe');
+		setHigh('phi1');
+	}
 	setHigh(nodenamereset);
 	for(var i=0;i<18;i++){halfStep();} // avoid updating graphics and trace buffer before user code
 	refresh();
