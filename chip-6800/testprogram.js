@@ -7,29 +7,19 @@ var consoleboxStream="";
 // for opcodes, see ftp://ftp.comlab.ox.ac.uk/pub/Cards/txt/6800.txt
 
 testprogram = [
-  0x86, 0x00, 0x9d, 0x10, 0x7e, 0x00, 0x02, 0x08, 0x5a, 0x7c, 0x00,
-  0x0f, 0x0d, 0x89, 0x02, 0x39,
+  0xce, 0x21, 0x43,  // LDX #4321
+  0x35,              // TXS
+  0xc6, 0x00,        // LDAA #$00
+  0xbd, 0x10, 0x00,  // JSR $0010
+  0x7e, 0x02, 0x00,  // JMP $0002
+  0x01,
+  0x01,
+  0x01,              // NOP
+  0x01,
+  0x08,              // INX
+  0x5a,              // DECB
+  0x7c, 0x0f, 0x00,  // INC $0F
+  0x0d,              // SEC
+  0xc9, 0x02,        // ADCA #$02
+  0x39,              // RTS
 ]
-
-// Crasm LYB 1.3:                                                   page  1
-//                          1  CPU  6800
-//                          2  
-//   0000                   3  * = 0
-//                          4  
-//                          5  CODE
-//                          6  
-// 0000 8600                7  LDAA #$00
-// 0002 9D10                8  JSR $0010
-// 0004 7E0002              9  JMP $0002
-// 0007 08                 10  INX
-// 0008 5A                 11  DECB
-// 0009 7C000F             12  INC $0F
-// 000C 0D                 13  SEC
-// 000D 8902               14  ADCA #$02
-// 000F 39                 15  RTS
-//                         16  
-// ERRORS:       0
-// WARNINGS:     0
-// Successful assembly...
-//  Last address        f (15)
-//  Code length        20 (32)

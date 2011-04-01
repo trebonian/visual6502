@@ -60,12 +60,24 @@ vma: 1971,     // pads: valid memory address
 ba: 1964,      // pads: bus available
 //
 
-ir0: 1302, // internal state: Instruction Register
-ir1: 1290,
-ir2: 1296,
-ir3: 1297,
-ir4: 1298,
-ir5: 1299,
-ir6: 1278,
-ir7: 1279,
+notir0: 1302, // internal state: Instruction Register
+notir1: 1290,
+notir2: 1296,
+notir3: 1297,
+notir4: 1298,
+notir5: 1299,
+notir6: 1278,
+notir7: 1279,
+
+ir0: 1271,
+ir1: 1269,
+ir2: 1268,
+ir3: 1267,
+ir4: 1265,
+ir5: 1264,
+ir6: 1263,
+ir7: 1261,
+
+// internal control signals
+sync: 1528,
 }
