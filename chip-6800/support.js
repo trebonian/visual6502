@@ -11,9 +11,10 @@ npwr = nodenames['vcc'];
 
 nodenamereset = 'reset';
 
+// we can't handle sp and ix as 16-bit quantities without refactoring busToString
 presetLogLists=[
                 ['cycle','phi1','phi2'],
-                ['ab','db','rw','vma','Fetch','pc','acca','accb','ixh','ixl','sph','spl'], // also p
+                ['ab','db','rw','vma','Fetch','pc','acca','accb','ixh','ixl','sph','spl','p'],
                 ['ir','sync','Execute'],    // instruction fetch and execution control
                 ['dbi','dbo','tmp'],        // internal state
                 ['idb','abh','abl','ablx'], // internal busses
@@ -95,6 +96,23 @@ function handleBusRead(){
 	}
 }
 
+function readAccA(){return readBits('acca', 8);}
+function readAccB(){return readBits('accb', 8);}
+function readIX(){return (readBits('ixh', 8)<<8) + readBits('ixl', 8);}
+function readSP(){return (readBits('sph', 8)<<8) + readBits('spl', 8);}
+function readPstring(){
+   var result;
+   result = '&#8209' +  // non-breaking hyphen
+            '&#8209' +  // non-breaking hyphen
+            (isNodeHigh(nodenames['flagh'])?'H':'h') +
+            (isNodeHigh(nodenames['flagi'])?'I':'i') +
+            (isNodeHigh(nodenames['flagn'])?'N':'n') +
+            (isNodeHigh(nodenames['flagz'])?'Z':'z') +
+            (isNodeHigh(nodenames['flagv'])?'V':'v') +
+            (isNodeHigh(nodenames['flagc'])?'C':'c');
+   return result;
+}
+
 function chipStatus(){
 	var ab = readAddressBus();
 	var machine1 =
@@ -103,22 +121,17 @@ function chipStatus(){
                 ' AB:' + hexWord(ab) +
 	        ' D:' + hexByte(readDataBus()) +
 	        ' RnW:' + readBit('rw');
-/* 6800 machine state names are not in place yet */
-	var machine2 = ''
-	var machine3 = ''
-/*
 	var machine2 =
 	        ' PC:' + hexWord(readPC()) +
-	        ' A:' + hexByte(readA()) +
-	        ' X:' + hexByte(readX()) +
-	        ' Y:' + hexByte(readY()) +
-	        ' SP:' + hexByte(readSP()) +
+	        ' A:' + hexByte(readAccA()) +
+	        ' B:' + hexByte(readAccB()) +
+	        ' IX:' + hexWord(readIX()) +
+	        ' SP:' + hexWord(readSP()) +
 	        ' ' + readPstring();
-*/
 	var machine3 = 
 		'Hz: ' + estimatedHz().toFixed(1);
 	if(typeof expertMode != "undefined") {
-//		machine3 += ' Exec: ' + busToString('Execute') + '(' + busToString('State') + ')';
+		machine3 += ' Exec: ' + busToString('Execute'); // no T-state info for 6800 yet
 		if(isNodeHigh(nodenames['sync']))
 			machine3 += ' (Fetch: ' + busToString('Fetch') + ')';
 		if(goldenChecksum != undefined)
