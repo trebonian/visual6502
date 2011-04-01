@@ -96,7 +96,7 @@ function setup_part3(){
 		// which saves a lot of memory and allows us to run on small systems
 		updateChipLayoutVisibility(true);
 	}
-	setStatus('resetting 6502...');
+	setStatus('resetting ' + chipname + '...');
 	setTimeout(setup_part4, 0);
 }
 
@@ -195,9 +195,9 @@ function setupParams(){
 		} else
 		// setup input pin events, breakpoints, watchpoints
 		if(name=="reset0" && parseInt(value)!=NaN){
-			clockTriggers[value]=[clockTriggers[value],"setLow('res');"].join("");
+			clockTriggers[value]=[clockTriggers[value],"setLow(nodenamereset);"].join("");
 		} else if(name=="reset1" && parseInt(value)!=NaN){
-			clockTriggers[value]=[clockTriggers[value],"setHigh('res');"].join("");
+			clockTriggers[value]=[clockTriggers[value],"setHigh(nodenamereset);"].join("");
 		} else if(name=="irq0" && parseInt(value)!=NaN){
 			clockTriggers[value]=[clockTriggers[value],"setLow('irq');"].join("");
 		} else if(name=="irq1" && parseInt(value)!=NaN){

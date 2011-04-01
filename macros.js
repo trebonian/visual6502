@@ -26,6 +26,8 @@ var trace = Array();
 var logstream = Array();
 var running = false;
 var logThese=[];
+var chipname='6502';
+var nodenamereset='res';
 var presetLogLists=[
 		['cycle'],
 		['ab','db','rw','Fetch','pc','a','x','y','s','p'],
@@ -35,7 +37,7 @@ var presetLogLists=[
 		['alucin','alua','alub','alucout','aluvout','dasb'],
 		['plaOutputs','DPControl'],
 		['idb','dor'],
-		['irq','nmi','res'],
+		['irq','nmi',nodenamereset],
 	];
 
 function loadProgram(){
@@ -147,13 +149,13 @@ function initChip(){
 	nodes[npwr].state = true;
 	nodes[npwr].float = false;
 	for(var tn in transistors) transistors[tn].on = false;
-	setLow('res');
+	setLow(nodenamereset);
 	setLow('clk0');
 	setHigh('rdy'); setLow('so');
 	setHigh('irq'); setHigh('nmi');
 	recalcNodeList(allNodes()); 
 	for(var i=0;i<8;i++){setHigh('clk0'), setLow('clk0');}
-	setHigh('res');
+	setHigh(nodenamereset);
 	for(var i=0;i<18;i++){halfStep();} // avoid updating graphics and trace buffer before user code
 	refresh();
 	cycle = 0;
@@ -424,7 +426,7 @@ function stopChip(){
 
 function resetChip(){
 	stopChip();
-        setStatus('resetting 6502...');                          
+        setStatus('resetting ' + chipname + '...');
 	setTimeout(initChip,0);
 }
 
