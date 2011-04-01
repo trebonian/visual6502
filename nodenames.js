@@ -114,22 +114,42 @@ pch4: 948,
 pch5: 49,
 pch6: 1551,
 pch7: 205,
-pchp0: 780,     // machine state: program counter high (pre-incremented?, second storage node)
-pchp1: 113,
-pchp2: 114,
-pchp3: 124,
-pchp4: 820,
-pchp5: 33,
-pchp6: 751,
-pchp7: 535,
-p0: 687,        // machine state: status register
-p1: 1444,
-p2: 1421,
-p3: 439,
-p4: 1119,       // there is no bit4 in the status register!
-p5: -1,         // there is no bit5 in the status register!
-p6: 77,
-p7: 1370,
+pchp0: 1722,     // machine state: program counter high (pre-incremented?, second storage node output)
+pchp1: 209,
+pchp2: 1496,
+pchp3: 141,
+pchp4: 27,
+pchp5: 1301,
+pchp6: 652,
+pchp7: 1206,
+"#pchp0": 780,     // machine state: program counter high (pre-incremented?, inverse second storage node)
+"#pchp1": 113,
+"#pchp2": 114,
+"#pchp3": 124,
+"#pchp4": 820,
+"#pchp5": 33,
+"#pchp6": 751,
+"#pchp7": 535,
+                // machine state: status register (not the storage nodes)
+p0: 32,         // C bit of status register (storage node)
+p1: 627,        // Z bit of status register (storage node)
+p2: 1553,       // I bit of status register (storage node)
+p3: 348,        // D bit of status register (storage node)
+p4: 1119,       // there is no bit4 in the status register! (not a storage node)
+p5: -1,         // there is no bit5 in the status register! (not a storage node)
+p6: 77,         // V bit of status register (storage node)
+p7: 1370,       // N bit of status register (storage node)
+
+                // internal bus: status register outputs for push P
+Pout0: 687,
+Pout1: 1444,
+Pout2: 1421,
+Pout3: 439,
+Pout4: 1119,    // there is no bit4 in the status register!
+Pout5: -1,      // there is no bit5 in the status register!
+Pout6: 77,
+Pout7: 1370,
+
 s0: 1403,       // machine state: stack pointer
 s1: 183,
 s2: 81,
@@ -155,12 +175,28 @@ notir5: 1394,
 notir6: 895,
 notir7: 1320,
 irline3: 996,   // internal signal: PLA input - ir0 AND ir1
-clock1: 1536,   // internal state: timing control
-clock2: 156,    // internal state: timing control
+clock1: 1536,   // internal state: timing control aka #T0
+clock2: 156,    // internal state: timing control aka #T+
 t2: 971,        // internal state: timing control
 t3: 1567,
 t4: 690,
 t5: 909,
+noty0: 1025,    // datapath state: not Y register
+noty1: 1138,
+noty2: 1484,
+noty3: 184,
+noty4: 565,
+noty5: 981,
+noty6: 1439,
+noty7: 1640,
+notx0: 987,     // datapath state: not X register
+notx1: 1434,
+notx2: 890,
+notx3: 1521,
+notx4: 485,
+notx5: 1017,
+notx6: 730,
+notx7: 1561,
 nots0: 418,     // datapath state: not stack pointer
 nots1: 1064,
 nots2: 752,
@@ -193,7 +229,7 @@ sb4: 1405,
 sb5: 166,
 sb6: 1336,
 sb7: 1001,
-notalu0: 394,   // datapath state: alu output storage node (inverse)
+notalu0: 394,   // datapath state: alu output storage node (inverse) aka #ADD0
 notalu1: 697,
 notalu2: 276,
 notalu3: 495,
@@ -201,7 +237,7 @@ notalu4: 1490,
 notalu5: 893,
 notalu6: 68,
 notalu7: 1123,
-alu0: 401,      // datapath signal: ALU output
+alu0: 401,      // datapath signal: ALU output aka ADD0out
 alu1: 872,
 alu2: 1637,
 alu3: 1414,
@@ -218,7 +254,7 @@ dasb4: 1405,    // same node as sb4
 dasb5: 263,
 dasb6: 679,
 dasb7: 1494,
-adl0: 413,      // internal state: address latch low
+adl0: 413,      // internal bus: address low
 adl1: 1282,
 adl2: 1242,
 adl3: 684,
@@ -226,7 +262,7 @@ adl4: 1437,
 adl5: 1630,
 adl6: 121,
 adl7: 1299,
-adh0: 407,      // internal state: address latch high
+adh0: 407,      // internal bus: address high
 adh1: 52,
 adh2: 1651,
 adh3: 315,
@@ -234,7 +270,7 @@ adh4: 1160,
 adh5: 483,
 adh6: 13,
 adh7: 1539,
-idb0: 1108,     // internal state: data buffer
+idb0: 1108,     // internal bus: data bus
 idb1: 991,
 idb2: 1473,
 idb3: 1302,
@@ -274,11 +310,61 @@ pd4: 369,
 pd5: 829,
 pd6: 1669,
 pd7: 1690,
-notRdy0: 248,   // internal signal: global pipeline control
+                // internal signals: predecode latch partial decodes
+"PD-xxxx10x0": 1019,
+"PD-1xx000x0": 1294,
+"PD-0xx0xx0x": 365,
+"PD-xxx010x1": 302,
+"PD-n-0xx0xx0x": 125,
+"#TWOCYCLE": 851,
+"#TWOCYCLE.phi1": 792,
+"ONEBYTE": 778,
+
+abl0: 1096,     // internal bus: address bus low latched data out (inverse of inverted storage node)
+abl1: 376,
+abl2: 1502,
+abl3: 1250,
+abl4: 1232,
+abl5: 234,
+abl6: 178,
+abl7: 567,
+"#ABL0": 153,   // internal state: address bus low latched data out (storage node, inverted)
+"#ABL1": 107,
+"#ABL2": 707,
+"#ABL3": 825,
+"#ABL4": 364,
+"#ABL5": 1513,
+"#ABL6": 1307,
+"#ABL7": 28,
+abh0: 1429,     // internal bus: address bus high latched data out (inverse of inverted storage node)
+abh1: 713,
+abh2: 287,
+abh3: 422,
+abh4: 1143,
+abh5: 775,
+abh6: 997,
+abh7: 489,
+"#ABH0": 1062,  // internal state: address bus high latched data out (storage node, inverted)
+"#ABH1": 907,
+"#ABH2": 768,
+"#ABH3": 92,
+"#ABH4": 668,
+"#ABH5": 1128,
+"#ABH6": 289,
+"#ABH7": 429,
+
+"branch-back": 626,           // distinguish forward from backward branches
+"branch-forward.phi1": 1110,  // distinguish forward from backward branches
+"branch-back.phi1": 771,      // distinguish forward from backward branches in IPC logic
+notRdy0: 248,           // internal signal: global pipeline control
+"notRdy0.phi1": 1272,   // delayed pipeline control
+"notRdy0.delay": 770,   // global pipeline control latched by phi1 and then phi2
+"#notRdy0.delay": 559,  // global pipeline control latched by phi1 and then phi2 (storage node)
 Reset0: 67,     // internal signal: retimed reset from pin
 C1x5Reset: 926, // retimed and pipelined reset in progress
 notRnWprepad: 187, // internal signal: to pad, yet to be inverted and retimed
-RnWstretched: 353, // internal signal: control datapad output drivers
+RnWstretched: 353, // internal signal: control datapad output drivers, aka TRISTATE
+"#DBE": 1035,      // internal signal: formerly from DBE pad (6501)
 cp1: 710,       // internal signal: clock phase 1
 cclk: 943,      // unbonded pad: internal non-overlappying phi2
 fetch: 879,     // internal signal
@@ -441,12 +527,54 @@ H1x1: 1042,     // internal signal: drive status byte onto databus
 "op-clv":1164,                 //  pla129
 "op-implied":1006,             //  pla130    // has extra pulldowns: pla121 and ir0
 
+// internal signals: derived from pla outputs
+"#op-branch-done": 1048,
+"#op-T3-branch": 1708,
+"op-ANDS": 1228,
+"op-EORS": 1689,
+"op-ORS": 522,
+"op-SUMS": 1196,
+"op-SRS": 934,
+"#op-store": 925,
+"#WR": 1352,
+"op-rmw": 434,
+"short-circuit-idx-add": 1185,
+"short-circuit-branch-add": 430,
+"#op-set-C": 252,
+
 // internal signals: control signals
 nnT2BR: 967,    // doubly inverted
-BRtaken: 1544,
+BRtaken: 1544,  // aka #TAKEN
+
+// internal signals and state: interrupt and vector related
+// segher says:
+//   "P" are the latched external signals.
+//   "G" are the signals that actually trigger the interrupt.
+//   "NMIL" is to do the edge detection -- it's pretty much just a delayed NMIG.
+//   INTG is IRQ and NMI taken together.
+IRQP: 675,
+"#IRQP": 888,
+NMIP: 1032,
+"#NMIP": 297,
+"#NMIG": 264,
+NMIL: 1374,
+RESP: 67,
+RESG: 926,
+VEC0: 1465,
+VEC1: 1481,
+"#VEC": 1134,
+D1x1: 827,         // internal signal: interrupt handler related
+"brk-done": 1382,  // internal signal: interrupt handler related
+INTG: 1350,        // internal signal: interrupt handler related
 
 // internal state: misc pipeline state clocked by cclk (phi2)
-pipeBRtaken: 832,
+"pipe#VEC": 1431,     // latched #VEC
+"pipeT-SYNC": 537,
+pipeT2out: 40,
+pipeT3out: 706,
+pipeT4out: 1373,
+pipeT5out: 940,
+pipeIPCrelated: 832,
 pipeUNK01: 1530,
 pipeUNK02: 974,
 pipeUNK03: 1436,
@@ -484,19 +612,22 @@ pipeUNK34: 56,
 pipeUNK35: 1713,
 pipeUNK36: 729,
 pipeUNK37: 197,
-pipeUNK38: 1131,
+"pipe#WR.phi2": 1131,
 pipeUNK39: 151,
 pipeUNK40: 456,
 pipeUNK41: 1438,
 pipeUNK42: 1104,
-pipeUNK43: 554,
-
-
+"pipe#T0": 554,   // aka #T0.phi2
 
 // internal state: vector address pulldown control
 pipeVectorA0: 357,
 pipeVectorA1: 170,
 pipeVectorA2: 45,
+
+// internal signals: vector address pulldown control
+"0/ADL0": 217,
+"0/ADL1": 686,
+"0/ADL2": 1193,
 
 // internal state: datapath control drivers
 pipedpc28: 683,
@@ -519,17 +650,105 @@ alub5: 1678,
 alub6: 235,
 alub7: 1535,
 
-aluanorb0: 143,
-aluanandb0: 1628,
-aluaorb0: 693,
-notaluoutmux0: 957,   // alu result latch input
+// alu carry chain and decimal mode
+C01: 1285,
+C12: 505,
+C23: 1023,
+C34: 78,
+C45: 142,
+C56: 500,
+C67: 1314,
+C78: 808,
+"C78.phi2": 560,
+DC34: 1372,   // lower nibble decimal carry
+DC78: 333,    // carry for decimal mode
+"DC78.phi2": 164,
+"#C01": 1506,
+"#C12": 1122,
+"#C23": 1003,
+"#C34": 1425,
+"#C45": 1571,
+"#C56": 427,
+"#C67": 592,
+"#C78": 1327,
+"DA-C01": 623,
+"DA-AB2": 216,
+"DA-AxB2": 516,
+"DA-C45": 1144,
+"#DA-ADD1": 901,
+"#DA-ADD2": 699,
 
-aluanorb1: 155,
-aluanandb1: 841,
-aluaorb1: 1021,
-notaluoutmux1: 250,   // alu result latch input
+// misc alu internals
+"#(AxBxC)0": 371,
+"#(AxBxC)1": 965,
+"#(AxBxC)2": 22,
+"#(AxBxC)3": 274,
+"#(AxBxC)4": 651,
+"#(AxBxC)5": 486,
+"#(AxBxC)6": 1197,
+"#(AxBxC)7": 532,
+AxB1: 425,
+AxB3: 640,
+AxB5: 1220,
+AxB7: 1241,
+"#(AxB)0": 1525,
+"#(AxB)2": 701,
+"#(AxB)4": 308,
+"#(AxB)6": 1459,
+"(AxB)0.#C0in": 555,
+"(AxB)2.#C12": 193,
+"(AxB)4.#C34": 65,
+"(AxB)6.#C56": 174,
+"#(AxB1).C01": 295,
+"#(AxB3).C23": 860,
+"#(AxB5).C45": 817,
+"#(AxB7).C67": 1217,
+"#A.B0": 1628,
+"#A.B1": 841,
+"#A.B2": 681,
+"#A.B3": 350,
+"#A.B4": 1063,
+"#A.B5": 477,
+"#A.B6": 336,
+"#A.B7": 1318,
+"A+B0": 693,
+"A+B1": 1021,
+"A+B2": 110,
+"A+B3": 1313,
+"A+B4": 918,
+"A+B5": 1236,
+"A+B6": 803,
+"A+B7": 117,
+"#(A+B)0": 143,
+"#(A+B)1": 155,
+"#(A+B)2": 1691,
+"#(A+B)3": 649,
+"#(A+B)4": 404,
+"#(A+B)5": 1632,
+"#(A+B)6": 1084,
+"#(A+B)7": 1398,
+"#(AxB)0": 1525,
+"#(AxB)2": 701,
+"#(AxB)4": 308,
+"#(AxB)6": 1459,
+"#(AxB)1": 953,
+"#(AxB)3": 884,
+"#(AxB)5": 1469,
+"#(AxB)7": 177,
+"#aluresult0": 957,   // alu result latch input
+"#aluresult1": 250,
+"#aluresult2": 740,
+"#aluresult3": 1071,
+"#aluresult4": 296,
+"#aluresult5": 277,
+"#aluresult6": 722,
+"#aluresult7": 304,
 
 // internal signals: datapath control signals
+
+"ADL/ABL": 639,      // load ABL latches from ADL bus
+"ADH/ABH": 821,      // load ABH latches from ADH bus
+
 dpc0_YSB: 801,       // drive sb from y
 dpc1_SBY: 325,       // load y from sb
 dpc2_XSB: 1263,      // drive sb from x
@@ -551,23 +770,29 @@ dpc16_EORS: 1666,    // alu op: a xor b (?)
 dpc17_SUMS: 921,     // alu op: a plus b (?)
 alucin: 910,         // alu carry in
 notalucin: 1165,
-dpc18_DAA: 1201,     // decimal related
+"dpc18_#DAA": 1201,  // decimal related (inverted)
 dpc19_ADDSB7: 214,   // alu to sb bit 7 only
 
 dpc20_ADDSB06: 129,  // alu to sb bits 6-0 only
 dpc21_ADDADL: 1015,  // alu to adl
 alurawcout: 808,     // alu raw carry out (no decimal adjust)
+notalucout: 412,     // alu carry out (inverted)
 alucout: 1146,       // alu carry out (latched by phi2)
 "#alucout": 206,
 "##alucout": 465,
 notaluvout: 1308,    // alu overflow out
 aluvout: 938,        // alu overflow out (latched by phi2)
-dpc22_DSA: 725,      // decimal related/SBC only
+
+"#DBZ": 1268,   // internal signal: not (databus is zero)
+DBZ: 744,       // internal signal: databus is zero
+DBNeg: 1200,    // internal signal: databus is negative (top bit of db) aka P-#DB7in
+
+"dpc22_#DSA": 725,   // decimal related/SBC only (inverted)
 dpc23_SBAC: 534,     // (optionalls decimal-adjusted) sb to acc
 dpc24_ACSB: 1698,    // acc to sb
-dpc25_SBDB: 1060,    // sb pass-connects to idb
+dpc25_SBDB: 1060,    // sb pass-connects to idb (bi-directionally)
 dpc26_ACDB: 1331,    // acc to idb
-dpc27_SBADH: 140,    // sb pass-connects to adh
+dpc27_SBADH: 140,    // sb pass-connects to adh (bi-directionally)
 dpc28_0ADH0: 229,    // zero to adh0 bit0 only
 dpc29_0ADH17: 203,   // zero to adh bits 7-1 only
 
@@ -576,14 +801,23 @@ dpc31_PCHPCH: 741,   // load pch from pch incremented
 dpc32_PCHADH: 1235,  // drive adh from pch incremented
 dpc33_PCHDB: 247,    // drive idb from pch incremented
 dpc34_PCLC: 1704,    // pch carry in and pcl FF detect?
-dpc35: 1334,         // pcl 0x?F detect - half-carry
-dpc36_IPC: 379,      // pcl carry in
+dpc35_PCHC: 1334,    // pcl 0x?F detect - half-carry
+"dpc36_#IPC": 379,   // pcl carry in (inverted)
 dpc37_PCLDB: 283,    // drive idb from pcl incremented
 dpc38_PCLADL: 438,   // drive adl from pcl incremented
 dpc39_PCLPCL: 898,   // load pcl from pcl incremented
 
 dpc40_ADLPCL: 414,   // load pcl from adl
-dpc41: 1564,    // pass-connect adl to mux node driven by idl
-dpc42: 41,      // pass-connect adh to mux node driven by idl
-dpc43: 863,     // pass-connect idb to mux node driven by idl
+"dpc41_DL/ADL": 1564,// pass-connect adl to mux node driven by idl
+"dpc42_DL/ADH": 41,  // pass-connect adh to mux node driven by idl
+"dpc43_DL/DB": 863,  // pass-connect idb to mux node driven by idl
+
 }
+
+/* many bus names taken from Donald F. Hanson's block diagram, found
+ * http://www.weihenstephan.org/~michaste/pagetable/6502/6502.jpg
+ * from his paper "A VHDL conversion tool for logic equations with embedded D latches"
+ * http://portal.acm.org/citation.cfm?id=1275143.1275151
+ * also available at
+ * http://www.ncsu.edu/wcae/WCAE1/hanson.pdf
+ */

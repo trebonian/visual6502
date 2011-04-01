@@ -264,7 +264,7 @@ function readPstring(){
    result = (isNodeHigh(nodenames['p7'])?'N':'n') +
             (isNodeHigh(nodenames['p6'])?'V':'v') +
             '&#8209' +  // non-breaking hyphen
-            (isNodeHigh(nodenames['p3'])?'B':'b') +
+            (isNodeHigh(nodenames['p4'])?'B':'b') +
             (isNodeHigh(nodenames['p3'])?'D':'d') +
             (isNodeHigh(nodenames['p2'])?'I':'i') +
             (isNodeHigh(nodenames['p1'])?'Z':'z') +
@@ -330,9 +330,9 @@ function busToString(busname){
 	if(busname=='State')
 		return listActiveTCStates();
 	if(busname=='Execute')
-		return dis6502[readBits('ir',8)];
+		return dis6502toHTML(readBits('ir',8));
 	if(busname=='Fetch')
-		return isNodeHigh(nodenames['sync'])?dis6502[readDataBus()]:'';
+		return isNodeHigh(nodenames['sync'])?dis6502toHTML(readDataBus()):"";
 	if(busname=='plaOutputs')
 		// PLA outputs are mostly ^op- but some have a prefix too
 		//    - we'll allow the x and xx prefix but ignore the #
@@ -462,12 +462,14 @@ function chipStatus(){
 	        ' SP:' + hexByte(readSP()) +
 	        ' ' + readPstring();
 	var machine3 = 
-		'Hz: ' + estimatedHz().toFixed(1) +
-		' Exec: ' + busToString('Execute') + '(' + busToString('State') + ')';
-	if(isNodeHigh(nodenames['sync']))
-		machine3 += ' (Fetch: ' + busToString('Fetch') + ')';
-	if(goldenChecksum != undefined)
-		machine3 += " Chk:" + traceChecksum + ((traceChecksum==goldenChecksum)?" OK":" no match");
+		'Hz: ' + estimatedHz().toFixed(1);
+	if(typeof expertMode != "undefined") {
+		machine3 += ' Exec: ' + busToString('Execute') + '(' + busToString('State') + ')';
+		if(isNodeHigh(nodenames['sync']))
+			machine3 += ' (Fetch: ' + busToString('Fetch') + ')';
+		if(goldenChecksum != undefined)
+			machine3 += " Chk:" + traceChecksum + ((traceChecksum==goldenChecksum)?" OK":" no match");
+	}
 	setStatus(machine1, machine2, machine3);
 	if (loglevel>0) {
 		updateLogbox(logThese);
@@ -554,7 +556,7 @@ function initLogbox(names){
 
 	names=names.map(function(x){return x.replace(/^-/,'')});
 	logStream = [];
-        logStream.push("<td>" + names.join("</td><td>") + "</td>");
+	logStream.push("<td class=header>" + names.join("</td><td class=header>") + "</td>");
 	logbox.innerHTML = "<tr>"+logStream.join("</tr><tr>")+"</tr>";
 }
 
@@ -577,16 +579,26 @@ function updateLogDirection(){
 // update the table of signal values, by prepending or appending
 function updateLogbox(names){
 	var signals=[];
+	var odd=true;
+	var bg;
+	var row;
 
-	for(i in names){
-		signals.push(busToString(names[i]));
+	for(var i in names){
+		if(cycle % 4 < 2){
+			bg = odd ? " class=oddcol":"";
+		} else {
+			bg = odd ? " class=oddrow":" class=oddrowcol";
+		}
+		signals.push("<td" + bg + ">" + busToString(names[i]) + "</td>");
+		odd =! odd;
 	}
+	row = "<tr>" + signals.join("") + "</tr>";
 	if(logboxAppend)
-	        logStream.push("<td>" + signals.join("</td><td>") + "</td>");
+	        logStream.push(row);
 	else
-		logStream.splice(1,0,"<td>" + signals.join("</td><td>") + "</td>");
+		logStream.splice(1,0,row);
 
-	logbox.innerHTML = "<tr>"+logStream.join("</tr><tr>")+"</tr>";
+	logbox.innerHTML = logStream.join("");
 }
 
 function getMem(){
@@ -610,6 +622,14 @@ function adler32(x){
 		b=(b+a)%65521;
 	}
 	return (0x100000000+(b<<16)+a).toString(16).slice(-8);
+}
+
+// sanitised opcode for HTML output
+function dis6502toHTML(byte){
+	var opcode=dis6502[byte];
+	if(typeof opcode == "undefined")
+		return "unknown"
+	return opcode.replace(/ /,'&nbsp;');
 }
 
 // opcode lookup for 6502 - not quite a disassembly

@@ -88,6 +88,7 @@ function setup_part2(){
 
 function setup_part3(){
 	loadProgram();
+	writeTriggers={};  // kiosk mode does not handle I/O
 	initChip();
 	document.getElementById('stop').style.visibility = 'hidden';
 	go();
@@ -101,11 +102,11 @@ function setup_part3(){
 /////////////////////////
 
 function handleKey(e){
-	var c = e.charCode;
+	var c = e.charCode || e.keyCode;
 	c = String.fromCharCode(c);
-	if('<>?np'.indexOf(c)==-1) return;
-	if(c=='<' && zoom>1) setZoom(zoom/1.2);
-	else if(c=='>' && zoom<grMaxZoom) setZoom(zoom*1.2);
+	if('zx<>?np'.indexOf(c)==-1) return;
+	if((c=='x' || c=='<') && zoom>1) setZoom(zoom/1.2);
+	else if((c=='z' || c=='>') && zoom<grMaxZoom) setZoom(zoom*1.2);
 	else if(c=='?') setZoom(1);
 	else if(c=='n') stepForward();
 	else if(c=='p') stepBack();
@@ -168,7 +169,10 @@ function handleClick(e){
 	var x = localx(hilite, e.clientX)/zoom;
 	var y = localy(hilite, e.clientY)/zoom;
 	var w = findNodeNumber(x,y);
-	if(e.shiftKey) hiliteNode(getNodeGroup(w));
+	if(e.shiftKey) {
+		getNodeGroup(w);
+		hiliteNode(group);
+	}
 	else {var a=new Array(); a.push(w); hiliteNode(a);}
         var cx = Math.round(x*grChipSize/600);
         var cy = Math.round(y*grChipSize/600);
