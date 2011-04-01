@@ -13,9 +13,11 @@ nodenamereset = 'reset';
 
 presetLogLists=[
                 ['cycle','phi1','phi2'],
-                ['ab','db','rw','pc','a','b'],
-                ['ir','vma','ba'],
-                ['irq','nmi',nodenamereset,'tsc','dbe','halt'],
+                ['ab','db','rw','vma','Fetch','pc','acca','accb'], // 'x','s'], // p
+                ['ir','sync','Execute'],
+                ['dbi','dbo'],              // internal state
+                ['idb','abh','abl','ablx'], // internal busses
+                ['irq','nmi',nodenamereset,'tsc','dbe','halt','ba'],
         ];
 
 function setupTransistors(){
