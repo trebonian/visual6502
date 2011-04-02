@@ -11,10 +11,9 @@ npwr = nodenames['vcc'];
 
 nodenamereset = 'reset';
 
-// we can't handle sp and ix as 16-bit quantities without refactoring busToString
 presetLogLists=[
                 ['cycle','phi1','phi2'],
-                ['ab','db','rw','vma','Fetch','pc','acca','accb','ixh','ixl','sph','spl','p'],
+                ['ab','db','rw','vma','Fetch','pc','acca','accb','ix','sp','p'],
                 ['ir','sync','Execute'],    // instruction fetch and execution control
                 ['dbi','dbo','tmp'],        // internal state
                 ['idb','abh','abl','ablx'], // internal busses
@@ -126,6 +125,44 @@ function readPstring(){
    return result;
 }
 
+function busToString(busname){
+	// takes a signal name or prefix
+	// returns an appropriate string representation
+	// some 'signal names' are CPU-specific aliases to user-friendly string output
+	if(busname=='cycle')
+		return cycle>>1;
+	if(busname=='pc')
+		return busToHex('pch') + busToHex('pcl');
+	if(busname=='sp')
+		return busToHex('sph') + busToHex('spl');
+	if(busname=='ix')
+		return busToHex('ixh') + busToHex('ixl');
+	if(busname=='p')
+		return readPstring();
+	if(busname=='State')
+		return listActiveTCStates();
+	if(busname=='Execute')
+		return disassemblytoHTML(readBits('ir',8));
+	if(busname=='Fetch')
+		return isNodeHigh(nodenames['sync'])?disassemblytoHTML(readDataBus()):"";
+	if(busname=='plaOutputs')
+		// PLA outputs are mostly ^op- but some have a prefix too
+		//    - we'll allow the x and xx prefix but ignore the #
+		return listActiveSignals('^([x]?x-)?op-');
+	if(busname=='DPControl')
+		return listActiveSignals('^dpc[0-9]+_');
+	if(busname[0]=="-"){
+		// invert the value of the bus for display
+		var value=busToHex(busname.slice(1))
+		if(typeof value != "undefined")
+			return value.replace(/./g,function(x){return (15-parseInt(x,16)).toString(16)});
+		else
+			return undefined;;
+	} else {
+		return busToHex(busname);
+	}
+}
+
 function chipStatus(){
 	var ab = readAddressBus();
 	var machine1 =
@@ -133,7 +170,8 @@ function chipStatus(){
 	        ' phi0:' + readBit('phi2') +
                 ' AB:' + hexWord(ab) +
 	        ' D:' + hexByte(readDataBus()) +
-	        ' RnW:' + readBit('rw');
+	        ' RnW:' + readBit('rw') +
+	        ' VMA:' + readBit('vma');
 	var machine2 =
 	        ' PC:' + hexWord(readPC()) +
 	        ' A:' + hexByte(readAccA()) +
