@@ -50,6 +50,19 @@ function halfStep(){
 	else {setHigh('phi1'); setLow('phi1'); setHigh('phi2'); setHigh('dbe'); handleBusWrite();}
 }
 
+function goUntilSyncOrWrite(){
+	halfStep();
+	cycle++;
+	while(
+		!isNodeHigh(nodenames['phi2']) ||
+		( !isNodeHigh(nodenames['sync']) && isNodeHigh(nodenames['rw']) )
+	) {
+		halfStep();
+		cycle++;
+	}
+	chipStatus();
+}
+
 function initChip(){
         var start = now();
 	for(var nn in nodes) {
