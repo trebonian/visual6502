@@ -12,7 +12,7 @@ npwr = nodenames['vcc'];
 nodenamereset = 'reset';
 
 presetLogLists=[
-                ['cycle','phi1','phi2'],
+                ['cycle',],
                 ['ab','db','rw','vma','Fetch','pc','acca','accb','ix','sp','p'],
                 ['ir','sync','Execute'],    // instruction fetch and execution control
                 ['dbi','dbo','tmp'],        // internal state
