@@ -86,7 +86,7 @@ function initChip(){
 		setHigh('phi1');
 	}
 	setHigh(nodenamereset);
-	for(var i=0;i<18;i++){halfStep();} // avoid updating graphics and trace buffer before user code
+	for(var i=0;i<6;i++){halfStep();} // avoid updating graphics and trace buffer before user code
 	refresh();
 	cycle = 0;
 	trace = Array();
