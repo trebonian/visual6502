@@ -471,7 +471,7 @@ function chipStatus(){
 			machine3 += " Chk:" + traceChecksum + ((traceChecksum==goldenChecksum)?" OK":" no match");
 	}
 	setStatus(machine1, machine2, machine3);
-	if (loglevel>0) {
+	if (logThese.length>1) {
 		updateLogbox(logThese);
 	}
 	selectCell(ab);

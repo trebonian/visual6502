@@ -190,7 +190,7 @@ function chipStatus(){
 	}
 
 	setStatus(machine1, machine2, machine3);
-	if (loglevel>0) {
+	if (logThese.length>1) {
 		updateLogbox(logThese);
 	}
 	selectCell(ab);
