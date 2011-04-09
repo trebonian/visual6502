@@ -2,9 +2,16 @@
  * The format here is
  *   name
  *   gate,c1,c2
- *   bb  (absent)  (bounding box: list of four ordinates)
- *   geometry (absent) (unused) (list of 5 measurements of the transistor)
+ *   bb (nominal) (bounding box: xmin, xmax, ymin, ymax)
+ *   geometry (absent) (unused) (length1, length2, width, #segments, area)
  *   weak (boolean) (marks weak transistors, whether pullups or pass gates)
+ *
+ * Note: the geometry is of the MOSFET channel: the two lengths are
+ * the lengths of the two edges where the poly extends past the active
+ * area, which would normally be equal. The number of segments, which
+ * would be 1 for a rectangular channel, or 2 for an L shape, 3 for a Z
+ * or U, will allow for taking into account corner effects. 
+ *
  */
 var transdefs = [
 ['t1',1646,13,663,[545,575,2715,2745],[],false],
