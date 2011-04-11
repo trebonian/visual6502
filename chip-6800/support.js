@@ -14,10 +14,10 @@ nodenamereset = 'reset';
 presetLogLists=[
                 ['cycle',],
                 ['ab','db','rw','vma','Fetch','pc','acca','accb','ix','sp','p'],
-                ['ir','sync','Execute'],    // instruction fetch and execution control
-                ['dbi','dbo','tmp'],        // internal state
-                ['idb','abh','abl','ablx'], // internal busses
-                ['irq','nmi',nodenamereset,'tsc','dbe','halt','ba'], // other pins
+                ['ir','sync','Execute','State'],			// instruction fetch and execution control
+                ['dbi','dbo','tmp'],       				// internal register-sized state
+                ['idb','abh','abl','ablx'],				// internal busses
+                ['irq','nmi',nodenamereset,'tsc','dbe','halt','ba'],	// other pins
         ];
 
 function setupTransistors(){
@@ -123,6 +123,33 @@ function readPstring(){
             (isNodeHigh(nodenames['flagv'])?'V':'v') +
             (isNodeHigh(nodenames['flagc'])?'C':'c');
    return result;
+}
+
+// The 6800 state control is something like a branching shift register
+// ... but not quite like that
+TCStates=[
+        "Ts",
+        "Tx0",  "Tx1",   "Tx2",
+                                "Ta0", "Ta1", "Ta2",
+        "Td0_0",
+	"#Te0", "Te1_0",
+        "Tg0",  "Tg1",   "Tg2", "Tg3", "Tg4", "Tg5", "Tg6", "Tg7", "Tg8",
+                                "Tr3", "Tr4", "Tr5", "Tr6", "Tr7", "Tr8",
+];
+
+function listActiveTCStates() {
+	var s=[];
+	for(var i=0;i<TCStates.length;i++){
+		var t=TCStates[i];
+		// remove a leading hash, but invert the signal
+		// in any case, remove any trailing suffix
+		if(t[0]=="#"){
+			if(!isNodeHigh(nodenames[t])) s.push(t.slice(1,4));
+		} else {
+			if(isNodeHigh(nodenames[t])) s.push(t.slice(0,3));
+		}
+	}
+	return s.join("+");
 }
 
 function busToString(busname){
