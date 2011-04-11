@@ -75,6 +75,7 @@ sync: 1528,   // aka #decode_0
 
 // timing state signals
 Ts: 1309,
+Tf: 849,      // aka fetch
 Ta0: 879,
 Td0_0: 981,
 "#Te0": 868,
@@ -110,7 +111,7 @@ abh4: 265,
 abh5: 256,
 abh6: 259,
 abh7: 255,
-ablx0: 1683,
+ablx0: 1683,  // extension of abl bus
 ablx1: 1682,
 ablx2: 1689,
 ablx3: 1687,
@@ -191,6 +192,14 @@ dbo5: 397,
 dbo6: 390,
 dbo7: 649,
 decode: 1225,
+enrwa: 1318,
+fetch: 849, // aka Tf
+flagc: 1160,
+flagh: 785,
+flagi: 1007,
+flagn: 1005,
+flagv: 1124,
+flagz: 1026,
 i0: 1271,  // pla word lines
 i1: 1269,
 i2: 1268,
@@ -297,14 +306,9 @@ tmp4: 1889,
 tmp5: 1888,
 tmp6: 1887,
 tmp7: 1886,
-enrwa: 1318,
-flagc: 1160,
-flagh: 785,
-flagi: 1007,
-flagn: 1005,
-flagv: 1124,
-flagz: 1026,
 qaddgen0: 593,
+
+// signals which are not purely alphabetical
 acca0_1: 342,
 acca1_1: 350,
 acca2_1: 344,

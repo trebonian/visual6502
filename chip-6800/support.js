@@ -128,7 +128,7 @@ function readPstring(){
 // The 6800 state control is something like a branching shift register
 // ... but not quite like that
 TCStates=[
-        "Ts",
+        "Ts",   "Tf",
         "Tx0",  "Tx1",   "Tx2",
                                 "Ta0", "Ta1", "Ta2",
         "Td0_0",
