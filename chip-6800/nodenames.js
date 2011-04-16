@@ -26,7 +26,8 @@ vcc: 31,       // pads: power
 phi1: 1507,    // pads: phase 1 clock input
 phi2: 1511,    // pads: phase 2 clock input
 reset: 1461,   // pads: reset
-db0: 686,       // pads: data bus
+
+db0: 686,       // pads: data bus (should really be called d)
 db1: 683,
 db2: 677,
 db3: 676,
@@ -34,7 +35,8 @@ db4: 669,
 db5: 670,
 db6: 664,
 db7: 691,
-ab0: 1854,       // pads: address bus
+
+ab0: 1854,       // pads: address bus (should really be called a)
 ab1: 1857,
 ab2: 1855,
 ab3: 1858,
@@ -50,6 +52,7 @@ ab12: 1948,
 ab13: 1946,
 ab14: 1949,
 ab15: 1947,
+
 irq: 1496,     // input pads: interrupt request (active low)
 nmi: 1501,     // pads: non maskable interrupt (active low)
 dbe: 1456,     // pads: data bus enable
@@ -60,8 +63,206 @@ vma: 1971,     // pads: valid memory address
 ba: 1964,      // pads: bus available
 //
 
-// internal state: Instruction Register
-ir0: 1301,
+// major internal busses
+
+idb0: 610,  // internal databus (should be called db)
+idb1: 1593,
+idb2: 387,
+idb3: 386,
+idb4: 311,
+idb5: 310,
+idb6: 393,
+idb7: 1651,
+
+abh0: 267, // internal bus: address bus high
+abh1: 258,
+abh2: 266,
+abh3: 257,
+abh4: 265,
+abh5: 256,
+abh6: 259,
+abh7: 255,
+
+abl0: 1670,  // internal bus: address bus low
+abl1: 1671,
+abl2: 1653,
+abl3: 1667,
+abl4: 1655,
+abl5: 1657,
+abl6: 1656,
+abl7: 1658,
+
+ablx0: 1683,  // internal bus: extension of abl bus
+ablx1: 1682,
+ablx2: 1689,
+ablx3: 1687,
+ablx4: 1694,
+ablx5: 1693,
+ablx6: 1698,
+ablx7: 1697,
+
+i0: 1271,  // pla word lines
+i1: 1269,
+i2: 1268,
+i3: 1267,
+i4: 1265,
+i5: 1264,
+i6: 1263,
+i7: 1261,
+
+// programmer-visible state
+
+flagc: 1160, // status word flags
+flagh: 785,
+flagi: 1007,
+flagn: 1005,
+flagv: 1124,
+flagz: 1026,
+
+acca0: 1934,  // a register: accumulator a
+acca1: 1688,
+acca2: 1700,
+acca3: 1699,
+acca4: 1701,
+acca5: 1702,
+acca6: 1703,
+acca7: 1784,
+
+accb0: 1919,  // b register: accumulator b
+accb1: 1927,
+accb2: 1921,
+accb3: 1929,
+accb4: 1923,
+accb5: 1931,
+accb6: 1925,
+accb7: 1933,
+
+ixh0: 1910, // index register high
+ixh1: 1914,
+ixh2: 1911,
+ixh3: 1915,
+ixh4: 1912,
+ixh5: 1916,
+ixh6: 1913,
+ixh7: 1917,
+ixl0: 1918, // index register low
+ixl1: 1926,
+ixl2: 1920,
+ixl3: 1928,
+ixl4: 1922,
+ixl5: 1930,
+ixl6: 1924,
+ixl7: 1932,
+
+pch0: 1878, // program counter high register
+pch1: 1882,
+pch2: 1879,
+pch3: 1883,
+pch4: 1880,
+pch5: 1884,
+pch6: 1881,
+pch7: 1885,
+pcl0: 1877, // program counter low register
+pcl1: 1873,
+pcl2: 1876,
+pcl3: 1872,
+pcl4: 1875,
+pcl5: 1871,
+pcl6: 1874,
+pcl7: 1870,
+
+sph0: 1909,  // stack pointer high register
+sph1: 1908,
+sph2: 1907,
+sph3: 1906,
+sph4: 1905,
+sph5: 1904,
+sph6: 1903,
+sph7: 1902,
+spl0: 1894,  // stack pointer low register
+spl1: 1898,
+spl2: 1895,
+spl3: 1899,
+spl4: 1896,
+spl5: 1900,
+spl6: 1897,
+spl7: 1901,
+
+// datapath state not visible to the programmer
+
+tmp0: 1893, // non-visible temporary register
+tmp1: 1892,
+tmp2: 1891,
+tmp3: 1890,
+tmp4: 1889,
+tmp5: 1888,
+tmp6: 1887,
+tmp7: 1886,
+
+sum0: 644,  // alu output (phi2-latched)
+sum1: 643,
+sum2: 642,
+sum3: 641,
+sum4: 640,
+sum5: 639,
+sum6: 638,
+sum7: 412,
+
+dbi0: 608,  // data bus input register
+dbi1: 599,
+dbi2: 598,
+dbi3: 400,
+dbi4: 405,
+dbi5: 395,
+dbi6: 389,
+dbi7: 650,
+
+dbo0: 609,  // data bus output latch
+dbo1: 602,
+dbo2: 601,
+dbo3: 402,
+dbo4: 406,
+dbo5: 397,
+dbo6: 390,
+dbo7: 649,
+
+inch0: 198, // incrementer high output port
+inch1: 199,
+inch2: 200,
+inch3: 201,
+inch4: 202,
+inch5: 203,
+inch6: 204,
+inch7: 205,
+incl0: 154, // incrementer low output port
+incl1: 143,
+incl2: 144,
+incl3: 147,
+incl4: 148,
+incl5: 151,
+incl6: 152,
+incl7: 156,
+
+obl0: 27,  // output buffer low (address bus low output latch)
+obl1: 30,
+obl2: 28,
+obl3: 32,
+obl4: 29,
+obl5: 33,
+obl6: 1073,
+obl7: 35,
+
+"#obh0": 1071,  // output buffer high (address bus high output latch))
+"#obh1": 819,
+"#obh2": 811,
+"#obh3": 813,
+"#obh4": 817,
+"#obh5": 809,
+"#obh6": 815,
+"#obh7": 574,
+
+// other internal state
+ir0: 1301, // Instruction Register
 ir1: 1285,
 ir2: 1286,
 ir3: 1287,
@@ -69,9 +270,6 @@ ir4: 1288,
 ir5: 1289,
 ir6: 1274,
 ir7: 1277,
-
-// internal control signals
-sync: 1528,   // aka #decode_0
 
 // timing state signals
 Ts: 1309,
@@ -102,47 +300,12 @@ Tg7: 1081,
 Tg8: 891,
 Tr8: 697,
 
-// many other internal busses registers and signals
-abh0: 267,
-abh1: 258,
-abh2: 266,
-abh3: 257,
-abh4: 265,
-abh5: 256,
-abh6: 259,
-abh7: 255,
-ablx0: 1683,  // extension of abl bus
-ablx1: 1682,
-ablx2: 1689,
-ablx3: 1687,
-ablx4: 1694,
-ablx5: 1693,
-ablx6: 1698,
-ablx7: 1697,
-abl0: 1670,
-abl1: 1671,
-abl2: 1653,
-abl3: 1667,
-abl4: 1655,
-abl5: 1657,
-abl6: 1656,
-abl7: 1658,
-acca0: 1934,
-acca1: 1688,
-acca2: 1700,
-acca3: 1699,
-acca4: 1701,
-acca5: 1702,
-acca6: 1703,
-acca7: 1784,
-accb0: 1919,
-accb1: 1927,
-accb2: 1921,
-accb3: 1929,
-accb4: 1923,
-accb5: 1931,
-accb6: 1925,
-accb7: 1933,
+// other internal busses registers and signals
+
+// internal control signals
+sync: 1528,   // aka #decode_0
+
+// ALU signals
 adda0: 1680,
 adda1: 1681,
 adda2: 1685,
@@ -183,141 +346,14 @@ addp4: 548,
 addp5: 550,
 addp6: 541,
 addp7: 543,
-idb0: 610,
-idb1: 1593,
-idb2: 387,
-idb3: 386,
-idb4: 311,
-idb5: 310,
-idb6: 393,
-idb7: 1651,
-dbi0: 608,
-dbi1: 599,
-dbi2: 598,
-dbi3: 400,
-dbi4: 405,
-dbi5: 395,
-dbi6: 389,
-dbi7: 650,
-dbo0: 609,
-dbo1: 602,
-dbo2: 601,
-dbo3: 402,
-dbo4: 406,
-dbo5: 397,
-dbo6: 390,
-dbo7: 649,
+
 decode: 1225,
 enrwa: 1318,
 fetch: 849, // aka Tf
-flagc: 1160,
-flagh: 785,
-flagi: 1007,
-flagn: 1005,
-flagv: 1124,
-flagz: 1026,
-i0: 1271,  // pla word lines
-i1: 1269,
-i2: 1268,
-i3: 1267,
-i4: 1265,
-i5: 1264,
-i6: 1263,
-i7: 1261,
-inch0: 198,
-inch1: 199,
-inch2: 200,
-inch3: 201,
-inch4: 202,
-inch5: 203,
-inch6: 204,
-inch7: 205,
-incl0: 154,
-incl1: 143,
-incl2: 144,
-incl3: 147,
-incl4: 148,
-incl5: 151,
-incl6: 152,
-incl7: 156,
-ixh0: 1910,
-ixh1: 1914,
-ixh2: 1911,
-ixh3: 1915,
-ixh4: 1912,
-ixh5: 1916,
-ixh6: 1913,
-ixh7: 1917,
-ixl0: 1918,
-ixl1: 1926,
-ixl2: 1920,
-ixl3: 1928,
-ixl4: 1922,
-ixl5: 1930,
-ixl6: 1924,
-ixl7: 1932,
-ob: 1308,
-obl0: 27,
-obl1: 30,
-obl2: 28,
-obl3: 32,
-obl4: 29,
-obl5: 33,
-obl6: 1073,
-obl7: 35,
-pch0: 1878, // program counter high register
-pch1: 1882,
-pch2: 1879,
-pch3: 1883,
-pch4: 1880,
-pch5: 1884,
-pch6: 1881,
-pch7: 1885,
-pcl0: 1877, // program counter low register
-pcl1: 1873,
-pcl2: 1876,
-pcl3: 1872,
-pcl4: 1875,
-pcl5: 1871,
-pcl6: 1874,
-pcl7: 1870,
+
+ob: 1308, // output buffer (read-not-write output latch)
 
 resg: 1512,
-
-sph0: 1909,  // stack pointer high register
-sph1: 1908,
-sph2: 1907,
-sph3: 1906,
-sph4: 1905,
-sph5: 1904,
-sph6: 1903,
-sph7: 1902,
-spl0: 1894,  // stack pointer low register
-spl1: 1898,
-spl2: 1895,
-spl3: 1899,
-spl4: 1896,
-spl5: 1900,
-spl6: 1897,
-spl7: 1901,
-
-sum0: 644,  // phi2-latched alu partial result
-sum1: 643,
-sum2: 642,
-sum3: 641,
-sum4: 640,
-sum5: 639,
-sum6: 638,
-sum7: 412,
-
-tmp0: 1893, // non-visible temporary register
-tmp1: 1892,
-tmp2: 1891,
-tmp3: 1890,
-tmp4: 1889,
-tmp5: 1888,
-tmp6: 1887,
-tmp7: 1886,
 
 xi0: 1303,  // half-latch prior to IR
 xi1: 1291,
@@ -660,14 +696,6 @@ phi2_1: 478,
 "#ixl5_0": 1726,
 "#ixl6_0": 1730,
 "#ixl7_0": 1782,
-"#obh0": 1071,
-"#obh1": 819,
-"#obh2": 811,
-"#obh3": 813,
-"#obh4": 817,
-"#obh5": 809,
-"#obh6": 815,
-"#obh7": 574,
 "#pch0_0": 1760,
 "#pch1_0": 1757,
 "#pch2_0": 1761,
@@ -922,7 +950,6 @@ phi2_1: 478,
 carry: 646,
 dbe_1: 1453,
 dec: 163,
-fetch: 849,
 halted: 2,
 int: 1083,
 irq_0: 3,
