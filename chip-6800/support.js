@@ -15,8 +15,8 @@ presetLogLists=[
                 ['cycle',],
                 ['ab','db','rw','vma','Fetch','pc','acca','accb','ix','sp','p'],
                 ['ir','sync','Execute','State'],			// instruction fetch and execution control
-                ['dbi','dbo','tmp'],       				// internal register-sized state
-                ['idb','abh','abl','ablx'],				// internal busses
+                ['dbi','dbo','tmp','sum','inc'],			// internal register-sized state
+                ['idb','abh','abl','ablx'],				// internal datapath busses
                 ['irq','nmi',nodenamereset,'tsc','dbe','halt','ba'],	// other pins
         ];
 
@@ -164,6 +164,8 @@ function busToString(busname){
 		return busToHex('sph') + busToHex('spl');
 	if(busname=='ix')
 		return busToHex('ixh') + busToHex('ixl');
+	if(busname=='inc')
+		return busToHex('inch') + busToHex('incl');
 	if(busname=='p')
 		return readPstring();
 	if(busname=='State')
