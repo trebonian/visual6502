@@ -99,13 +99,21 @@ pclp5: 72,
 pclp6: 1458,
 pclp7: 1647,
 "#pclp0": 1227,    // machine state: program counter low (pre-incremented?, inverse second storage node)
+"~pclp0": 1227,     // automatic alias replacing hash with tilde
 "#pclp1": 1102,
+"~pclp1": 1102, // automatic alias replacing hash with tilde
 "#pclp2": 1079,
+"~pclp2": 1079, // automatic alias replacing hash with tilde
 "#pclp3": 868,
+"~pclp3": 868, // automatic alias replacing hash with tilde
 "#pclp4": 39,
+"~pclp4": 39, // automatic alias replacing hash with tilde
 "#pclp5": 1326,
+"~pclp5": 1326, // automatic alias replacing hash with tilde
 "#pclp6": 731,
+"~pclp6": 731, // automatic alias replacing hash with tilde
 "#pclp7": 536,
+"~pclp7": 536, // automatic alias replacing hash with tilde
 pch0: 1670,     // machine state: program counter high (first storage node)
 pch1: 292,
 pch2: 502,
@@ -123,13 +131,21 @@ pchp5: 1301,
 pchp6: 652,
 pchp7: 1206,
 "#pchp0": 780,     // machine state: program counter high (pre-incremented?, inverse second storage node)
+"~pchp0": 780,      // automatic alias replacing hash with tilde
 "#pchp1": 113,
+"~pchp1": 113, // automatic alias replacing hash with tilde
 "#pchp2": 114,
+"~pchp2": 114, // automatic alias replacing hash with tilde
 "#pchp3": 124,
+"~pchp3": 124, // automatic alias replacing hash with tilde
 "#pchp4": 820,
+"~pchp4": 820, // automatic alias replacing hash with tilde
 "#pchp5": 33,
+"~pchp5": 33, // automatic alias replacing hash with tilde
 "#pchp6": 751,
+"~pchp6": 751, // automatic alias replacing hash with tilde
 "#pchp7": 535,
+"~pchp7": 535, // automatic alias replacing hash with tilde
                 // machine state: status register (not the storage nodes)
 p0: 32,         // C bit of status register (storage node)
 p1: 627,        // Z bit of status register (storage node)
@@ -176,7 +192,9 @@ notir6: 895,
 notir7: 1320,
 irline3: 996,   // internal signal: PLA input - ir0 AND ir1
 clock1: 1536,   // internal state: timing control aka #T0
+clock1: 1536,    // automatic alias replacing hash with tilde
 clock2: 156,    // internal state: timing control aka #T+
+clock2: 156,     // automatic alias replacing hash with tilde
 t2: 971,        // internal state: timing control
 t3: 1567,
 t4: 690,
@@ -230,6 +248,7 @@ sb5: 166,
 sb6: 1336,
 sb7: 1001,
 notalu0: 394,   // datapath state: alu output storage node (inverse) aka #ADD0
+notalu0: 394,    // automatic alias replacing hash with tilde
 notalu1: 697,
 notalu2: 276,
 notalu3: 495,
@@ -317,7 +336,9 @@ pd7: 1690,
 "PD-xxx010x1": 302,
 "PD-n-0xx0xx0x": 125,
 "#TWOCYCLE": 851,
+"~TWOCYCLE": 851, // automatic alias replacing hash with tilde
 "#TWOCYCLE.phi1": 792,
+"~TWOCYCLE.phi1": 792, // automatic alias replacing hash with tilde
 "ONEBYTE": 778,
 
 abl0: 1096,     // internal bus: address bus low latched data out (inverse of inverted storage node)
@@ -329,13 +350,21 @@ abl5: 234,
 abl6: 178,
 abl7: 567,
 "#ABL0": 153,   // internal state: address bus low latched data out (storage node, inverted)
+"~ABL0": 153,    // automatic alias replacing hash with tilde
 "#ABL1": 107,
+"~ABL1": 107, // automatic alias replacing hash with tilde
 "#ABL2": 707,
+"~ABL2": 707, // automatic alias replacing hash with tilde
 "#ABL3": 825,
+"~ABL3": 825, // automatic alias replacing hash with tilde
 "#ABL4": 364,
+"~ABL4": 364, // automatic alias replacing hash with tilde
 "#ABL5": 1513,
+"~ABL5": 1513, // automatic alias replacing hash with tilde
 "#ABL6": 1307,
+"~ABL6": 1307, // automatic alias replacing hash with tilde
 "#ABL7": 28,
+"~ABL7": 28, // automatic alias replacing hash with tilde
 abh0: 1429,     // internal bus: address bus high latched data out (inverse of inverted storage node)
 abh1: 713,
 abh2: 287,
@@ -345,13 +374,21 @@ abh5: 775,
 abh6: 997,
 abh7: 489,
 "#ABH0": 1062,  // internal state: address bus high latched data out (storage node, inverted)
+"~ABH0": 1062,   // automatic alias replacing hash with tilde
 "#ABH1": 907,
+"~ABH1": 907, // automatic alias replacing hash with tilde
 "#ABH2": 768,
+"~ABH2": 768, // automatic alias replacing hash with tilde
 "#ABH3": 92,
+"~ABH3": 92, // automatic alias replacing hash with tilde
 "#ABH4": 668,
+"~ABH4": 668, // automatic alias replacing hash with tilde
 "#ABH5": 1128,
+"~ABH5": 1128, // automatic alias replacing hash with tilde
 "#ABH6": 289,
+"~ABH6": 289, // automatic alias replacing hash with tilde
 "#ABH7": 429,
+"~ABH7": 429, // automatic alias replacing hash with tilde
 
 "branch-back": 626,           // distinguish forward from backward branches
 "branch-forward.phi1": 1110,  // distinguish forward from backward branches
@@ -360,11 +397,13 @@ notRdy0: 248,           // internal signal: global pipeline control
 "notRdy0.phi1": 1272,   // delayed pipeline control
 "notRdy0.delay": 770,   // global pipeline control latched by phi1 and then phi2
 "#notRdy0.delay": 559,  // global pipeline control latched by phi1 and then phi2 (storage node)
+"~notRdy0.delay": 559,   // automatic alias replacing hash with tilde
 Reset0: 67,     // internal signal: retimed reset from pin
 C1x5Reset: 926, // retimed and pipelined reset in progress
 notRnWprepad: 187, // internal signal: to pad, yet to be inverted and retimed
 RnWstretched: 353, // internal signal: control datapad output drivers, aka TRISTATE
 "#DBE": 1035,      // internal signal: formerly from DBE pad (6501)
+"~DBE": 1035,       // automatic alias replacing hash with tilde
 cp1: 710,       // internal signal: clock phase 1
 cclk: 943,      // unbonded pad: internal non-overlappying phi2
 fetch: 879,     // internal signal
@@ -519,32 +558,40 @@ H1x1: 1042,     // internal signal: drive status byte onto databus
 "x-op-push/pull":1050,         //  pla121    // feeds into pla130 (no normal pla output)
 "op-T0-cld/sed":1419,          //  pla122
 "#op-branch-bit6":840,         //  pla123    // IR bit6 used only to detect branch type
+"~op-branch-bit6":840,          // automatic alias replacing hash with tilde
 "op-T3-mem-abs":607,           //  pla124
 "op-T2-mem-zp":219,            //  pla125
 "op-T5-mem-ind-idx":1385,      //  pla126
 "op-T4-mem-abs-idx":281,       //  pla127
 "#op-branch-bit7":1174,        //  pla128    // IR bit7 used only to detect branch type
+"~op-branch-bit7":1174,         // automatic alias replacing hash with tilde
 "op-clv":1164,                 //  pla129
 "op-implied":1006,             //  pla130    // has extra pulldowns: pla121 and ir0
 
 // internal signals: derived from pla outputs
 "#op-branch-done": 1048,
+"~op-branch-done": 1048, // automatic alias replacing hash with tilde
 "#op-T3-branch": 1708,
+"~op-T3-branch": 1708, // automatic alias replacing hash with tilde
 "op-ANDS": 1228,
 "op-EORS": 1689,
 "op-ORS": 522,
 "op-SUMS": 1196,
 "op-SRS": 934,
 "#op-store": 925,
+"~op-store": 925, // automatic alias replacing hash with tilde
 "#WR": 1352,
+"~WR": 1352, // automatic alias replacing hash with tilde
 "op-rmw": 434,
 "short-circuit-idx-add": 1185,
 "short-circuit-branch-add": 430,
 "#op-set-C": 252,
+"~op-set-C": 252, // automatic alias replacing hash with tilde
 
 // internal signals: control signals
 nnT2BR: 967,    // doubly inverted
 BRtaken: 1544,  // aka #TAKEN
+BRtaken: 1544,   // automatic alias replacing hash with tilde
 
 // internal signals and state: interrupt and vector related
 // segher says:
@@ -554,21 +601,26 @@ BRtaken: 1544,  // aka #TAKEN
 //   INTG is IRQ and NMI taken together.
 IRQP: 675,
 "#IRQP": 888,
+"~IRQP": 888, // automatic alias replacing hash with tilde
 NMIP: 1032,
 "#NMIP": 297,
+"~NMIP": 297, // automatic alias replacing hash with tilde
 "#NMIG": 264,
+"~NMIG": 264, // automatic alias replacing hash with tilde
 NMIL: 1374,
 RESP: 67,
 RESG: 926,
 VEC0: 1465,
 VEC1: 1481,
 "#VEC": 1134,
+"~VEC": 1134, // automatic alias replacing hash with tilde
 D1x1: 827,         // internal signal: interrupt handler related
 "brk-done": 1382,  // internal signal: interrupt handler related
 INTG: 1350,        // internal signal: interrupt handler related
 
 // internal state: misc pipeline state clocked by cclk (phi2)
 "pipe#VEC": 1431,     // latched #VEC
+"pipe~VEC": 1431,      // automatic alias replacing hash with tilde
 "pipeT-SYNC": 537,
 pipeT2out: 40,
 pipeT3out: 706,
@@ -613,11 +665,13 @@ pipeUNK35: 1713,
 pipeUNK36: 729,
 pipeUNK37: 197,
 "pipe#WR.phi2": 1131,
+"pipe~WR.phi2": 1131, // automatic alias replacing hash with tilde
 pipeUNK39: 151,
 pipeUNK40: 456,
 pipeUNK41: 1438,
 pipeUNK42: 1104,
 "pipe#T0": 554,   // aka #T0.phi2
+"pipe~T0": 554,    // automatic alias replacing hash with tilde
 
 // internal state: vector address pulldown control
 pipeVectorA0: 357,
@@ -664,53 +718,91 @@ DC34: 1372,   // lower nibble decimal carry
 DC78: 333,    // carry for decimal mode
 "DC78.phi2": 164,
 "#C01": 1506,
+"~C01": 1506, // automatic alias replacing hash with tilde
 "#C12": 1122,
+"~C12": 1122, // automatic alias replacing hash with tilde
 "#C23": 1003,
+"~C23": 1003, // automatic alias replacing hash with tilde
 "#C34": 1425,
+"~C34": 1425, // automatic alias replacing hash with tilde
 "#C45": 1571,
+"~C45": 1571, // automatic alias replacing hash with tilde
 "#C56": 427,
+"~C56": 427, // automatic alias replacing hash with tilde
 "#C67": 592,
+"~C67": 592, // automatic alias replacing hash with tilde
 "#C78": 1327,
+"~C78": 1327, // automatic alias replacing hash with tilde
 "DA-C01": 623,
 "DA-AB2": 216,
 "DA-AxB2": 516,
 "DA-C45": 1144,
 "#DA-ADD1": 901,
+"~DA-ADD1": 901, // automatic alias replacing hash with tilde
 "#DA-ADD2": 699,
+"~DA-ADD2": 699, // automatic alias replacing hash with tilde
 
 // misc alu internals
 "#(AxBxC)0": 371,
+"~(AxBxC)0": 371, // automatic alias replacing hash with tilde
 "#(AxBxC)1": 965,
+"~(AxBxC)1": 965, // automatic alias replacing hash with tilde
 "#(AxBxC)2": 22,
+"~(AxBxC)2": 22, // automatic alias replacing hash with tilde
 "#(AxBxC)3": 274,
+"~(AxBxC)3": 274, // automatic alias replacing hash with tilde
 "#(AxBxC)4": 651,
+"~(AxBxC)4": 651, // automatic alias replacing hash with tilde
 "#(AxBxC)5": 486,
+"~(AxBxC)5": 486, // automatic alias replacing hash with tilde
 "#(AxBxC)6": 1197,
+"~(AxBxC)6": 1197, // automatic alias replacing hash with tilde
 "#(AxBxC)7": 532,
+"~(AxBxC)7": 532, // automatic alias replacing hash with tilde
 AxB1: 425,
 AxB3: 640,
 AxB5: 1220,
 AxB7: 1241,
 "#(AxB)0": 1525,
+"~(AxB)0": 1525, // automatic alias replacing hash with tilde
 "#(AxB)2": 701,
+"~(AxB)2": 701, // automatic alias replacing hash with tilde
 "#(AxB)4": 308,
+"~(AxB)4": 308, // automatic alias replacing hash with tilde
 "#(AxB)6": 1459,
+"~(AxB)6": 1459, // automatic alias replacing hash with tilde
 "(AxB)0.#C0in": 555,
+"(AxB)0.~C0in": 555, // automatic alias replacing hash with tilde
 "(AxB)2.#C12": 193,
+"(AxB)2.~C12": 193, // automatic alias replacing hash with tilde
 "(AxB)4.#C34": 65,
+"(AxB)4.~C34": 65, // automatic alias replacing hash with tilde
 "(AxB)6.#C56": 174,
+"(AxB)6.~C56": 174, // automatic alias replacing hash with tilde
 "#(AxB1).C01": 295,
+"~(AxB1).C01": 295, // automatic alias replacing hash with tilde
 "#(AxB3).C23": 860,
+"~(AxB3).C23": 860, // automatic alias replacing hash with tilde
 "#(AxB5).C45": 817,
+"~(AxB5).C45": 817, // automatic alias replacing hash with tilde
 "#(AxB7).C67": 1217,
+"~(AxB7).C67": 1217, // automatic alias replacing hash with tilde
 "#A.B0": 1628,
+"~A.B0": 1628, // automatic alias replacing hash with tilde
 "#A.B1": 841,
+"~A.B1": 841, // automatic alias replacing hash with tilde
 "#A.B2": 681,
+"~A.B2": 681, // automatic alias replacing hash with tilde
 "#A.B3": 350,
+"~A.B3": 350, // automatic alias replacing hash with tilde
 "#A.B4": 1063,
+"~A.B4": 1063, // automatic alias replacing hash with tilde
 "#A.B5": 477,
+"~A.B5": 477, // automatic alias replacing hash with tilde
 "#A.B6": 336,
+"~A.B6": 336, // automatic alias replacing hash with tilde
 "#A.B7": 1318,
+"~A.B7": 1318, // automatic alias replacing hash with tilde
 "A+B0": 693,
 "A+B1": 1021,
 "A+B2": 110,
@@ -720,29 +812,53 @@ AxB7: 1241,
 "A+B6": 803,
 "A+B7": 117,
 "#(A+B)0": 143,
+"~(A+B)0": 143, // automatic alias replacing hash with tilde
 "#(A+B)1": 155,
+"~(A+B)1": 155, // automatic alias replacing hash with tilde
 "#(A+B)2": 1691,
+"~(A+B)2": 1691, // automatic alias replacing hash with tilde
 "#(A+B)3": 649,
+"~(A+B)3": 649, // automatic alias replacing hash with tilde
 "#(A+B)4": 404,
+"~(A+B)4": 404, // automatic alias replacing hash with tilde
 "#(A+B)5": 1632,
+"~(A+B)5": 1632, // automatic alias replacing hash with tilde
 "#(A+B)6": 1084,
+"~(A+B)6": 1084, // automatic alias replacing hash with tilde
 "#(A+B)7": 1398,
+"~(A+B)7": 1398, // automatic alias replacing hash with tilde
 "#(AxB)0": 1525,
+"~(AxB)0": 1525, // automatic alias replacing hash with tilde
 "#(AxB)2": 701,
+"~(AxB)2": 701, // automatic alias replacing hash with tilde
 "#(AxB)4": 308,
+"~(AxB)4": 308, // automatic alias replacing hash with tilde
 "#(AxB)6": 1459,
+"~(AxB)6": 1459, // automatic alias replacing hash with tilde
 "#(AxB)1": 953,
+"~(AxB)1": 953, // automatic alias replacing hash with tilde
 "#(AxB)3": 884,
+"~(AxB)3": 884, // automatic alias replacing hash with tilde
 "#(AxB)5": 1469,
+"~(AxB)5": 1469, // automatic alias replacing hash with tilde
 "#(AxB)7": 177,
+"~(AxB)7": 177, // automatic alias replacing hash with tilde
 "#aluresult0": 957,   // alu result latch input
+"~aluresult0": 957,    // automatic alias replacing hash with tilde
 "#aluresult1": 250,
+"~aluresult1": 250, // automatic alias replacing hash with tilde
 "#aluresult2": 740,
+"~aluresult2": 740, // automatic alias replacing hash with tilde
 "#aluresult3": 1071,
+"~aluresult3": 1071, // automatic alias replacing hash with tilde
 "#aluresult4": 296,
+"~aluresult4": 296, // automatic alias replacing hash with tilde
 "#aluresult5": 277,
+"~aluresult5": 277, // automatic alias replacing hash with tilde
 "#aluresult6": 722,
+"~aluresult6": 722, // automatic alias replacing hash with tilde
 "#aluresult7": 304,
+"~aluresult7": 304, // automatic alias replacing hash with tilde
 
 // internal signals: datapath control signals
 
@@ -771,6 +887,7 @@ dpc17_SUMS: 921,     // alu op: a plus b (?)
 alucin: 910,         // alu carry in
 notalucin: 1165,
 "dpc18_#DAA": 1201,  // decimal related (inverted)
+"dpc18_~DAA": 1201,   // automatic alias replacing hash with tilde
 dpc19_ADDSB7: 214,   // alu to sb bit 7 only
 
 dpc20_ADDSB06: 129,  // alu to sb bits 6-0 only
@@ -779,15 +896,20 @@ alurawcout: 808,     // alu raw carry out (no decimal adjust)
 notalucout: 412,     // alu carry out (inverted)
 alucout: 1146,       // alu carry out (latched by phi2)
 "#alucout": 206,
+"~alucout": 206, // automatic alias replacing hash with tilde
 "##alucout": 465,
+"~~alucout": 465, // automatic alias replacing hash with tilde
 notaluvout: 1308,    // alu overflow out
 aluvout: 938,        // alu overflow out (latched by phi2)
 
 "#DBZ": 1268,   // internal signal: not (databus is zero)
+"~DBZ": 1268,    // automatic alias replacing hash with tilde
 DBZ: 744,       // internal signal: databus is zero
 DBNeg: 1200,    // internal signal: databus is negative (top bit of db) aka P-#DB7in
+DBNeg: 1200,     // automatic alias replacing hash with tilde
 
 "dpc22_#DSA": 725,   // decimal related/SBC only (inverted)
+"dpc22_~DSA": 725,    // automatic alias replacing hash with tilde
 dpc23_SBAC: 534,     // (optionalls decimal-adjusted) sb to acc
 dpc24_ACSB: 1698,    // acc to sb
 dpc25_SBDB: 1060,    // sb pass-connects to idb (bi-directionally)
@@ -803,6 +925,7 @@ dpc33_PCHDB: 247,    // drive idb from pch incremented
 dpc34_PCLC: 1704,    // pch carry in and pcl FF detect?
 dpc35_PCHC: 1334,    // pcl 0x?F detect - half-carry
 "dpc36_#IPC": 379,   // pcl carry in (inverted)
+"dpc36_~IPC": 379,    // automatic alias replacing hash with tilde
 dpc37_PCLDB: 283,    // drive idb from pcl incremented
 dpc38_PCLADL: 438,   // drive adl from pcl incremented
 dpc39_PCLPCL: 898,   // load pcl from pcl incremented
