@@ -73,8 +73,9 @@ function setupLayerVisibility(){
 
 function setupBackground(){
 	chipbg = document.getElementById('chipbg');
-	chipbg.width = grCanvasSize;
-	chipbg.height = grCanvasSize;
+	chipbg.width = 4000;
+	chipbg.height = 4000;
+	return;
 	var ctx = chipbg.getContext('2d');
 	ctx.fillStyle = '#000000';
 	ctx.strokeStyle = 'rgba(255,255,255,0.5)';
@@ -137,10 +138,10 @@ function hexdigit(n){return '0123456789ABCDEF'.charAt(n);}
 
 function refresh(){
 	if(!chipLayoutIsVisible) return;
-	ctx.clearRect(0,0,grCanvasSize,grCanvasSize);
-	for(i in nodes){
-		if(isNodeHigh(i)) overlayNode(nodes[i].segs);
-	}
+//	ctx.clearRect(0,0,grCanvasSize,grCanvasSize);
+//	for(i in nodes){
+//		if(isNodeHigh(i)) overlayNode(nodes[i].segs);
+//	}
 	hiliteNode(hilited);
 }
 

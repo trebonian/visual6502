@@ -50,6 +50,13 @@ canvas.chip {
  height: 600px;
 }
 
+object.chipbg {
+ position: absolute;
+ width: 600px;
+ height: 600px;
+}
+
+
 div.buttons{
  position: absolute;
  top: -5px;
