@@ -144,12 +144,19 @@ function mouseUp(e){
 }
 
 function setZoom(n){
+	var svg = chipbg.getSVGDocument();
+	svg = svg.childNodes[0];
+
 	zoom = n;
 	setChipStyle({
 		width: 600*n+'px',
 		height: 600*n+'px'
 	});
+
+	svg.style.width = 600*n+'px';
+	svg.style.height = 600*n+'px';
 	recenter();
+
 }
 
 function recenter(){
@@ -193,7 +200,7 @@ function handleClick(e){
 function setChipStyle(props){
 	for(var i in props){
 		chipbg.style[i] = props[i];
-		overlay.style[i] = props[i];
+//		overlay.style[i] = props[i];
 		hilite.style[i] = props[i];
 		hitbuffer.style[i] = props[i];
 	}

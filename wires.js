@@ -94,10 +94,10 @@ function setupBackground(){
 }
 
 function setupOverlay(){
-	overlay = document.getElementById('overlay');
-	overlay.width = grCanvasSize;
-	overlay.height = grCanvasSize;
-	ctx = overlay.getContext('2d');
+//	overlay = document.getElementById('overlay');
+//	overlay.width = grCanvasSize;
+//	overlay.height = grCanvasSize;
+//	ctx = overlay.getContext('2d');
 }
 
 function setupHilite(){
@@ -137,21 +137,44 @@ function hexdigit(n){return '0123456789ABCDEF'.charAt(n);}
 /////////////////////////
 
 function refresh(){
+	var svg = chipbg.getSVGDocument();
+	svg = svg.childNodes[0];
+	var poly = svg.getElementById('poly');
+	var metal = svg.getElementById('metal');
+	var polyOffFill = poly.getAttribute('fill');
+	var metalOffFill = metal.getAttribute('fill');
+
 	if(!chipLayoutIsVisible) return;
 //	ctx.clearRect(0,0,grCanvasSize,grCanvasSize);
 //	for(i in nodes){
 //		if(isNodeHigh(i)) overlayNode(nodes[i].segs);
 //	}
+	for(i in nodes){
+		var n = poly.getElementsByClassName(i+'')[0];
+		var n2 = metal.getElementsByClassName(i+'')[0];
+
+		if(isNodeHigh(i)){
+			if(n!=undefined)
+				n.setAttribute('fill', 'rgb(0,255,255)');
+			if(n2!=undefined)
+				n2.setAttribute('fill', 'rgb(0,255,255)');
+		} else {
+			if(n!=undefined)
+				n.setAttribute('fill', polyOffFill);
+			if(n2!=undefined)
+				n2.setAttribute('fill', metalOffFill);
+		}
+	}	
 	hiliteNode(hilited);
 }
 
-function overlayNode(w){
-	ctx.fillStyle = 'rgba(255,0,64,0.4)';
-	for(i in w) {
-		drawSeg(ctx, w[i]);
-		ctx.fill();
-	}
-}
+//function overlayNode(w){
+//	ctx.fillStyle = 'rgba(255,0,64,0.4)';
+//	for(i in w) {
+//		drawSeg(ctx, w[i]);
+//		ctx.fill();
+//	}
+//}
 
 // originally to highlight using a list of node numbers
 //   but can now include transistor names
