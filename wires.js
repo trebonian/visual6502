@@ -23,6 +23,10 @@
 var frame, chipbg, overlay, hilite, hitbuffer, ctx;
 var nodes = new Array();
 var lastState = new Array();
+var polyAttr = new Array();
+var metalAttr = new Array();
+var polyOffFill;
+var metalOffFill;
 var transistors = {};
 var nodenamelist=[];
 
@@ -77,7 +81,18 @@ function setupBackground(){
 	chipbg = document.getElementById('chipbg');
 	chipbg.width = 4000;
 	chipbg.height = 4000;
+	var svg = chipbg.getSVGDocument();
+	svg = svg.childNodes[0];
+	var poly = svg.getElementById('poly');
+	var metal = svg.getElementById('metal');
+	polyOffFill = poly.getAttribute('fill');
+	metalOffFill = metal.getAttribute('fill');
+	for(var i in nodes){
+		polyAttr[i] = poly.getElementsByClassName(i+'')[0];	 
+		metalAttr[i] = metal.getElementsByClassName(i+'')[0];	 
+	}
 	return;
+
 	var ctx = chipbg.getContext('2d');
 	ctx.fillStyle = '#000000';
 	ctx.strokeStyle = 'rgba(255,255,255,0.5)';
@@ -139,13 +154,6 @@ function hexdigit(n){return '0123456789ABCDEF'.charAt(n);}
 /////////////////////////
 
 function refresh(){
-	var svg = chipbg.getSVGDocument();
-	svg = svg.childNodes[0];
-	var poly = svg.getElementById('poly');
-	var metal = svg.getElementById('metal');
-	var polyOffFill = poly.getAttribute('fill');
-	var metalOffFill = metal.getAttribute('fill');
-
 	if(!chipLayoutIsVisible) return;
 //	ctx.clearRect(0,0,grCanvasSize,grCanvasSize);
 //	for(i in nodes){
@@ -155,8 +163,8 @@ function refresh(){
 		if(isNodeHigh(i)){
 			if(lastState[i]==1)continue;
 
-			var n = poly.getElementsByClassName(i+'')[0];
-			var n2 = metal.getElementsByClassName(i+'')[0];
+			var n = polyAttr[i];
+			var n2 = metalAttr[i];
 			if(n!=undefined)
 				n.setAttribute('fill', 'rgb(0,255,255)');
 			if(n2!=undefined)
@@ -165,8 +173,8 @@ function refresh(){
 		} else {
 			if(lastState[i]==0)continue;
 
-			var n = poly.getElementsByClassName(i+'')[0];
-			var n2 = metal.getElementsByClassName(i+'')[0];
+			var n = polyAttr[i];
+			var n2 = metalAttr[i];
 
 			if(n!=undefined)
 				n.setAttribute('fill', polyOffFill);
