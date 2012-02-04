@@ -22,6 +22,7 @@
 
 var frame, chipbg, overlay, hilite, hitbuffer, ctx;
 var nodes = new Array();
+var lastState = new Array();
 var transistors = {};
 var nodenamelist=[];
 
@@ -40,6 +41,7 @@ function setupNodes(){
 			            state: false, gates: new Array(), c1c2s: new Array()};
 		if(w==ngnd) continue;
 		if(w==npwr) continue;
+		lastState[i] = 0;
 		nodes[w].segs.push(seg.slice(3));
 	}
 }
@@ -150,19 +152,27 @@ function refresh(){
 //		if(isNodeHigh(i)) overlayNode(nodes[i].segs);
 //	}
 	for(i in nodes){
-		var n = poly.getElementsByClassName(i+'')[0];
-		var n2 = metal.getElementsByClassName(i+'')[0];
-
 		if(isNodeHigh(i)){
+			if(lastState[i]==1)continue;
+
+			var n = poly.getElementsByClassName(i+'')[0];
+			var n2 = metal.getElementsByClassName(i+'')[0];
 			if(n!=undefined)
 				n.setAttribute('fill', 'rgb(0,255,255)');
 			if(n2!=undefined)
 				n2.setAttribute('fill', 'rgb(0,255,255)');
+			lastState[i] = 1;
 		} else {
+			if(lastState[i]==0)continue;
+
+			var n = poly.getElementsByClassName(i+'')[0];
+			var n2 = metal.getElementsByClassName(i+'')[0];
+
 			if(n!=undefined)
 				n.setAttribute('fill', polyOffFill);
 			if(n2!=undefined)
 				n2.setAttribute('fill', metalOffFill);
+			lastState[i] = 0;
 		}
 	}	
 	hiliteNode(hilited);
