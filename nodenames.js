@@ -190,7 +190,7 @@ notir4: 26,
 notir5: 1394,
 notir6: 895,
 notir7: 1320,
-irline3: 996,   // internal signal: PLA input - ir0 AND ir1
+irline3: 996,   // internal signal: PLA input - ir0 OR ir1
 clock1: 1536,   // internal state: timing control aka #T0
 clock1: 1536,    // automatic alias replacing hash with tilde
 clock2: 156,    // internal state: timing control aka #T+
