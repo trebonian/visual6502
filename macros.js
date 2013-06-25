@@ -226,9 +226,10 @@ fetchTriggers={};
 // simulate a single clock phase with no update to graphics or trace
 function halfStep(){
 	var clk = isNodeHigh(nodenames['clk0']);
-	eval(clockTriggers[cycle]);
 	if (clk) {setLow('clk0'); handleBusRead(); } 
 	else {setHigh('clk0'); handleBusWrite();}
+	eval(clockTriggers[cycle+1]);  // pre-apply next tick's inputs now, so the updates are displayed
+
 }
 
 function handleBusRead(){
