@@ -78,19 +78,19 @@ $().ready(function(){
 <div id="layoutControlPanel">
   Use 'z' or '&gt;' to zoom in, 'x' or '&lt;' to zoom out, click to probe signals and drag to pan.
   <form id="updateShow"> Show:
-  <input type="checkbox" name="1" id="updateShow1" onchange="updateShow(this.name,this.checked)" />(diffusion)
-  <input type="checkbox" name="3" id="updateShow3" onchange="updateShow(this.name,this.checked)" />(grounded diffusion)
-  <input type="checkbox" name="4" id="updateShow4" onchange="updateShow(this.name,this.checked)" />(powered diffusion)
-  <input type="checkbox" name="5" id="updateShow5" onchange="updateShow(this.name,this.checked)" />(polysilicon)
-  <input type="checkbox" name="0" id="updateShow0" onchange="updateShow(this.name,this.checked)" />(metal)
-  <input type="checkbox" name="2" id="updateShow2" onchange="updateShow(this.name,this.checked)" />(protection)
+  <input type="checkbox" name="1" id="updateShow1" onchange="updateShow(this.name,this.checked)" /><label for="updateShow1">(diffusion)</label>
+  <input type="checkbox" name="3" id="updateShow3" onchange="updateShow(this.name,this.checked)" /><label for="updateShow3">(grounded diffusion)</label>
+  <input type="checkbox" name="4" id="updateShow4" onchange="updateShow(this.name,this.checked)" /><label for="updateShow4">(powered diffusion)</label>
+  <input type="checkbox" name="5" id="updateShow5" onchange="updateShow(this.name,this.checked)" /><label for="updateShow5">(polysilicon)</label>
+  <input type="checkbox" name="0" id="updateShow0" onchange="updateShow(this.name,this.checked)" /><label for="updateShow0">(metal)</label>
+  <input type="checkbox" name="2" id="updateShow2" onchange="updateShow(this.name,this.checked)" /><label for="updateShow2">(protection)</label>
   </form>
   <form action="javascript:hiliteNodeList();">
   <input type="button" value="Find:" onclick="hiliteNodeList();" />
   <input type="text" id="HighlightThese" name="HighlightThese" value="" />
   <input type="button" value="Clear Highlighting" onclick="clearHighlight();" />
   <span class="animatebox">
-    Animate during simulation:
+    <label for="animateModeCheckbox">Animate during simulation:</label>
     <input type="checkbox" id="animateModeCheckbox" onchange="updateChipLayoutAnimation(this.checked)" 
     /></span>
   </form>
