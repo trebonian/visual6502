@@ -699,7 +699,7 @@ var disassembly={
 0x68:"PLA",
 0x69:"ADC #",
 0x6A:"ROR ",
-0x6C:"JMP zp",
+0x6C:"JMP (Abs)",
 0x6D:"ADC Abs",
 0x6E:"ROR Abs",
 0x70:"BVS ",
