@@ -923,7 +923,7 @@ dpc31_PCHPCH: 741,   // load pch from pch incremented
 dpc32_PCHADH: 1235,  // drive adh from pch incremented
 dpc33_PCHDB: 247,    // drive idb from pch incremented
 dpc34_PCLC: 1704,    // pch carry in and pcl FF detect?
-dpc35_PCHC: 1334,    // pcl 0x?F detect - half-carry
+dpc35_PCHC: 1334,    // pch 0x?F detect - half-carry
 "dpc36_#IPC": 379,   // pcl carry in (inverted)
 "dpc36_~IPC": 379,    // automatic alias replacing hash with tilde
 dpc37_PCLDB: 283,    // drive idb from pcl incremented
