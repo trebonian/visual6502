@@ -153,8 +153,8 @@ p2: 1553,       // I bit of status register (storage node)
 p3: 348,        // D bit of status register (storage node)
 p4: 1119,       // there is no bit4 in the status register! (not a storage node)
 p5: -1,         // there is no bit5 in the status register! (not a storage node)
-p6: 77,         // V bit of status register (storage node)
-p7: 1370,       // N bit of status register (storage node)
+p6: 1625,       // V bit of status register (storage node)
+p7: 69,         // N bit of status register (storage node)
 
                 // internal bus: status register outputs for push P
 Pout0: 687,
@@ -405,7 +405,7 @@ RnWstretched: 353, // internal signal: control datapad output drivers, aka TRIST
 "#DBE": 1035,      // internal signal: formerly from DBE pad (6501)
 "~DBE": 1035,       // automatic alias replacing hash with tilde
 cp1: 710,       // internal signal: clock phase 1
-cclk: 943,      // unbonded pad: internal non-overlappying phi2
+cclk: 943,      // unbonded pad: internal non-overlapping phi2
 fetch: 879,     // internal signal
 clearIR: 1077,  // internal signal
 H1x1: 1042,     // internal signal: drive status byte onto databus
