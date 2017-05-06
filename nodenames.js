@@ -590,8 +590,8 @@ H1x1: 1042,     // internal signal: drive status byte onto databus
 
 // internal signals: control signals
 nnT2BR: 967,    // doubly inverted
-BRtaken: 1544,  // aka #TAKEN
-BRtaken: 1544,   // automatic alias replacing hash with tilde
+"#BRtaken": 1544,  // aka #TAKEN
+"~BRtaken": 1544,   // automatic alias replacing hash with tilde
 
 // internal signals and state: interrupt and vector related
 // segher says:

@@ -12281,7 +12281,7 @@ INTG: 1350,     // internal signal: interrupt handler related
 
 // internal signals: control signals
 nnT2BR: 967,    // doubly inverted
-BRtaken: 1544,  // aka #TAKEN
+"#BRtaken": 1544,  // aka #TAKEN
 
 // interrupt and vector related
 NMIP: 1032,
