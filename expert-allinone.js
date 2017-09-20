@@ -14023,6 +14023,59 @@ function listActiveTCStates() {
 	return s.join("+");
 }
 
+    // Show all time code node states (active and inactive) in fixed format,
+    // with T1/T6 indication in square brackets. ".." for a node indicates
+    // inactive state, "T"* for a node indicates active state.
+function allTCStates()
+{
+    var s = "";
+    var allHigh, thisHigh;
+    thisHigh = isNodeHigh( nodenames[ 'clock1' ] );
+    allHigh = thisHigh;
+    if ( !thisHigh ) s += "T0"; else s += "..";
+    s += " ";
+        // T+ in visual6502 is called T1x in
+        // http://www.weihenstephan.org/~michaste/pagetable/6502/6502.jpg
+        // Notated as T+ for compatibility with PLA node names
+    thisHigh = isNodeHigh( nodenames[ 'clock2' ] );
+    allHigh = allHigh && thisHigh;
+    if ( !thisHigh ) s += "T+"; else s += "..";
+    s += " ";
+    thisHigh = isNodeHigh( nodenames[ 't2' ] );
+    allHigh = allHigh && thisHigh;
+    if ( !thisHigh ) s += "T2"; else s += "..";
+    s += " ";
+    thisHigh = isNodeHigh( nodenames[ 't3' ] );
+    allHigh = allHigh && thisHigh;
+    if ( !thisHigh ) s += "T3"; else s += "..";
+    s += " ";
+    thisHigh = isNodeHigh( nodenames[ 't4' ] );
+    allHigh = allHigh && thisHigh;
+    if ( !thisHigh ) s += "T4"; else s += "..";
+    s += " ";
+    thisHigh = isNodeHigh( nodenames[ 't5' ] )
+    allHigh = allHigh && thisHigh;
+    if ( !thisHigh ) s += "T5"; else s += "..";
+    s += " [";
+        // If all of the time code bits are high (inactive)...
+    if ( allHigh ) {
+        // ...distinguish T1 from T6
+            // If bits T2 through T5 are actively being cleared...
+        if ( isNodeHigh( 1357 ) ) {
+            // ...then this is T1
+            s += "T1";
+        } else {
+            // ...else T2 through T5 are clear because the bits ran off the end
+            // of the T2 through T5 complex: this is T6
+            s += "T6";
+        }
+    } else {
+        s += "..";
+    }
+    s += "]";
+    return s;
+}
+
 function readBit(name){
         return isNodeHigh(nodenames[name])?1:0;
 }
