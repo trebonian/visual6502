@@ -120,7 +120,7 @@ The time code:
 
 T0 T+ .. .. .. .. [..]
 
-arises when RES is down when a T0 F1 clock state is clocked in. This can be
-either the T0 that is usually scheduled for an instruction's last cycle, or
-the T0 caused by instruction abort.
+arises when RES is down when a T0 phase 1 clock state is clocked in. This can
+be either the T0 that is usually scheduled for an instruction's last cycle, or
+the T0 caused by instruction abort (later caused by the RES).
 
