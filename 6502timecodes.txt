@@ -97,7 +97,8 @@ instruction's first actions do not begin during opcode fetch. Their earliest
 effect can be only in the first half of the next cycle, T2, when the IR is set
 from the predecode register.
 
-This implies that an instruction's actions may extend as far as the second half of the opcode fetch of the next instruction, in concert with the T+ time code
+This implies that an instruction's actions may extend as far as the second half
+of the opcode fetch of the next instruction, in concert with the T+ time code
 bit. Not all instructions may necessarily use this: it could be an unused
 constraint for some instructions.
 
