@@ -14026,37 +14026,42 @@ function listActiveTCStates() {
     // Show all time code node states (active and inactive) in fixed format,
     // with T1/T6 indication in square brackets. ".." for a node indicates
     // inactive state, "T"* for a node indicates active state.
-function allTCStates()
+function allTCStates( useNBSP )
 {
     var s = "";
+    var _spc;
+    useNBSP = (typeof useNBSP === 'undefined') ? false : useNBSP;
+        // Use Non-Breaking Space for presentation in an HTML (browser)
+        // context, else use ASCII space for logging context
+    _spc = useNBSP ? '&nbsp;' : ' ';
     var allHigh, thisHigh;
     thisHigh = isNodeHigh( nodenames[ 'clock1' ] );
     allHigh = thisHigh;
     if ( !thisHigh ) s += "T0"; else s += "..";
-    s += " ";
+    s += _spc;
         // T+ in visual6502 is called T1x in
         // http://www.weihenstephan.org/~michaste/pagetable/6502/6502.jpg
         // Notated as T+ for compatibility with PLA node names
     thisHigh = isNodeHigh( nodenames[ 'clock2' ] );
     allHigh = allHigh && thisHigh;
     if ( !thisHigh ) s += "T+"; else s += "..";
-    s += " ";
+    s += _spc;
     thisHigh = isNodeHigh( nodenames[ 't2' ] );
     allHigh = allHigh && thisHigh;
     if ( !thisHigh ) s += "T2"; else s += "..";
-    s += " ";
+    s += _spc;
     thisHigh = isNodeHigh( nodenames[ 't3' ] );
     allHigh = allHigh && thisHigh;
     if ( !thisHigh ) s += "T3"; else s += "..";
-    s += " ";
+    s += _spc;
     thisHigh = isNodeHigh( nodenames[ 't4' ] );
     allHigh = allHigh && thisHigh;
     if ( !thisHigh ) s += "T4"; else s += "..";
-    s += " ";
+    s += _spc;
     thisHigh = isNodeHigh( nodenames[ 't5' ] )
     allHigh = allHigh && thisHigh;
     if ( !thisHigh ) s += "T5"; else s += "..";
-    s += " [";
+    s += _spc + "[";
         // If all of the time code bits are high (inactive)...
     if ( allHigh ) {
         // ...distinguish T1 from T6
@@ -14102,6 +14107,16 @@ function busToString(busname){
 		return ['clock1','clock2','t2','t3','t4','t5'].map(busToHex).join("");
 	if(busname=='State')
 		return listActiveTCStates();
+	if(busname=='TState')
+		return allTCStates( true );
+	if(busname=='TStateF')
+		// TState with phase indication tacked on: F1 or F2
+		// Prefer latin 'F' because that's what Greek phi really is:
+		// a single glyph for the "eff" speech sound
+		// Capitalized because the 'T's in the time state are
+		// capitalized
+		return allTCStates( true ) + '&nbsp;' + 'F' +
+		       (isNodeHigh( nodenames[ 'cp1' ] ) ? '1' : '2');
 	if(busname=='Execute')
 		return dis6502toHTML(readBits('ir',8));
 	if(busname=='Fetch')
