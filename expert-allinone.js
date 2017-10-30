@@ -14026,14 +14026,14 @@ function listActiveTCStates() {
     // Show all time code node states (active and inactive) in fixed format,
     // with T1/T6 indication in square brackets. ".." for a node indicates
     // inactive state, "T"* for a node indicates active state.
-function allTCStates( useNBSP )
+function allTCStates( useHTML )
 {
     var s = "";
     var _spc;
-    useNBSP = (typeof useNBSP === 'undefined') ? false : useNBSP;
+    useHTML = (typeof useHTML === 'undefined') ? false : useHTML;
         // Use Non-Breaking Space for presentation in an HTML (browser)
         // context, else use ASCII space for logging context
-    _spc = useNBSP ? '&nbsp;' : ' ';
+    _spc = useHTML ? '&nbsp;' : ' ';
     var allHigh, thisHigh;
     thisHigh = isNodeHigh( nodenames[ 'clock1' ] );
     allHigh = thisHigh;
@@ -14109,13 +14109,10 @@ function busToString(busname){
 		return listActiveTCStates();
 	if(busname=='TState')
 		return allTCStates( true );
-	if(busname=='TStateF')
-		// TState with phase indication tacked on: F1 or F2
-		// Prefer latin 'F' because that's what Greek phi really is:
-		// a single glyph for the "eff" speech sound
-		// Capitalized because the 'T's in the time state are
-		// capitalized
-		return allTCStates( true ) + '&nbsp;' + 'F' +
+	if(busname=='Phi')
+		// Pretty-printed phase indication based on the state of cp1,
+                // the internal Phase 1 node
+		return '&Phi;' +
 		       (isNodeHigh( nodenames[ 'cp1' ] ) ? '1' : '2');
 	if(busname=='Execute')
 		return dis6502toHTML(readBits('ir',8));

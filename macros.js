@@ -311,12 +311,10 @@ function allTCStates( useHTML )
 {
     var s = "";
     var _spc;
-    var _phi;
-    var useHTML = (typeof useHTML === 'undefined') ? false : useHTML;
+    useHTML = (typeof useHTML === 'undefined') ? false : useHTML;
         // Use Non-Breaking Space for presentation in an HTML (browser)
         // context, else use ASCII space for logging context
     _spc = useHTML ? '&nbsp;' : ' ';
-    _phi = useHTML ? '&Phi;' : 'F';
     var allHigh, thisHigh;
     thisHigh = isNodeHigh( nodenames[ 'clock1' ] );
     allHigh = thisHigh;
@@ -360,8 +358,7 @@ function allTCStates( useHTML )
     } else {
         s += "..";
     }
-	// indicate the clock phase, Phi1 or Phi2
-    s += "]" + _spc + _phi + (isNodeHigh( nodenames[ 'cp1' ] ) ? '1' : '2');
+    s += "]";
     return s;
 }
 
@@ -393,6 +390,11 @@ function busToString(busname){
 		return listActiveTCStates();
 	if(busname=='TState')
 		return allTCStates( true );
+	if(busname=='Phi')
+		// Pretty-printed phase indication based on the state of cp1,
+                // the internal Phase 1 node
+		return '&Phi;' +
+		       (isNodeHigh( nodenames[ 'cp1' ] ) ? '1' : '2');
 	if(busname=='Execute')
 		return disassemblytoHTML(readBits('ir',8));
 	if(busname=='Fetch')
