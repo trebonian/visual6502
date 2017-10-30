@@ -14026,6 +14026,8 @@ function listActiveTCStates() {
     // Show all time code node states (active and inactive) in fixed format,
     // with T1/T6 indication in square brackets. ".." for a node indicates
     // inactive state, "T"* for a node indicates active state.
+    // For discussion of this reconstruction, see:
+    // http://visual6502.org/wiki/index.php?title=6502_Timing_States
 function allTCStates( useHTML )
 {
     var s = "";
