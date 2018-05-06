@@ -14024,8 +14024,13 @@ function listActiveTCStates() {
 }
 
     // Show all time code node states (active and inactive) in fixed format,
-    // with T1/T6 indication in square brackets. ".." for a node indicates
-    // inactive state, "T"* for a node indicates active state.
+    // with non-PLA-controlling internal state indication in square
+    // brackets, followed by RCL-resident timing state indication.
+    // ".." for a PLA-controlling node indicates inactive state, "T"* for a
+    // PLA-controlling node indicates active state.
+    // Bracketed codes are one of T1/V0/T6/..
+    // V0 indicates the VEC0 node, T6 is a synonym for the VEC1 node.
+    // The RCL codes are one of SD1/SD2/...
     // For discussion of this reconstruction, see:
     // http://visual6502.org/wiki/index.php?title=6502_Timing_States
 function allTCStates( useHTML )
@@ -14036,50 +14041,50 @@ function allTCStates( useHTML )
         // Use Non-Breaking Space for presentation in an HTML (browser)
         // context, else use ASCII space for logging context
     _spc = useHTML ? '&nbsp;' : ' ';
-    var allHigh, thisHigh;
-    thisHigh = isNodeHigh( nodenames[ 'clock1' ] );
-    allHigh = thisHigh;
-    if ( !thisHigh ) s += "T0"; else s += "..";
+    if ( !isNodeHigh( nodenames[ 'clock1' ] ) ) s += "T0"; else s += "..";
     s += _spc;
         // T+ in visual6502 is called T1x in
         // http://www.weihenstephan.org/~michaste/pagetable/6502/6502.jpg
         // Notated as T+ for compatibility with PLA node names
-    thisHigh = isNodeHigh( nodenames[ 'clock2' ] );
-    allHigh = allHigh && thisHigh;
-    if ( !thisHigh ) s += "T+"; else s += "..";
+    if ( !isNodeHigh( nodenames[ 'clock2' ] ) ) s += "T+"; else s += "..";
     s += _spc;
-    thisHigh = isNodeHigh( nodenames[ 't2' ] );
-    allHigh = allHigh && thisHigh;
-    if ( !thisHigh ) s += "T2"; else s += "..";
+    if ( !isNodeHigh( nodenames[ 't2' ] ) ) s += "T2"; else s += "..";
     s += _spc;
-    thisHigh = isNodeHigh( nodenames[ 't3' ] );
-    allHigh = allHigh && thisHigh;
-    if ( !thisHigh ) s += "T3"; else s += "..";
+    if ( !isNodeHigh( nodenames[ 't3' ] ) ) s += "T3"; else s += "..";
     s += _spc;
-    thisHigh = isNodeHigh( nodenames[ 't4' ] );
-    allHigh = allHigh && thisHigh;
-    if ( !thisHigh ) s += "T4"; else s += "..";
+    if ( !isNodeHigh( nodenames[ 't4' ] ) ) s += "T4"; else s += "..";
     s += _spc;
-    thisHigh = isNodeHigh( nodenames[ 't5' ] )
-    allHigh = allHigh && thisHigh;
-    if ( !thisHigh ) s += "T5"; else s += "..";
+    if ( !isNodeHigh( nodenames[ 't5' ] ) ) s += "T5"; else s += "..";
     s += _spc + "[";
-        // If all of the time code bits are high (inactive)...
-    if ( allHigh ) {
-        // ...distinguish T1 from T6
-            // If bits T2 through T5 are actively being cleared...
-        if ( isNodeHigh( 1357 ) ) {
-            // ...then this is T1
-            s += "T1";
-        } else {
-            // ...else T2 through T5 are clear because the bits ran off the end
-            // of the T2 through T5 complex: this is T6
-            s += "T6";
-        }
+    // Check three confirmed exclusive states (three nodes)
+    if ( isNodeHigh( 862 ) ) {
+        s += "T1";
+        // ...else if VEC0 is on...
+    } else if ( isNodeHigh( nodenames[ 'VEC0' ] ) ) {
+        // ...then tell the outside world
+        s += "V0";
+        // ...else if VEC1 is on...
+    } else if ( isNodeHigh( nodenames[ 'VEC1' ] ) ) {
+        // ...then this is the canonical T6. It is a synonym for VEC1
+        s += "T6";
     } else {
+        // ...else none of the "hidden" bits in the clock state is active
         s += "..";
     }
-    s += "]";
+    s += "]" + _spc;
+    // Check the RCL's two confirmed exclusive states (two nodes)
+        // If this node is grounding ~WR...
+    if ( isNodeHigh( 440 ) ) {
+        // ...then we can regard this state as Store Data 1
+        s += "SD1";
+        // ...else if this node is grounding ~WR...
+    } else if ( isNodeHigh( 1258 ) ) {
+        // ...then we can regard this state as Store Data 2
+        s += "SD2";
+    } else {
+        // ...else none of the RCL-resident timing bits is active
+        s += "...";
+    }
     return s;
 }
 
