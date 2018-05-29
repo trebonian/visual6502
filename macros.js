@@ -411,7 +411,7 @@ function busToString(busname){
 		//    - we'll allow the x and xx prefix but ignore the #
 		return listActiveSignals('^([x]?x-)?op-');
 	if(busname=='DPControl')
-		return listActiveSignals('^dpc[0-9]+_');
+		return listActiveSignals('^dpc[-]?[0-9]+_');
 	if(busname[0]=="-"){
 		// invert the value of the bus for display
 		var value=busToHex(busname.slice(1))

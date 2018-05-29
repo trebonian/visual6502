@@ -863,7 +863,10 @@ AxB7: 1241,
 // internal signals: datapath control signals
 
 "ADL/ABL": 639,      // load ABL latches from ADL bus
+"dpc-1_ADL/ABL": 639,// alias for DPControl pseudo-bus
+
 "ADH/ABH": 821,      // load ABH latches from ADH bus
+"dpc-2_ADH/ABH": 821,// alias for DPControl pseudo-bus
 
 dpc0_YSB: 801,       // drive sb from y
 dpc1_SBY: 325,       // load y from sb

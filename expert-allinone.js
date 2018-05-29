@@ -12470,7 +12470,10 @@ AxB7: 1241,
 // internal signals: datapath control signals
 
 "ADL/ABL": 639,      // load ABL latches from ADL bus
+"dpc-1_ADL/ABL": 639,// alias for DPControl pseudo-bus
+
 "ADH/ABH": 821,      // load ABH latches from ADH bus
+"dpc-2_ADH/ABH": 821,// alias for DPControl pseudo-bus
 
 dpc0_YSB: 801,       // drive sb from y
 dpc1_SBY: 325,       // load y from sb
@@ -14130,7 +14133,7 @@ function busToString(busname){
 		//    - we'll allow the x and xx prefix but ignore the #
 		return listActiveSignals('^([x]?x-)?op-');
 	if(busname=='DPControl')
-		return listActiveSignals('^dpc[0-9]+_');
+		return listActiveSignals('^dpc[-]?[0-9]+_');
 	if(busname[0]=="-"){
 		// invert the value of the bus for display
 		var value=busToHex(busname.slice(1))
