@@ -15,6 +15,7 @@ readTriggers[0x8000]="var c=consolegetc; consolegetc=undefined; (c)";
 // for opcodes, see http://www.textfiles.com/programming/CARDS/6800
 
 testprogram = [
+    0xD9,                    // EXX
     0x21, 0x34, 0x12,        // LD HL,$1234
     0x31, 0xfe, 0xdc,        // LD SP,0xDCFE
     0xe5,                    // PUSH HL
