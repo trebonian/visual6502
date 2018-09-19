@@ -16,7 +16,7 @@ presetLogLists=[
     ['cycle',],
     ['ab','db','_m1','_rd','_wr','_mreq','_iorq','pc'],
     ['af', 'bc', 'de', 'hl', 'ix', 'iy', 'sp', 'wz', 'ir'],
-    ['State'],
+    ['af2', 'bc2', 'de2', 'hl2', 'State'],
     ['_int','_nmi',nodenamereset],
 ];
 
@@ -181,6 +181,14 @@ function busToString(busname){
         return busToHexInv('reg_d') + busToHexInv('reg_e');
     if(busname=='hl')
         return busToHexInv('reg_h') + busToHexInv('reg_l');
+    if(busname=='af2')
+        return busToHexInv('reg_aa') + busToHexInv('reg_ff');
+    if(busname=='bc2')
+        return busToHexInv('reg_bb') + busToHexInv('reg_cc');
+    if(busname=='de2')
+        return busToHexInv('reg_dd') + busToHexInv('reg_ee');
+    if(busname=='hl2')
+        return busToHexInv('reg_hh') + busToHexInv('reg_ll');
     if(busname=='ir')
         return busToHexInv('reg_i') + busToHexInv('reg_r');
     if(busname=='wz')
