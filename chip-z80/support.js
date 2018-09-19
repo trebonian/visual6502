@@ -47,9 +47,9 @@ function halfStep(){
     eval(clockTriggers[cycle]);
     if (clk) {setLow('clk'); }
     else {setHigh('clk'); }
-    // DMB: It's almost certainly wrong to execute the on both clock edges
+    // DMB: It's almost certainly wrong to execute these on both clock edges
     handleBusRead();
-    handleBusWrite;
+    handleBusWrite();
 }
 
 function goUntilSyncOrWrite(){
