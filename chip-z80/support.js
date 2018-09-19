@@ -15,7 +15,7 @@ nodenamereset = '_reset';
 presetLogLists=[
     ['cycle',],
     ['ab','db','_m1','_rd','_wr','_mreq','_iorq','pc'],
-    ['af', 'bc', 'de', 'hl', 'ix', 'iy', 'sp'],
+    ['af', 'bc', 'de', 'hl', 'ix', 'iy', 'sp', 'wz', 'ir'],
     ['State'],
     ['_int','_nmi',nodenamereset],
 ];
@@ -131,6 +131,11 @@ function readD(){return 0xFF ^ readBits('reg_d', 8);}
 function readE(){return 0xFF ^ readBits('reg_e', 8);}
 function readH(){return 0xFF ^ readBits('reg_h', 8);}
 function readL(){return 0xFF ^ readBits('reg_l', 8);}
+function readI(){return 0xFF ^ readBits('reg_i', 8);}
+function readR(){return 0xFF ^ readBits('reg_r', 8);}
+function readW(){return 0xFF ^ readBits('reg_w', 8);}
+function readZ(){return 0xFF ^ readBits('reg_z', 8);}
+
 function readIX(){return 0xFFFF ^ ((readBits('reg_ixh', 8)<<8) + readBits('reg_ixl', 8));}
 function readIY(){return 0xFFFF ^ ((readBits('reg_iyh', 8)<<8) + readBits('reg_iyl', 8));}
 function readSP(){return 0xFFFF ^ ((readBits('reg_sph', 8)<<8) + readBits('reg_spl', 8));}
@@ -176,6 +181,10 @@ function busToString(busname){
         return busToHexInv('reg_d') + busToHexInv('reg_e');
     if(busname=='hl')
         return busToHexInv('reg_h') + busToHexInv('reg_l');
+    if(busname=='ir')
+        return busToHexInv('reg_i') + busToHexInv('reg_r');
+    if(busname=='wz')
+        return busToHexInv('reg_w') + busToHexInv('reg_z');
     if(busname=='pc')
         return busToHexInv('reg_pch') + busToHexInv('reg_pcl');
     if(busname=='sp')
@@ -231,6 +240,10 @@ function chipStatus(){
         ' E:' + hexByte(readE()) +
         ' H:' + hexByte(readH()) +
         ' L:' + hexByte(readL()) +
+        ' I:' + hexByte(readI()) +
+        ' R:' + hexByte(readR()) +
+        ' W:' + hexByte(readW()) +
+        ' Z:' + hexByte(readZ()) +
         ' IX:' + hexWord(readIX()) +
         ' IY:' + hexWord(readIY()) +
         ' SP:' + hexWord(readSP());
