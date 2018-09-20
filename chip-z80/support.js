@@ -4,8 +4,7 @@
 
 chipname='z80';
 
-// DMB: Update this
-grChipSize=7000;
+grChipSize=5500;
 
 ngnd = nodenames['vss'];
 npwr = nodenames['vcc'];
