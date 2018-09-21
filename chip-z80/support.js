@@ -5,7 +5,7 @@
 chipname='z80';
 
 grChipSize=5000;
-grCanvasSize=2500;
+grCanvasSize=5000;
 grMaxZoom=24;
 
 ngnd = nodenames['vss'];
