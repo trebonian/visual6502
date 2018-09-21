@@ -15,10 +15,11 @@ nodenamereset = '_reset';
 
 presetLogLists=[
     ['cycle',],
-    ['ab','db','_m1','_rd','_wr','_mreq','_iorq','Fetch', 'pc'],
-    ['af', 'bc', 'de', 'hl', 'ix', 'iy', 'sp', 'wz', 'ir'],
-    ['af2', 'bc2', 'de2', 'hl2', 'State'],
-    ['_int','_nmi',nodenamereset],
+    ['ab', 'db', '_m1', '_rd', '_wr', '_mreq', '_iorq', 'State', 'pc', 'Fetch'],
+    ['af', 'bc', 'de', 'hl', 'ix', 'iy', 'sp'],
+    ['af2', 'bc2', 'de2', 'hl2'],
+    ['wz', 'ir'],
+    ['_int','_nmi', nodenamereset],
 ];
 
 // Override drawSeg so we can use a different offset
@@ -205,14 +206,198 @@ function handleBusWrite(){
     }
 }
 
-function readA(){return 0xFF ^ readBits('reg_a', 8);}
-function readF(){return 0xFF ^ readBits('reg_f', 8);}
-function readB(){return 0xFF ^ readBits('reg_b', 8);}
-function readC(){return 0xFF ^ readBits('reg_c', 8);}
-function readD(){return 0xFF ^ readBits('reg_d', 8);}
-function readE(){return 0xFF ^ readBits('reg_e', 8);}
-function readH(){return 0xFF ^ readBits('reg_h', 8);}
-function readL(){return 0xFF ^ readBits('reg_l', 8);}
+function readA() {
+    if (!isNodeHigh(nodenames['ex_af'])) {
+        return 0xFF ^ readBits('reg_aa', 8);
+    } else {
+        return 0xFF ^ readBits('reg_a', 8);
+    }
+}
+
+function readF() {
+    if (!isNodeHigh(nodenames['ex_af'])) {
+        return 0xFF ^ readBits('reg_ff', 8);
+    } else {
+        return 0xFF ^ readBits('reg_f', 8);
+    }
+}
+
+function readB() {
+    if (isNodeHigh(nodenames['ex_bcdehl'])) {
+        return 0xFF ^ readBits('reg_bb', 8);
+    } else {
+        return 0xFF ^ readBits('reg_b', 8);
+    }
+}
+
+function readC() {
+    if (isNodeHigh(nodenames['ex_bcdehl'])) {
+        return 0xFF ^ readBits('reg_cc', 8);
+    } else {
+        return 0xFF ^ readBits('reg_c', 8);
+    }
+}
+
+function readD() {
+    if (isNodeHigh(nodenames['ex_bcdehl'])) {
+        if (isNodeHigh(nodenames['ex_dehl1'])) {
+            return 0xFF ^ readBits('reg_hh', 8);
+        } else {
+            return 0xFF ^ readBits('reg_dd', 8);
+        }
+    } else {
+        if (isNodeHigh(nodenames['ex_dehl0'])) {
+            return 0xFF ^ readBits('reg_h', 8);
+        } else {
+            return 0xFF ^ readBits('reg_d', 8);
+        }
+    }
+}
+
+function readE() {
+    if (isNodeHigh(nodenames['ex_bcdehl'])) {
+        if (isNodeHigh(nodenames['ex_dehl1'])) {
+            return 0xFF ^ readBits('reg_ll', 8);
+        } else {
+            return 0xFF ^ readBits('reg_ee', 8);
+        }
+    } else {
+        if (isNodeHigh(nodenames['ex_dehl0'])) {
+            return 0xFF ^ readBits('reg_l', 8);
+        } else {
+            return 0xFF ^ readBits('reg_e', 8);
+        }
+    }
+}
+
+function readH() {
+    if (isNodeHigh(nodenames['ex_bcdehl'])) {
+        if (isNodeHigh(nodenames['ex_dehl1'])) {
+            return 0xFF ^ readBits('reg_dd', 8);
+        } else {
+            return 0xFF ^ readBits('reg_hh', 8);
+        }
+    } else {
+        if (isNodeHigh(nodenames['ex_dehl0'])) {
+            return 0xFF ^ readBits('reg_d', 8);
+        } else {
+            return 0xFF ^ readBits('reg_h', 8);
+        }
+    }
+}
+
+function readL() {
+    if (isNodeHigh(nodenames['ex_bcdehl'])) {
+        if (isNodeHigh(nodenames['ex_dehl1'])) {
+            return 0xFF ^ readBits('reg_ee', 8);
+        } else {
+            return 0xFF ^ readBits('reg_ll', 8);
+        }
+    } else {
+        if (isNodeHigh(nodenames['ex_dehl0'])) {
+            return 0xFF ^ readBits('reg_e', 8);
+        } else {
+            return 0xFF ^ readBits('reg_l', 8);
+        }
+    }
+}
+
+function readA2() {
+    if (isNodeHigh(nodenames['ex_af'])) {
+        return 0xFF ^ readBits('reg_aa', 8);
+    } else {
+        return 0xFF ^ readBits('reg_a', 8);
+    }
+}
+
+function readF2() {
+    if (isNodeHigh(nodenames['ex_af'])) {
+        return 0xFF ^ readBits('reg_ff', 8);
+    } else {
+        return 0xFF ^ readBits('reg_f', 8);
+    }
+}
+
+function readB2() {
+    if (!isNodeHigh(nodenames['ex_bcdehl'])) {
+        return 0xFF ^ readBits('reg_bb', 8);
+    } else {
+        return 0xFF ^ readBits('reg_b', 8);
+    }
+}
+
+function readC2() {
+    if (!isNodeHigh(nodenames['ex_bcdehl'])) {
+        return 0xFF ^ readBits('reg_cc', 8);
+    } else {
+        return 0xFF ^ readBits('reg_c', 8);
+    }
+}
+
+function readD2() {
+    if (!isNodeHigh(nodenames['ex_bcdehl'])) {
+        if (isNodeHigh(nodenames['ex_dehl1'])) {
+            return 0xFF ^ readBits('reg_hh', 8);
+        } else {
+            return 0xFF ^ readBits('reg_dd', 8);
+        }
+    } else {
+        if (isNodeHigh(nodenames['ex_dehl0'])) {
+            return 0xFF ^ readBits('reg_h', 8);
+        } else {
+            return 0xFF ^ readBits('reg_d', 8);
+        }
+    }
+}
+
+function readE2() {
+    if (!isNodeHigh(nodenames['ex_bcdehl'])) {
+        if (isNodeHigh(nodenames['ex_dehl1'])) {
+            return 0xFF ^ readBits('reg_ll', 8);
+        } else {
+            return 0xFF ^ readBits('reg_ee', 8);
+        }
+    } else {
+        if (isNodeHigh(nodenames['ex_dehl0'])) {
+            return 0xFF ^ readBits('reg_l', 8);
+        } else {
+            return 0xFF ^ readBits('reg_e', 8);
+        }
+    }
+}
+
+function readH2() {
+    if (!isNodeHigh(nodenames['ex_bcdehl'])) {
+        if (isNodeHigh(nodenames['ex_dehl1'])) {
+            return 0xFF ^ readBits('reg_dd', 8);
+        } else {
+            return 0xFF ^ readBits('reg_hh', 8);
+        }
+    } else {
+        if (isNodeHigh(nodenames['ex_dehl0'])) {
+            return 0xFF ^ readBits('reg_d', 8);
+        } else {
+            return 0xFF ^ readBits('reg_h', 8);
+        }
+    }
+}
+
+function readL2() {
+    if (!isNodeHigh(nodenames['ex_bcdehl'])) {
+        if (isNodeHigh(nodenames['ex_dehl1'])) {
+            return 0xFF ^ readBits('reg_ee', 8);
+        } else {
+            return 0xFF ^ readBits('reg_ll', 8);
+        }
+    } else {
+        if (isNodeHigh(nodenames['ex_dehl0'])) {
+            return 0xFF ^ readBits('reg_e', 8);
+        } else {
+            return 0xFF ^ readBits('reg_l', 8);
+        }
+    }
+}
+
 function readI(){return 0xFF ^ readBits('reg_i', 8);}
 function readR(){return 0xFF ^ readBits('reg_r', 8);}
 function readW(){return 0xFF ^ readBits('reg_w', 8);}
@@ -256,21 +441,21 @@ function busToString(busname){
     if(busname=='cycle')
         return cycle>>1;
     if(busname=='af')
-        return busToHexInv('reg_a') + busToHexInv('reg_f');
+        return hexByte(readA()) + hexByte(readF());
     if(busname=='bc')
-        return busToHexInv('reg_b') + busToHexInv('reg_c');
+        return hexByte(readB()) + hexByte(readC());
     if(busname=='de')
-        return busToHexInv('reg_d') + busToHexInv('reg_e');
+        return hexByte(readD()) + hexByte(readE());
     if(busname=='hl')
-        return busToHexInv('reg_h') + busToHexInv('reg_l');
+        return hexByte(readH()) + hexByte(readL());
     if(busname=='af2')
-        return busToHexInv('reg_aa') + busToHexInv('reg_ff');
+        return hexByte(readA2()) + hexByte(readF2());
     if(busname=='bc2')
-        return busToHexInv('reg_bb') + busToHexInv('reg_cc');
+        return hexByte(readB2()) + hexByte(readC2());
     if(busname=='de2')
-        return busToHexInv('reg_dd') + busToHexInv('reg_ee');
+        return hexByte(readD2()) + hexByte(readE2());
     if(busname=='hl2')
-        return busToHexInv('reg_hh') + busToHexInv('reg_ll');
+        return hexByte(readH2()) + hexByte(readL2());
     if(busname=='ir')
         return busToHexInv('reg_i') + busToHexInv('reg_r');
     if(busname=='wz')

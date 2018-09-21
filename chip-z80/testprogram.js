@@ -18,31 +18,31 @@ testprogram = [
     0x00,                    // NOP
     0x3C,                    // INC A
     0x04,                    // INC B
-    0x14,                    // INC D
+    0x15,                    // DEC D
     0x24,                    // INC H
     0xEB,                    // EXX DE,HL
     0x00,                    // NOP
     0x3C,                    // INC A
     0x04,                    // INC B
-    0x14,                    // INC D
+    0x15,                    // DEC D
     0x24,                    // INC H
     0xD9,                    // EXX
     0x00,                    // NOP
     0x3C,                    // INC A
     0x04,                    // INC B
-    0x14,                    // INC D
+    0x15,                    // DEC D
     0x24,                    // INC H
     0xEB,                    // EXX DE,HL
     0x00,                    // NOP
     0x3C,                    // INC A
     0x04,                    // INC B
-    0x14,                    // INC D
+    0x15,                    // DEC D
     0x24,                    // INC H
     0x08,                    // EXX AF,AF'
     0x00,                    // NOP
     0x3C,                    // INC A
     0x04,                    // INC B
-    0x14,                    // INC D
+    0x15,                    // DEC D
     0x24,                    // INC H
     0x00,                    // NOP
     0x00,                    // NOP
