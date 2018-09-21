@@ -89,7 +89,7 @@ function initChip(){
     nodes[npwr].float = false;
     for(var tn in transistors) transistors[tn].on = false;
     setLow(nodenamereset);
-    setLow('clk');
+    setHigh('clk');
     setHigh('_busrq');
     setHigh('_int');
     setHigh('_nmi');
