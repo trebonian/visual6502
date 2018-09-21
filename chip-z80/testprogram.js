@@ -16,6 +16,14 @@ readTriggers[0x8000]="var c=consolegetc; consolegetc=undefined; (c)";
 
 testprogram = [
     0x00,                    // NOP
+    0x31, 0x00, 0x01,        // LD SP,0x0100
+    0xCD, 0x0B, 0x00,        // CALL $000B
+    0x00,                    // NOP
+    0x21, 0x34, 0x12,        // LD HL,$1234
+    0x21, 0x78, 0x56,        // LD HL,$5678
+    0xe5,                    // PUSH HL
+    0x00,                    // NOP
+    0x00,                    // NOP
     0x3C,                    // INC A
     0x04,                    // INC B
     0x15,                    // DEC D
@@ -53,8 +61,6 @@ testprogram = [
     0x7E,                    // LD A, (HL)
     0x00,                    // NOP
     0x21, 0x34, 0x12,        // LD HL,$1234
-    0x31, 0xfe, 0xdc,        // LD SP,0xDCFE
-//  0xe5,                    // PUSH HL
     0x21, 0x78, 0x56,        // LD HL,$5678
     0xe3,                    // EX (SP),HL
     0xdd, 0x21, 0xbc,0x9a,   // LD IX, 0x9ABC
