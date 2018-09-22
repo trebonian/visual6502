@@ -21,7 +21,7 @@ testprogram = [
     0x00,                    // NOP
     0x21, 0x78, 0x56,        // LD HL,$5678
     0x21, 0x34, 0x12,        // LD HL,$1234
- // 0xe5,                    // PUSH HL
+    0xe5,                    // PUSH HL
     0x00,                    // NOP
     0x00,                    // NOP
     0x3C,                    // INC A
@@ -60,11 +60,14 @@ testprogram = [
     0x00,                    // NOP
     0x7E,                    // LD A, (HL)
     0x00,                    // NOP
+    // Pavel's original test program
     0x21, 0x34, 0x12,        // LD HL,$1234
+    0x31, 0xfe, 0xdc,        // LD SP,0xDCFE
     0xe5,                    // PUSH HL
     0x21, 0x78, 0x56,        // LD HL,$5678
     0xe3,                    // EX (SP),HL
     0xdd, 0x21, 0xbc,0x9a,   // LD IX, 0x9ABC
     0xdd, 0xe3,              // EX (SP),IX
-    0x76                     // HALT
+    0x76,                    // HALT
+    0x00                     // NOP    
 ]
