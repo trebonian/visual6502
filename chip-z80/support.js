@@ -18,8 +18,8 @@ nodenamereset = '_reset';
 presetLogLists=[
     ['cycle',],
     ['ab', 'db', '_m1', '_rd', '_wr', '_mreq', '_iorq', 'State', 'pc', 'Fetch'],
-    ['af', 'bc', 'de', 'hl', 'ix', 'iy', 'sp'],
-    ['af2', 'bc2', 'de2', 'hl2'],
+    ['a', 'f', 'bc', 'de', 'hl', 'ix', 'iy', 'sp'],
+    ['a2', 'f2', 'bc2', 'de2', 'hl2'],
     ['wz', 'ir'],
     ['_int','_nmi', nodenamereset],
 ];
@@ -403,6 +403,20 @@ function readPC(){return 0xFFFF ^ ((readBits('reg_pch', 8)<<8) + readBits('reg_p
 function readPCL(){return 0xFF ^ readBits('reg_pcl', 8);}
 function readPCH(){return 0xFF ^ readBits('reg_pch', 8);}
 
+function formatFstring(f){
+    var result;
+    result=
+        ((f & 0x80)?'S':'s') +
+        ((f & 0x40)?'Z':'z') +
+        ((f & 0x20)?'Y':'y') +
+        ((f & 0x10)?'H':'h') +
+        ((f & 0x08)?'X':'x') +
+        ((f & 0x04)?'P':'p') +
+        ((f & 0x02)?'N':'n') +
+        ((f & 0x01)?'F':'f');
+    return result;
+}
+
 // The 6800 state control is something like a branching shift register
 // ... but not quite like that
 TCStates=[
@@ -433,16 +447,20 @@ function busToString(busname){
     // some 'signal names' are CPU-specific aliases to user-friendly string output
     if(busname=='cycle')
         return cycle>>1;
-    if(busname=='af')
-        return hexByte(readA()) + hexByte(readF());
+    if(busname=='a')
+        return hexByte(readA());
+    if(busname=='f')
+        return formatFstring(readF());
     if(busname=='bc')
         return hexByte(readB()) + hexByte(readC());
     if(busname=='de')
         return hexByte(readD()) + hexByte(readE());
     if(busname=='hl')
         return hexByte(readH()) + hexByte(readL());
-    if(busname=='af2')
-        return hexByte(readA2()) + hexByte(readF2());
+    if(busname=='a2')
+        return hexByte(readA2());
+    if(busname=='f2')
+        return formatFstring(readF2());
     if(busname=='bc2')
         return hexByte(readB2()) + hexByte(readC2());
     if(busname=='de2')
@@ -494,26 +512,21 @@ function chipStatus(){
         ' IORQ:' + readBit('_iorq');
     var machine2 =
         ' PC:' + hexWord(readPC()) +
-        ' A:' + hexByte(readA()) +
-        ' F:' + hexByte(readF()) +
-        ' B:' + hexByte(readB()) +
-        ' C:' + hexByte(readC()) +
-        ' D:' + hexByte(readD()) +
-        ' E:' + hexByte(readE()) +
-        ' H:' + hexByte(readH()) +
-        ' L:' + hexByte(readL()) +
-        ' I:' + hexByte(readI()) +
-        ' R:' + hexByte(readR()) +
-        ' W:' + hexByte(readW()) +
-        ' Z:' + hexByte(readZ()) +
+        ' A:'  + hexByte(readA()) +
+        ' F:'  + formatFstring(readF()) +
+        ' BC:' + hexByte(readB()) + hexByte(readC()) +
+        ' DE:' + hexByte(readD()) + hexByte(readE()) +
+        ' HL:' + hexByte(readH()) + hexByte(readL()) +
         ' IX:' + hexWord(readIX()) +
         ' IY:' + hexWord(readIY()) +
-        ' SP:' + hexWord(readSP());
+        ' SP:' + hexWord(readSP()) +
+        ' IR:' + hexByte(readI()) + hexByte(readR()) +
+        ' WZ:' + hexByte(readW()) + hexByte(readZ());
     var machine3 =
         'State: ' + busToString('State') +
-        'Hz: ' + estimatedHz().toFixed(1);
+        ' Hz: ' + estimatedHz().toFixed(1);
     if(typeof expertMode != "undefined") {
-        machine3 += ' Exec: ' + busToString('Execute'); // no T-state info for 6800 yet
+        // machine3 += ' Exec: ' + busToString('Execute'); // no T-state info for 6800 yet
         if(!isNodeHigh(nodenames['_m1']) && !isNodeHigh(nodenames['_mreq']) && !isNodeHigh(nodenames['_rd']))
             machine3 += ' (Fetch: ' + busToString('Fetch') + ')';
         if(goldenChecksum != undefined)
