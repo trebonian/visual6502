@@ -4,7 +4,9 @@
 
 chipname='6800';
 
-grChipSize=7000;
+grChipSize=6600;
+grChipOffsetX=25
+grChipOffsetY=-200;
 
 ngnd = nodenames['gnd'];
 npwr = nodenames['vcc'];

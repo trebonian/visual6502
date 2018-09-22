@@ -5,6 +5,8 @@
 chipname='z80';
 
 grChipSize=5000;
+grChipOffsetX=150;
+grChipOffsetY=0;
 grCanvasSize=5000;
 grMaxZoom=24;
 
@@ -21,15 +23,6 @@ presetLogLists=[
     ['wz', 'ir'],
     ['_int','_nmi', nodenamereset],
 ];
-
-// Override drawSeg so we can use a different offset
-function drawSeg(ctx, seg){
-	var dx = 150;
-	ctx.beginPath();
-	ctx.moveTo(grScale(seg[0]+dx), grScale(grChipSize-seg[1]));
-	for(var i=2;i<seg.length;i+=2) ctx.lineTo(grScale(seg[i]+dx), grScale(grChipSize-seg[i+1]));
-	ctx.lineTo(grScale(seg[0]+dx), grScale(grChipSize-seg[1]));
-}
 
 function setupTransistors(){
     for(i in transdefs){
