@@ -121,14 +121,11 @@ function handleBusRead(){
         writeDataBus(d);
     }
 
-    // Prefic / Opcode parsing state machone
+    // Prefix / displacement / opcode state machine, deals with:
     //   CB <op>
-    //   DD <op>
     //   ED <op>
-    //   FD <op>
-    //   DD CB <op>
-    //   FD CB <op>
-    //
+    //   [DD|FD]+ <op>
+    //   [DD|FD]+ CB <displacement> <op>
 
     // Only advance the state machine on the falling edge of read
     if (last_rd_done && !isNodeHigh(nodenames['_rd']) && !isNodeHigh(nodenames['_mreq'])) {
@@ -136,53 +133,60 @@ function handleBusRead(){
         case 0:
             // In state 0 we are ready to start a new instruction
             if(!isNodeHigh(nodenames['_m1'])) {
+                prefix = 0;
+                opcode = d;
                 switch (d) {
-                case 0xdd:
-                case 0xfd:
-                    prefix = d;
-                    opcode = d;
+                case 0xcb: case 0xed:
                     state = 1;
                     break;
-                case 0xcb:
-                case 0xed:
-                    prefix = d;
-                    opcode = 0x100;
+                case 0xdd: case 0xfd:
                     state = 2;
                     break;
-                default:
-                    prefix = 0;
-                    opcode = d;
-                    break;
                 }
+            } else {
+                // This case covers other reads in the instruction
+                prefix = 0;
+                opcode = -1;   // If opcode < 0, then no fetch will be displayed
             }
             break;
         case 1:
-            // In state 1 we have just seen the 0xdd/0xfd prefix
-            if(!isNodeHigh(nodenames['_mreq'])) {
-                switch (d) {
-                case 0xdd:
-                case 0xfd:
-                    prefix = d;
-                    opcode = d;
-                    break;
-                case 0xcb:
-                    prefix = (prefix << 8) | d;
-                    opcode = 0x100;
-                    state = 2;
-                    break;
-                default:
-                    opcode = d;
-                    state = 0;
-                    break;
-                }
+            // In state 1 we have just seen the CB/ED prefix and expect the opcode
+            prefix = opcode; // The prefix(s) just seen
+            opcode = d;
+            state  = 0;
+            break;
+        case 2:
+            // In state 2 we have just seen the DD/FD prefix
+            prefix = opcode; // the prefix just seen
+            opcode = d;
+            switch (d) {
+            case 0xdd: case 0xfd:
+                state = 2;   // remain in state 1
+                break;
+            case 0xcb:
+                state = 3;
+                break;
+            default:
+                state = 0;
+                break;
             }
             break;
+        case 3:
+            // In state 3 we expect the displacement byte
+            prefix = (prefix << 8) | opcode; // The prefix(s) just seen
+            opcode = 0x100; // Trick the disassembler into marking fetch as DISP
+            state  = 4;
+            break;
+        case 4:
+            // In state 4 we expect the opcode
+            opcode = d;
+            state  = 0;
+            break;
         default:
-            // In state 2 the next read must be the opcode
-            if(!isNodeHigh(nodenames['_mreq'])) {
-                opcode = d;
-                state = 0;
-            }
+            // This should never be needd
+            prefix = 0;
+            opcode = -1;
+            state  = 0;
             break;
         }
     }
@@ -485,7 +489,7 @@ function busToString(busname){
     //   if(busname=='Execute')
     //      return disassemblytoHTML(readBits('ir',8));
     if(busname=='Fetch')
-        return (!isNodeHigh(nodenames['_m1']) && !isNodeHigh(nodenames['_mreq']) && !isNodeHigh(nodenames['_rd']))?disassemblytoHTML():"";
+        return (!isNodeHigh(nodenames['_mreq']) && !isNodeHigh(nodenames['_rd']) && (opcode >= 0))?disassemblytoHTML(prefix,opcode):"";
     if(busname[0]=="-"){
         // invert the value of the bus for display
         var value=busToHex(busname.slice(1))
@@ -541,7 +545,7 @@ function chipStatus(){
 }
 
 // sanitised opcode for HTML output
-function disassemblytoHTML(){
+function disassemblytoHTML(prefix, opcode){
 
     var disassembly;
     switch (prefix) {
@@ -778,7 +782,7 @@ var disassembly_00={
     0xC8:	"RET Z",
     0xC9:	"RET",
     0xCA:	"JP Z,NNNN",
-    0xCB:	"PREFIX",
+    0xCB:	"CB PREFIX",
     0xCC:	"CALL Z,NNNN",
     0xCD:	"CALL NNNN",
     0xCE:	"ADC A,NN",
@@ -797,7 +801,7 @@ var disassembly_00={
     0xDA:	"JP C,NNNN",
     0xDB:	"IN A,(NN)",
     0xDC:	"CALL C,NNNN",
-    0xDD:	"PREFIX",
+    0xDD:	"DD PREFIX",
     0xDE:	"SBC A,NN",
     0xDF:	"RST 18h",
 
@@ -814,7 +818,7 @@ var disassembly_00={
     0xEA:	"JP PE,NNNN",
     0xEB:	"EX DE,HL",
     0xEC:	"CALL PE,NNNN",
-    0xED:	"PREFIX",
+    0xED:	"ED PREFIX",
     0xEE:	"XOR NN",
     0xEF:	"RST 28h",
 
@@ -831,7 +835,7 @@ var disassembly_00={
     0xFA:	"JP M,NNNN",
     0xFB:	"EI",
     0xFC:	"CALL M,NNNN",
-    0xFD:	"PREFIX",
+    0xFD:	"FD PREFIX",
     0xFE:	"CP NN",
     0xFF:	"RST 38h"
 };
@@ -1108,9 +1112,7 @@ var disassembly_ed={
     0xFC:	"???",
     0xFD:	"???",
     0xFE:	"???",
-    0xFF:	"???",
-
-    0x100: "PREFIX"
+    0xFF:	"???"
 };
 
 
@@ -1386,9 +1388,7 @@ var disassembly_cb={
     0xFC:	"SET 7,H",
     0xFD:	"SET 7,L",
     0xFE:	"SET 7,(HL)",
-    0xFF:	"SET 7,A",
-
-    0x100:  "PREFIX"
+    0xFF:	"SET 7,A"
 };
 
 
@@ -1609,7 +1609,7 @@ var disassembly_dd={
     0xC8:	"RET Z",
     0xC9:	"RET",
     0xCA:	"JP Z,NNNN",
-    0xCB:	"PREFIX",
+    0xCB:	"CB PREFIX",
     0xCC:	"CALL Z,NNNN",
     0xCD:	"CALL NNNN",
     0xCE:	"ADC A,NN",
@@ -1628,7 +1628,7 @@ var disassembly_dd={
     0xDA:	"JP C,NNNN",
     0xDB:	"IN A,(NN)",
     0xDC:	"CALL C,NNNN",
-    0xDD:	"PREFIX",
+    0xDD:	"DD PREFIX",
     0xDE:	"SBC A,NN",
     0xDF:	"RST 18h",
 
@@ -1645,7 +1645,7 @@ var disassembly_dd={
     0xEA:	"JP PE,NNNN",
     0xEB:	"EX DE,HL",
     0xEC:	"CALL PE,NNNN",
-    0xED:	"PREFIX",
+    0xED:	"ED PREFIX",
     0xEE:	"XOR NN",
     0xEF:	"RST 28h",
 
@@ -1662,7 +1662,7 @@ var disassembly_dd={
     0xFA:	"JP M,NNNN",
     0xFB:	"EI",
     0xFC:	"CALL M,NNNN",
-    0xFD:	"PREFIX",
+    0xFD:	"FD PREFIX",
     0xFE:	"CP NN",
     0xFF:	"RST 38h"
 };
@@ -1884,7 +1884,7 @@ var disassembly_fd={
     0xC8:	"RET Z",
     0xC9:	"RET",
     0xCA:	"JP Z,NNNN",
-    0xCB:	"PREFIX",
+    0xCB:	"CB PREFIX",
     0xCC:	"CALL Z,NNNN",
     0xCD:	"CALL NNNN",
     0xCE:	"ADC A,NN",
@@ -1903,7 +1903,7 @@ var disassembly_fd={
     0xDA:	"JP C,NNNN",
     0xDB:	"IN A,(NN)",
     0xDC:	"CALL C,NNNN",
-    0xDD:	"PREFIX",
+    0xDD:	"DD PREFIX",
     0xDE:	"SBC A,NN",
     0xDF:	"RST 18h",
 
@@ -1920,7 +1920,7 @@ var disassembly_fd={
     0xEA:	"JP PE,NNNN",
     0xEB:	"EX DE,HL",
     0xEC:	"CALL PE,NNNN",
-    0xED:	"PREFIX",
+    0xED:	"ED PREFIX",
     0xEE:	"XOR NN",
     0xEF:	"RST 28h",
 
@@ -1937,7 +1937,7 @@ var disassembly_fd={
     0xFA:	"JP M,NNNN",
     0xFB:	"EI",
     0xFC:	"CALL M,NNNN",
-    0xFD:	"PREFIX",
+    0xFD:	"FD PREFIX",
     0xFE:	"CP NN",
     0xFF:	"RST 38h"
 };
@@ -2216,7 +2216,7 @@ var disassembly_ddcb={
     0xFE:	"SET 7,(IX+d)",
     0xFF:	"SET 7,(IX+d),A",
 
-    0x100: "PREFIX"
+    0x100:  "DISPLACEMENT"
 };
 
 var disassembly_fdcb={
@@ -2493,5 +2493,5 @@ var disassembly_fdcb={
     0xFE:	"SET 7,(IY+d)",
     0xFF:	"SET 7,(IY+d),A",
 
-    0x100:  "PREFIX"
+    0x100:  "DISPLACEMENT"
 };
