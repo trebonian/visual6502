@@ -417,7 +417,7 @@ function formatFstring(f){
         ((f & 0x08)?'X':'x') +
         ((f & 0x04)?'P':'p') +
         ((f & 0x02)?'N':'n') +
-        ((f & 0x01)?'F':'f');
+        ((f & 0x01)?'C':'c');
     return result;
 }
 
