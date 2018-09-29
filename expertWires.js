@@ -43,6 +43,8 @@ var labelThese=[];
 //   rounding artifacts, and at high zoom there will be anti-aliasing on edges.
 var grMaxZoom=12;
 var grChipSize=10000;
+var grChipOffsetX=400;
+var grChipOffsetY=0;
 var grCanvasSize=2000;
 var grLineWidth=1;
 
@@ -457,7 +459,7 @@ function hiliteNodeList(){
 // the localx and localy functions return canvas coordinate offsets from the canvas window top left corner
 // we divide the results by 'zoom' to get drawn coordinates useful in findNodeNumber
 // to convert to reported user chip coordinates we multiply by grChipSize/600
-// to compare to segdefs and transdefs coordinates we subtract 400 from x and subtract y from grChipSize
+// to compare to segdefs and transdefs coordinates we subtract grChipOffsetX from x and subtract y from grChipSize plus grChipOffsetY
 
 function handleClick(e){
 	var x = localx(hilite, e.clientX)/zoom;
@@ -476,8 +478,8 @@ function handleClick(e){
 	// we have a node, but maybe we clicked over a transistor
 	var nodelist=[w];
 	// match the coordinate against transistor gate bounding boxes
-	x=cx-400;
-	y=grChipSize-cy;
+	x=cx-grChipOffsetX;
+	y=grChipSize+grChipOffsetY-cy;
 	for(var i=0;i<nodes[w].gates.length;i++){
 		var xmin=nodes[w].gates[i].bb[0], xmax=nodes[w].gates[i].bb[1];
 		var ymin=nodes[w].gates[i].bb[2], ymax=nodes[w].gates[i].bb[3];

@@ -211,11 +211,12 @@ function zoomToBox(xmin,xmax,ymin,ymax){
 }
 
 function drawSeg(ctx, seg){
-	var dx = 400;
+	var dx = grChipOffsetX;
+	var dy = grChipOffsetY;
 	ctx.beginPath();
-	ctx.moveTo(grScale(seg[0]+dx), grScale(grChipSize-seg[1]));
-	for(var i=2;i<seg.length;i+=2) ctx.lineTo(grScale(seg[i]+dx), grScale(grChipSize-seg[i+1]));
-	ctx.lineTo(grScale(seg[0]+dx), grScale(grChipSize-seg[1]));
+	ctx.moveTo(grScale(seg[0]+dx), grScale(grChipSize-seg[1]+dy));
+	for(var i=2;i<seg.length;i+=2) ctx.lineTo(grScale(seg[i]+dx), grScale(grChipSize-seg[i+1]+dy));
+	ctx.lineTo(grScale(seg[0]+dx), grScale(grChipSize-seg[1]+dy));
 }
 
 function findNodeNumber(x,y){
