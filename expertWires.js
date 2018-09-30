@@ -212,6 +212,10 @@ function setupParams(){
 			clockTriggers[value]=[clockTriggers[value],"setLow('rdy');"].join("");
 		} else if(name=="rdy1" && parseInt(value)!=NaN){
 			clockTriggers[value]=[clockTriggers[value],"setHigh('rdy');"].join("");
+		} else if(name=="so0" && parseInt(value)!=NaN){
+			clockTriggers[value]=[clockTriggers[value],"setLow('so');"].join("");
+		} else if(name=="so1" && parseInt(value)!=NaN){
+			clockTriggers[value]=[clockTriggers[value],"setHigh('so');"].join("");
 		} else if(name=="time" && parseInt(value)!=NaN){
 			eventTime=value;
 		} else if(name=="databus" && parseInt(value)!=NaN){
