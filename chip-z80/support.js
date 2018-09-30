@@ -110,7 +110,14 @@ var state        = 0;
 var last_rd_done = 1;
 
 function handleBusRead(){
-    if(!isNodeHigh(nodenames['_rd'])){
+    if(!isNodeHigh(nodenames['_m1']) && !isNodeHigh(nodenames['_iorq'])) {
+        // Interrupt acknownledge cycle, force 0xFF onto the bus
+        // In IM0 this is seen as RST 0x38
+        // In IM1 this is ignored
+        // In IM2 this is used as the low byte of the vector
+        // TODO: ideally this "vector" would be a configurable parameter
+        writeDataBus(0xff);
+    } else if(!isNodeHigh(nodenames['_rd'])){
         var a = readAddressBus();
         var d = eval(readTriggers[a]);
         if(d == undefined)
