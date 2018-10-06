@@ -216,6 +216,20 @@ function setupParams(){
 			clockTriggers[value]=[clockTriggers[value],"setLow('so');"].join("");
 		} else if(name=="so1" && parseInt(value)!=NaN){
 			clockTriggers[value]=[clockTriggers[value],"setHigh('so');"].join("");
+		// Some Z80 inputs - we can refactor if this becomes unwieldy
+		} else if(name=="int0" && parseInt(value)!=NaN){
+			clockTriggers[value]=[clockTriggers[value],"setLow('int');"].join("");
+		} else if(name=="int1" && parseInt(value)!=NaN){
+			clockTriggers[value]=[clockTriggers[value],"setHigh('int');"].join("");
+		} else if(name=="wait0" && parseInt(value)!=NaN){
+			clockTriggers[value]=[clockTriggers[value],"setLow('wait');"].join("");
+		} else if(name=="wait1" && parseInt(value)!=NaN){
+			clockTriggers[value]=[clockTriggers[value],"setHigh('wait');"].join("");
+		} else if(name=="busrq0" && parseInt(value)!=NaN){
+			clockTriggers[value]=[clockTriggers[value],"setLow('busrq');"].join("");
+		} else if(name=="busrq1" && parseInt(value)!=NaN){
+			clockTriggers[value]=[clockTriggers[value],"setHigh('busrq');"].join("");
+		//
 		} else if(name=="time" && parseInt(value)!=NaN){
 			eventTime=value;
 		} else if(name=="databus" && parseInt(value)!=NaN){
