@@ -24,6 +24,37 @@ presetLogLists=[
     ['_int','_nmi', nodenamereset],
 ];
 
+// Override ChipSim getNodeValue() function to allow an estimate of capacitance
+// (number of connections) to be used when joining floating segments.
+
+function getNodeValue(){
+    // 1. deal with power connections first
+    if(arrayContains(group, ngnd)) return false;
+    if(arrayContains(group, npwr)) return true;
+    // 2. deal with pullup/pulldowns next
+    for(var i in group){
+        var nn = group[i];
+        var n = nodes[nn];
+        if(n.pullup) return true;
+        if(n.pulldown) return false;
+    }
+    // 3. resolve connected set of floating nodes
+    // based on state of largest (by #connections) node
+    // (previously this was any node with state true wins)
+    var max_state = false;
+    var max_connections = 0;
+    for(var i in group){
+        var nn = group[i];
+        var n = nodes[nn];
+        var connections = n.gates.length + n.c1c2s.length;
+        if (connections > max_connections) {
+            max_connections = connections;
+            max_state = n.state;
+        }
+    }
+    return max_state;
+}
+
 function setupTransistors(){
     for(i in transdefs){
         var tdef = transdefs[i];
