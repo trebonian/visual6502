@@ -1,4 +1,156 @@
 var nodenames ={
+
+    dp_dl: 82,
+    dl_dp: 165,
+
+    load_ir: 1354,
+
+    dlatch0: 123,
+    dlatch1: 195,
+    dlatch2: 414,
+    dlatch3: 930,
+    dlatch4: 1000,
+    dlatch5: 872,
+    dlatch6: 751,
+    dlatch7: 358,
+
+    dl_d:  87,
+    d_dl:  133,
+
+    dbus0: 138,
+    dbus1: 196,
+    dbus2: 412,
+    dbus3: 480,
+    dbus4: 485,
+    dbus5: 486,
+    dbus6: 380,
+    dbus7: 370,
+
+    _instr0: 1350,
+    _instr1: 1360,
+    _instr2: 1366,
+    _instr6: 1370,
+    _instr7: 1375,
+    _instr3: 1380,
+    _instr4: 1388,
+    _instr5: 1395,
+
+    instr0: 1348,
+    instr1: 1359,
+    instr2: 1365,
+    instr6: 1369,
+    instr7: 1374,
+    instr3: 1379,
+    instr4: 1387,
+    instr5: 1394,
+
+    d_u: 546,
+
+    ubus0: 545,   // To low half of register file
+    ubus1: 528,
+    ubus2: 526,
+    ubus3: 770,
+    ubus4: 779,
+    ubus5: 790,
+    ubus6: 716,
+    ubus7: 525,
+
+    u_v: 750, // enables pass transistors that link ubus and vbus
+
+    vbus0: 755,     // To high half of register file
+    vbus1: 772,
+    vbus2: 783,
+    vbus3: 796,
+    vbus4: 803,
+    vbus5: 808,
+    vbus6: 836,
+    vbus7: 839,
+
+    rl_wr: 678,  // write control
+    rh_wr: 652,  // write control
+
+    r_u: 692,   // enable register bit lines 0..7 values onto the ubus
+    r_v: 693,   // enable register bit lines 8..15 values onto the vbus
+
+    regbit0: 702,    // bit lines within the register array
+    regbit1: 732,
+    regbit2: 738,
+    regbit3: 775,
+    regbit4: 776,
+    regbit5: 807,
+    regbit6: 809,
+    regbit7: 864,
+    regbit8: 870,
+    regbit9: 902,
+    regbit10: 906,
+    regbit11: 934,
+    regbit12: 935,
+    regbit13: 970,
+    regbit14: 973,
+    regbit15: 999,
+
+    r_x1: 608,    // sone sort of register precharge, or inccrement control?
+
+    r_p: 1785, // connects the register bit lines to the pc/ir/inc/dec bit lines
+
+    pcbit0: 703,     // bit lines within the PC/IR/INC/DEC bit lines
+    pcbit1: 731,
+    pcbit2: 739,
+    pcbit3: 774,
+    pcbit4: 777,
+    pcbit5: 806,
+    pcbit6: 810,
+    pcbit7: 863,
+    pcbit8: 871,
+    pcbit9: 901,
+    pcbit10: 907,
+    pcbit11: 933,
+    pcbit12: 936,
+    pcbit13: 969,
+    pcbit14: 974,
+    pcbit15: 998,
+
+    alubus0: 837, // ALU bus lo nibble
+    alubus1: 889,
+    alubus2: 937,
+    alubus3: 983,
+
+    alubus4: 852, // ALU bus hi nibble
+    alubus5: 903,
+    alubus6: 951,
+    alubus7: 995,
+
+    alua0: 850, // ALU op 1 lo nibble
+    alua1: 899,
+    alua2: 947,
+    alua3: 993,
+
+    alua4: 868, // ALU op 1 hi nibble
+    alua5: 920,
+    alua6: 968,
+    alua7: 1007,
+
+    alub0: 845, // ALU op 2 lo nibble
+    alub1: 897,
+    alub2: 944,
+    alub3: 988,
+
+    alub4: 867, // ALU op 2 hi nibble
+    alub5: 918,
+    alub6: 966,
+    alub7: 1005,
+
+    aluout0: 2211,
+    aluout1: 2338,
+    aluout2: 2504,
+    aluout3: 816,
+
+    alulat0: 865,
+    alulat1: 912,
+    alulat2: 960,
+    alulat3: 1002,
+
+
 vss: 1,
 vcc: 2,
 clk: 3,

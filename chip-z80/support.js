@@ -19,8 +19,11 @@ presetLogLists=[
     ['cycle',],
     ['ab', 'db', '_m1', '_rd', '_wr', '_mreq', '_iorq', 'State', 'pc', 'Fetch'],
     ['a', 'f', 'bc', 'de', 'hl', 'ix', 'iy', 'sp'],
-    ['a2', 'f2', 'bc2', 'de2', 'hl2'],
     ['wz', 'ir'],
+    ['alubus', '-alua', '-alub', 'aluout', 'alulat'],
+    ['d_u', 'r_u', '-ubus', 'r_v', 'u_v', '-vbus', 'regbit', 'r_p', 'pcbit', 'rl_wr', 'rh_wr', 'r_x1'],
+    ['dp_dl', 'dl_dp', '-dlatch', 'dl_d', 'd_dl', '-dbus', 'instr', 'load_ir'],
+    ['a2', 'f2', 'bc2', 'de2', 'hl2'],
     ['_int','_nmi', nodenamereset],
 ];
 
@@ -74,6 +77,15 @@ function setupTransistors(){
         nodes[c2].c1c2s.push(trans);
         transistors[name] = trans;
     }
+}
+
+function stepBack(){
+	if(cycle==0) return;
+	showState(trace[--cycle].chip);
+	setMem(trace[cycle].mem);
+	var clk = isNodeHigh(nodenames['clk']);
+	if(!clk) writeDataBus(mRead(readAddressBus()));
+	chipStatus();
 }
 
 // simulate a single clock phase with no update to graphics or trace
@@ -151,6 +163,13 @@ function handleBusRead(){
             eval(fetchTriggers[d]);
         }
         writeDataBus(d);
+    } else if(!isNodeHigh(nodenames['_m1']) && !isNodeHigh(nodenames['_iorq'])) {
+        // Interrupt acknownledge cycle, force 0xFF onto the bus
+        // In IM0 this is seen as JP (HL)
+        // In IM1 this is ignored
+        // In IM2 this is used as the low byte of the vector
+        // TODO: ideally this "vector" would be a configurable parameter
+        writeDataBus(0xe9);
     } else {
         // In all other cases we set the data bus to FF
         // as a crude indicateion that it's not being driven
