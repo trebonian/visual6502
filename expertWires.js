@@ -487,7 +487,7 @@ function handleClick(e){
 	var cx = Math.round(x*grChipSize/600);
 	var cy = Math.round(y*grChipSize/600);
 	// prepare two lines of status report
-	var s1='x: ' + cx + ' y: ' + cy;
+	var s1='x: ' + (cx - grChipOffsetX) + ' y: ' + (cy - grChipOffsetY);
 	var s2='node:&nbsp;' + w + '&nbsp;' + nodeName(w);
 	if(w==-1) {
 		setStatus(s1); // no node found, so report only coordinates
