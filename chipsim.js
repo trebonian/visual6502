@@ -158,7 +158,7 @@ function allNodes(){
 function stateString(){
 	var codes = ['l','h'];
 	var res = '';
-	for(var i=0;i<1725;i++){
+	for(var i=0;i<nodes.length;i++){
 		var n = nodes[i];
 		if(n==undefined) res+='x';
 		else if(i==ngnd) res+='g';
