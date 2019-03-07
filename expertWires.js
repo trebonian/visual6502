@@ -601,6 +601,7 @@ function setupChipLayoutGraphics(){
 	chipsurround.focus();
 	chipsurround.onmousedown = function(e){mouseDown(e);};
 	chipsurround.onkeypress = function(e){handleKey(e);};
+	chipsurround.onmouseout = function(e){mouseLeave(e);};
 }
 
 // utility function to save graphics pan and zoom
