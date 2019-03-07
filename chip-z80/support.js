@@ -58,6 +58,32 @@ function getNodeValue(){
     return max_state;
 }
 
+// Override ChipSim drawSeg() to deal with holes
+function drawSeg(ctx, seg){
+    var dx = grChipOffsetX;
+    var dy = grChipOffsetY;
+    ctx.beginPath();
+    var moveTo = true;
+    var sx;
+    var sy;
+    for (var i=0;i<seg.length;i+=2) {
+        if (moveTo) {
+            sx = seg[i];
+            sy = seg[i+1];
+            ctx.moveTo(grScale(sx+dx), grScale(grChipSize-sy+dy));
+            moveTo = false;
+        } else if (seg[i] == sx && seg[i + 1] == sy) {
+            ctx.closePath();
+            moveTo = true;
+        } else {
+            ctx.lineTo(grScale(seg[i]+dx), grScale(grChipSize-seg[i+1]+dy));
+        }
+    }
+    if (!moveTo) {
+        ctx.closePath();
+    }
+}
+
 function setupTransistors(){
     for(i in transdefs){
         var tdef = transdefs[i];
@@ -80,12 +106,12 @@ function setupTransistors(){
 }
 
 function stepBack(){
-	if(cycle==0) return;
-	showState(trace[--cycle].chip);
-	setMem(trace[cycle].mem);
-	var clk = isNodeHigh(nodenames['clk']);
-	if(!clk) writeDataBus(mRead(readAddressBus()));
-	chipStatus();
+   if(cycle==0) return;
+   showState(trace[--cycle].chip);
+   setMem(trace[cycle].mem);
+   var clk = isNodeHigh(nodenames['clk']);
+   if(!clk) writeDataBus(mRead(readAddressBus()));
+   chipStatus();
 }
 
 // simulate a single clock phase with no update to graphics or trace
