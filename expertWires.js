@@ -37,7 +37,7 @@ var labelThese=[];
 //   overlay - a red/white transparency to show logic high or low
 //   hilite - to show the selected polygon
 //   hitbuffer - abusing color values to return which polygon is under a point
-// we no longer use a scaling transform - we now scale the chip data at 
+// we no longer use a scaling transform - we now scale the chip data at
 //   the point of drawing line segments
 // if the canvas is any smaller than chip coordinates there will be
 //   rounding artifacts, and at high zoom there will be anti-aliasing on edges.
@@ -53,7 +53,7 @@ var layernames = ['metal', 'switched diffusion', 'inputdiode', 'grounded diffusi
 var colors = ['rgba(128,128,192,0.4)','#FFFF00','#FF00FF','#4DFF4D',
               '#FF4D4D','#801AC0','rgba(128,0,255,0.75)'];
 var drawlayers = [true, true, true, true, true, true];
-              
+
 // some modes and parameters which can be passed in from the URL query
 var moveHereFirst;
 var expertMode=true;
@@ -277,13 +277,22 @@ function handleKey(e){
 	else if(c=='p') stepBack();
 }
 
+//  handler for zoom in/out using the mouse wheel
+function handleWheelZoom(e){
+	chipsurround.focus();
+	e.preventDefault();
+	var n = e.deltaY / 100;
+	if(n>0 && zoom>1) setZoom(zoom/1.2);
+	if(n<0 && zoom<grMaxZoom) setZoom(zoom*1.2);
+}
+
 //  handler for mousedown events over chip display
 //  must handle click-to-select (and focus), and drag to pan
 function mouseDown(e){
 	chipsurround.focus();
 	e.preventDefault();
-	moved=false;	
-	dragMouseX = e.clientX;	
+	moved=false;
+	dragMouseX = e.clientX;
 	dragMouseY = e.clientY;
 	chipsurround.onmousemove = function(e){mouseMove(e)};
 	chipsurround.onmouseup = function(e){mouseUp(e)};
@@ -306,7 +315,7 @@ function mouseMove(e){
 }
 
 function mouseUp(e){
-	if(!moved) handleClick(e);	
+	if(!moved) handleClick(e);
 	chipsurround.onmousemove = undefined;
 	chipsurround.onmouseup = undefined;
 }
@@ -350,8 +359,8 @@ function updateLinkHere(){
 //   boxLabel(['PD',   50, 8424, 3536, 9256, 2464])
 //   boxLabel(['IR',   50, 8432, 2332, 9124,  984])
 //   boxLabel(['PLA', 100, 1169, 2328, 8393,  934])
-//   boxLabel(['Y',    50, 2143, 8820, 2317, 5689])  
-//   boxLabel(['X',    50, 2317, 8820, 2490, 5689])  
+//   boxLabel(['Y',    50, 2143, 8820, 2317, 5689])
+//   boxLabel(['X',    50, 2317, 8820, 2490, 5689])
 //   boxLabel(['S',    50, 2490, 8820, 2814, 5689])
 //   boxLabel(['ALU',  50, 2814, 8820, 4525, 5689])
 //   boxLabel(['DAdj', 40, 4525, 8820, 5040, 5689])
@@ -599,6 +608,7 @@ function setupChipLayoutGraphics(){
 	}
 	// grant focus to the chip display to enable zoom keys
 	chipsurround.focus();
+	chipsurround.onwheel = function(e){handleWheelZoom(e);};
 	chipsurround.onmousedown = function(e){mouseDown(e);};
 	chipsurround.onkeypress = function(e){handleKey(e);};
 	chipsurround.onmouseout = function(e){mouseLeave(e);};
