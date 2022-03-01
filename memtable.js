@@ -71,14 +71,14 @@ function getCellValue(n){return cellEl(n).val;}
 function selectCell(n){
 	unselectCell();
 	if(n>=0x200) return;
-	cellEl(n).style.background = '#ff8';
+	cellEl(n).style.background = '#338';
 	selected = n;
 	table.onkeydown = function(e){cellKeydown(e);};
 }
 
 function unselectCell(){
 	if(selected==undefined) return;
-	cellEl(selected).style.background = '#fff';
+	cellEl(selected).style.background = '#333';
 	selected = undefined;
 	window.onkeydown = undefined;
 }

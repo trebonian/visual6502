@@ -1,26 +1,120 @@
 <!DOCTYPE html>
-
 <head>
-<title>Visual 6502 in JavaScript</title>
+  <link rel="stylesheet" href="newera.css">
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/fontawesome/css/all.min.css">
+  <title>Visual 6502 in JavaScript</title>
+</head>
+<body onload="handleOnload();" class="bg-dark text-white container-fluid">
+  <div class="frame" id="frame">
+    <div class="leftcolumn" id="leftcolumn">
+      <div id="chipsurround" tabindex="1">
+        <div class="chip" id="chip">
+          <canvas class="chip" id="chipbg"></canvas>
+          <canvas class="chip" id="overlay"></canvas>
+          <canvas class="chip" id="hilite"></canvas>
+          <canvas class="chip" id="hitbuffer"></canvas>
+        </div>
+      </div> <!-- chipsurround -->
+      <div class="nochip" id="nochip">
+        <form>
+        <input class="btn btn-success" type="button" value="Show chip layout" onclick="updateChipLayoutVisibility(true)" />
+        </form>
+      </div>
+      <div id="layoutControlPanel" class="mt-3">
+        <p>Use 'z' or '&gt;' to zoom in, 'x' or '&lt;' to zoom out, click to probe signals and drag to pan.</p>
+        <form id="updateShow" class="form-group"> Show:
+          <input class="form-check-inline" type="checkbox" name="1" id="updateShow1" onchange="updateShow(this.name,this.checked)" /><label class="form-label" for="updateShow1">(diffusion)</label>
+          <input class="form-check-inline" type="checkbox" name="3" id="updateShow3" onchange="updateShow(this.name,this.checked)" /><label class="form-label" for="updateShow3">(grounded diffusion)</label>
+          <input class="form-check-inline" type="checkbox" name="4" id="updateShow4" onchange="updateShow(this.name,this.checked)" /><label class="form-label" for="updateShow4">(powered diffusion)</label>
+          <input class="form-check-inline" type="checkbox" name="5" id="updateShow5" onchange="updateShow(this.name,this.checked)" /><label class="form-label" for="updateShow5">(polysilicon)</label>
+          <input class="form-check-inline" type="checkbox" name="0" id="updateShow0" onchange="updateShow(this.name,this.checked)" /><label class="form-label" for="updateShow0">(metal)</label>
+          <input class="form-check-inline" type="checkbox" name="2" id="updateShow2" onchange="updateShow(this.name,this.checked)" /><label class="form-label" for="updateShow2">(protection)</label>
+        </form>
+        <form action="javascript:hiliteNodeList();">
+          <div class="row mt-3">
+            <div class="col">
+              <input class="form-control" type="text" id="HighlightThese" name="HighlightThese" value="" />
+            </div>
+            <div class="col">
+              <input class="btn btn-primary" type="button" value="Find:" onclick="hiliteNodeList();" />
+            </div>
+          </div>
+          <div class="mt-3">
+            <input class="btn btn-primary" type="button" value="Clear Highlighting" onclick="clearHighlight();" />
+            <span class="animatebox">
+              <label for="animateModeCheckbox">Animate during simulation:</label>
+              <input type="checkbox" id="animateModeCheckbox" onchange="updateChipLayoutAnimation(this.checked)"/>
+            </span>
+          </div>
+        </form>
+        <form>
+          <input class="btn btn-danger mt-5" type="button" value="Hide Chip Layout" onclick="updateChipLayoutVisibility(false)" />
+        </form>
+      </div>
+    </div> <!-- closing leftcolumn -->
+    <div class="rightcolumn" id="rightcolumn">
+      <div id="righttopdiv">
+        <div class = "buttons">
+            <div class="twobuttons">
+              <a class="mx-1" href ="javascript:stopChip()" id="stop"><i class="navbutton fa-solid fa-stop fa-2x text-white-50"></i></a>
+              <a class="mx-1" href ="javascript:runChip()"  id="start"><i class="navbutton fa-solid fa-play fa-2x text-white-50"></i></a>
+            </div>
+            <div class="morebuttons">
+              <a class="mx-1" href ="javascript:resetChip()"><i class="navbutton fa-solid fa-rotate fa-2x text-white-50"></i></a>
+              <a class="mx-1" href ="javascript:stepBack()"><i class="navbutton fa-solid fa-angle-left fa-2x text-white-50"></i></a>
+              <a class="mx-1" href ="javascript:stepForward()"><i class="navbutton fa-solid fa-angle-right fa-2x text-white-50"></i></a>
+              <a class="mx-1" href ="javascript:goUntilSyncOrWrite()"><i class="fa-solid fa-forward-fast fa-2x text-white-50"></i></a>
+              <a class="mx-1" href ="javascript:goFor()"><i class="fa-solid fa-forward fa-2x text-white-50"></i></a>
+            </div>
+          </div>  <!-- buttons -->
+          <div class="status" id="status"><p>x: 0<br>y: 0</p>
+          </div> <!-- status -->
 
-<!-- by default, index.html will run in kiosk mode -->
-<style type="text/css">@import "kiosk.css";</style>
+          <div id="memtablediv">
+            <table class="memtable table text-white-50" id="memtable"></table>
+          </div>
+      </div> <!-- righttopdiv -->
+
+      <div id="tracingdiv">
+        <textarea id="consolebox">click here and type if your program handles input</textarea>
+        <div id="expertControlPanel" tabindex="3">
+          <form action="javascript:updateLogList()">
+            <div>
+              <input class="btn btn-primary" type="button" value="Trace more" onclick="updateLoglevel(++loglevel)" />
+              <input class="btn btn-primary" type="button" value="Trace less" onclick="updateLoglevel(--loglevel)" />
+              <input class="btn btn-primary" type="button" value="Trace these too:" onclick="updateLogList()" />
+              <input class="form-control-sm" type="text" id="LogThese" name="LogThese" value="" />
+            </div>
+            <div class="mt-3">
+              <input class="btn btn-primary" type="button" value="Log Up/Down" onclick="updateLogDirection();" />
+              <input class="btn btn-primary" type="button" value="Clear Log" onclick="updateLoglevel(loglevel)" />
+            </div>
+          </form>
+          <br />
+        </div>
+        <div id="logstreamscroller">
+              <table class="table table-striped table-dark" id="logstream"></table>
+        </div>
+      </div>
+    </div> <!-- closing rightcolumn -->
+  </div> <!-- closing 'frame' div -->
+</body>
 <script src="segdefs.js"></script>
 <script src="transdefs.js"></script>
 <script src="nodenames.js"></script>
-<script src="kioskWires.js"></script>
 <script src="wires.js"></script>
+<script src="expertWires.js"></script>
 <script src="chipsim.js"></script>
 <script src="memtable.js"></script>
 <script src="macros.js"></script>
 <script src="testprogram.js"></script>
+<script src="3rdparty/jquery-1.3.2.min.js"></script>
+<script src="3rdparty/jquery.cookie.js"></script>
+<script src="3rdparty/splitter.js"></script>
 
 <script type="text/javascript">
 function handleOnload() {
-	// two checks and fixes here:
-        //   - replace the dynamic content with an image if running older versions of IE
-        //   - redirect to the expert page if we find any query parameters
-	//
 	/MSIE (\d+\.\d+);/.test(navigator.appVersion);
 	IEVersion=Number(RegExp.$1);
 	if((navigator.appName == 'Microsoft Internet Explorer') && (IEVersion<9)){
@@ -28,93 +122,26 @@ function handleOnload() {
 			'<p>Sorry, '+navigator.appName+' not supported - showing you a picture instead!</p>';
 		document.getElementById('frame').innerHTML='<a href="browsertrouble.html"><img src="images/jssim2.png" style="border:10px"></a>';
 	}else{
-		var suffix=location.search;
-		var path=location.pathname;
-		// ensure we always have a trailing slash
-		path=path.replace("index.html","").replace(/\/?$/,"/");
-
-		if (suffix != "") {
-			// redirect to the expert page
-			var prefix=location.protocol+"//"+location.host+path;
-			window.location.replace(prefix+"expert.html"+suffix);
-			return;
-		} else {
-			// normal case: start the simulator
-			setTimeout(setup,200);
-		}
+		setTimeout(setup,200);
 	}
-}
+};
+
+// initialise splitter (built on jquery)
+$().ready(function(){
+	$("#frame").splitter({
+		type: "v",
+		outline: true,
+		minLeft: 20,
+		sizeLeft: 810,
+		resizeToWidth: true,
+		anchorToWindow: true,
+	});
+	$("#rightcolumn").splitter({
+		type: "h",
+		outline: true,
+		sizeBottom: 180,
+		minTop: 100,
+	});
+});
 </script>
-
-</head>
-
-<body onload="handleOnload();">
-<br />
-<span id="title"><a href="http://visual6502.org">The Visual 6502</a></span>
-<span id="plain">
-<br />
-<a href="http://www.visual6502.org/faq.html">FAQ</a>&nbsp;
-<a href="http://blog.visual6502.org">Blog</a>&nbsp;
-<a href="http://www.visual6502.org/links.html">Links</a>&nbsp
-<br /><br />
-This simulator uses HTML5 features only found on the latest versions of browsers and needs
-lots of RAM. If you have trouble, please <a href="browsertrouble.html">check compatibility.</a>
-<br />
-<span id="browsertrouble"></span>
-<br />
-Keyboard controls: 'z' to zoom in, 'x' to zoom out, 'n' to step the simulation.
-<br />
-Mouse controls: Left-click and drag to scroll around (when you're zoomed in.)
-<br />
-More information in the <a href="http://visual6502.org/wiki/index.php?title=JssimUserHelp">User Guide</a>.
-<br />
-<br /> 
-</span>
-<div class="frame" id="frame">
-<div class="chip" id="chip">
-<canvas class="chip" id="chipbg"></canvas>
-<canvas class="chip" id="overlay"></canvas>
-<canvas class="chip" id="hilite"></canvas>
-<canvas class="chip" id="hitbuffer"></canvas>
-</div>
-<div class = "buttons">
-  <div style="position:relative; float:left;">
-    <a href ="javascript:stopChip()" id="stop"><img class="navstop" src="images/stop.png" title="stop"></a>
-    <a href ="javascript:runChip()" id="start"><img class="navplay" src="images/play.png" title="start"></a>
-  </div>
-  <div style="float:left;">
-    <a href ="javascript:resetChip()"><img class="navbutton" src="images/up.png" title="reset"></a>
-    <a href ="javascript:stepBack()"><img class="navbutton" src="images/prev.png" title="back"></a>
-    <a href ="javascript:stepForward()"><img class="navbutton" src="images/next.png" title="step"></a>
-  </div>
-  <div style="float:right; margin-left:20px;">... or try <a href="expert.html">Advanced</a></div>
-</div>
-<p class="status" id="status">x: 0<br>y: 0</p>
-<table class="memtable" id="memtable"></table>
-</div>
-<div id="updateShow">
-</div>
-<br />
-<br />
-Source code is available on <a href="http://github.com/trebonian/visual6502">github visual6502</a>.
-Use the online <a href="http://skilldrick.github.com/easy6502/#first-program">emulator and assembler</a> from the easy6502 tutorial
-and <a href="http://www.masswerk.at/6502/disassembler.html">disassembler</a> from mass:werk
-<br />
-For in-depth 6502 investigation and some more advanced features, try our <a href="expert.html">Advanced</a> page.
-<br />
-<br />
-
-<script type="text/javascript"><!--
-google_ad_client = "pub-9008420149077488";
-/* 728x90, created 9/22/10 */
-google_ad_slot = "4303982675";
-google_ad_width = 728;
-google_ad_height = 90;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
-
-</body>
 </html>

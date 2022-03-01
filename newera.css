@@ -1,0 +1,151 @@
+div.frame {
+    margin-left: 10px;
+    min-width: 1120px;  /* ugh - prevent memtable flowing underneath chip */
+}
+
+div.leftcolumn {
+    width: 804px;       /* ugh - matches the div.chip width + border */
+}
+
+div.rightcolumn {
+    padding-left: 8px;
+}
+
+div.footer {
+    clear: both;
+    padding-top: 10px;
+}
+
+div.nochip {
+    display:none;
+}
+
+div#chipsurround {
+    height: 600px;      /* matches the div.chip height */
+}
+
+div.chip {
+    background-color: #111111;
+    position: absolute; /* must be absolute to contain the canvas */
+    width: 800px;
+    height: 600px;
+    overflow: hidden;
+}
+
+canvas.chip {
+    position: absolute;
+    width: 600px;       /* square chip image same height as div.chip */
+    height: 600px;      /* square */
+}
+
+div.twobuttons{
+    float:left;
+}
+
+div.morebuttons{
+    float:left;
+}
+
+div.status {
+    clear: left;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-family: monospace;
+    font-size: 12px;
+}
+
+img.navbutton {
+    border: 0px;
+}
+
+img.navplay {
+    margin-right: 5px;
+    border: 0px;
+}
+
+img.navstop {
+    position: absolute;
+    border: 0px;
+}
+
+span.expertcheckbox {
+    margin-left: 20px;
+}
+
+table.memtable {
+    font-family: monospace;
+    font-size: 12px;
+    border-spacing: 0px;
+    overflow: auto;
+}
+
+div#layoutControlPanel{
+    display:none;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+div#expertControlPanel{
+    display:none;
+}
+
+span.animatebox{
+    padding:2px;
+}
+
+a#linkHere{
+    padding:2px;
+}
+
+textarea#consolebox{
+    background-color: #111111;
+    color: white;
+    border: 2px solid black;
+    font-family:courier,monospace;
+    margin: 2px;
+    padding: 2px;
+    width: 80em;
+}
+
+div#logstreamscroller{
+    overflow: hidden;
+}
+
+div.leftcolumn, div.rightcolumn {
+    overflow: auto;
+}
+
+div#righttopdiv, div#tracingdiv {
+    overflow: auto;
+    background-color: transparent;
+}
+
+div.rightcolumn {
+    background-color: transparent;
+}
+
+.vsplitbar {
+    width: 2px;
+    background: #111111;
+}
+
+.vsplitbar {
+    width: 2px;
+    background: #111111;
+}
+
+.vsplitbar:hover, .vsplitbar.active {
+    background: #c66 url(3rdparty/img/vgrabber.gif) no-repeat center;
+    opacity: 0.7;
+    filter: alpha(opacity=70); /* IE */
+    background: #c99;
+}
+
+.hsplitbar {
+    width: 2px;
+    background: #111111;
+}
+
+.hsplitbar.active, .hsplitbar:hover {
+    background: #c66 url(3rdparty/img/hgrabber.gif) no-repeat center;
+}
