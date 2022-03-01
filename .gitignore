@@ -3,3 +3,5 @@
 # patch detritus
 *.orig
 *.rej
+
+node_modules/
