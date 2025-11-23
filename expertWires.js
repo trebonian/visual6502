@@ -320,6 +320,11 @@ function mouseUp(e){
 	chipsurround.onmouseup = undefined;
 }
 
+function mouseLeave(e){
+	chipsurround.onmousemove = undefined;
+	chipsurround.onmouseup = undefined;
+}
+
 function setZoom(n){
 	zoom = n;
 	setChipStyle({
