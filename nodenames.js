@@ -199,6 +199,14 @@ t2: 971,        // internal state: timing control
 t3: 1567,
 t4: 690,
 t5: 909,
+nota0: 5,       // datapath state: not accumulator
+nota1: 1549,
+nota2: 419,
+nota3: 947,
+nota4: 556,
+nota5: 1719,
+nota6: 1356,
+nota7: 128,
 noty0: 1025,    // datapath state: not Y register
 noty1: 1138,
 noty2: 1484,
@@ -223,6 +231,54 @@ nots4: 1603,
 nots5: 601,
 nots6: 1029,
 nots7: 181,
+"~s0": 983,     // datapath state: not stack pointer (undelayed, cclk latches it into nots0)
+"~s1": 1711,
+"~s2": 1190,
+"~s3": 34,
+"~s4": 973,
+"~s5": 496,
+"~s6": 1187,
+"~s7": 548,
+aout0: 146,     // datapath signal: accumulator output (drives sb and idb)
+aout1: 929,
+aout2: 1618,
+aout3: 1654,
+aout4: 1344,
+aout5: 831,
+aout6: 326,
+aout7: 1592,
+yout0: 564,     // datapath signal: Y register output (drives sb)
+yout1: 767,
+yout2: 1491,
+yout3: 1531,
+yout4: 658,
+yout5: 733,
+yout6: 518,
+yout7: 1251,
+xout0: 1169,    // datapath signal: X register output (drives sb)
+xout1: 1709,
+xout2: 1694,
+xout3: 242,
+xout4: 436,
+xout5: 578,
+xout6: 1724,
+xout7: 871,
+sout0: 332,     // datapath signal: stack pointer output (drives sb and adl)
+sout1: 694,
+sout2: 1389,
+sout3: 998,
+sout4: 3,
+sout5: 280,
+sout6: 618,
+sout7: 721,
+"~db0": 718,    // datapath state: databus pad read back (cclk latches it into notidl)
+"~db1": 213,
+"~db2": 1199,
+"~db3": 896,
+"~db4": 490,
+"~db5": 568,
+"~db6": 1638,
+"~db7": 588,
 notidl0: 116,   // datapath state: internal data latch (first storage node)
 notidl1: 576,
 notidl2: 1485,
@@ -281,6 +337,22 @@ adl4: 1437,
 adl5: 1630,
 adl6: 121,
 adl7: 1299,
+"~adl0": 123,   // internal bus: address low (inverted)
+"~adl1": 1016,
+"~adl2": 935,
+"~adl3": 1507,
+"~adl4": 1519,
+"~adl5": 1094,
+"~adl6": 1548,
+"~adl7": 1046,
+"~adl0.phi1": 246, // internal bus: address low (inverted, latched by phi1)
+"~adl1.phi1": 416,
+"~adl2.phi1": 1636,
+"~adl3.phi1": 864,
+"~adl4.phi1": 738,
+"~adl5.phi1": 463,
+"~adl6.phi1": 524,
+"~adl7.phi1": 577,
 adh0: 407,      // internal bus: address high
 adh1: 52,
 adh2: 1651,
@@ -289,6 +361,22 @@ adh4: 1160,
 adh5: 483,
 adh6: 13,
 adh7: 1539,
+"~adh0": 1668,  // internal bus: address high (inverted)
+"~adh1": 1267,
+"~adh2": 168,
+"~adh3": 883,
+"~adh4": 212,
+"~adh5": 254,
+"~adh6": 880,
+"~adh7": 494,
+"~adh0.phi1": 705, // internal bus: address high (inverted, latched by phi1)
+"~adh1.phi1": 1298,
+"~adh2.phi1": 836,
+"~adh3.phi1": 1667,
+"~adh4.phi1": 1451,
+"~adh5.phi1": 1353,
+"~adh6.phi1": 1514,
+"~adh7.phi1": 514,
 idb0: 1108,     // internal bus: data bus
 idb1: 991,
 idb2: 1473,
@@ -313,6 +401,30 @@ dor4: 1088,
 dor5: 1453,
 dor6: 1415,
 dor7: 63,
+"~db0.pre": 769, // internal signal: databus pad driver predriver, feeds both gates below
+"~db1.pre": 288,
+"~db2.pre": 224,
+"~db3.pre": 1613,
+"~db4.pre": 1463,
+"~db5.pre": 1720,
+"~db6.pre": 466,
+"~db7.pre": 23,
+"db0.up": 1325, // internal signal: databus pad driver pullup gate
+"db1.up": 798,
+"db2.up": 520,
+"db3.up": 42,
+"db4.up": 1076,
+"db5.up": 373,
+"db6.up": 7,
+"db7.up": 298,
+"db0.dn": 1072, // internal signal: databus pad driver pulldown gate
+"db1.dn": 794,
+"db2.dn": 37,
+"db3.dn": 643,
+"db4.dn": 147,
+"db5.dn": 612,
+"db6.dn": 471,
+"db7.dn": 1501,
 "pd0.clearIR": 1622,       // internal state: predecode register output (anded with not ClearIR)
 "pd1.clearIR": 809,
 "pd2.clearIR": 1671,
@@ -365,6 +477,14 @@ abl7: 567,
 "~ABL6": 1307, // automatic alias replacing hash with tilde
 "#ABL7": 28,
 "~ABL7": 28, // automatic alias replacing hash with tilde
+"~abl0": 1660,  // internal signal: address pad driver predriver, low byte (~abl0 drives ab0)
+"~abl1": 842,
+"~abl2": 951,
+"~abl3": 990,
+"~abl4": 1676,
+"~abl5": 172,
+"~abl6": 1195,
+"~abl7": 1026,
 abh0: 1429,     // internal bus: address bus high latched data out (inverse of inverted storage node)
 abh1: 713,
 abh2: 287,
@@ -389,6 +509,46 @@ abh7: 489,
 "~ABH6": 289, // automatic alias replacing hash with tilde
 "#ABH7": 429,
 "~ABH7": 429, // automatic alias replacing hash with tilde
+"~abh0": 1315,  // internal signal: address pad driver predriver, high byte (~abh0 drives ab8)
+"~abh1": 617,
+"~abh2": 1034,
+"~abh3": 1346,
+"~abh4": 1677,
+"~abh5": 1423,
+"~abh6": 1523,
+"~abh7": 1153,
+"ab0.up": 855,  // internal signal: address pad driver pullup gate
+"ab1.up": 1479,
+"ab2.up": 1152,
+"ab3.up": 1041,
+"ab4.up": 634,
+"ab5.up": 1633,
+"ab6.up": 1191,
+"ab7.up": 322,
+"ab8.up": 826,
+"ab9.up": 1140,
+"ab10.up": 1545,
+"ab11.up": 1296,
+"ab12.up": 475,
+"ab13.up": 1608,
+"ab14.up": 963,
+"ab15.up": 1639,
+"ab0.dn": 1100, // internal signal: address pad driver pulldown gate
+"ab1.dn": 66,
+"ab2.dn": 642,
+"ab3.dn": 138,
+"ab4.dn": 86,
+"ab5.dn": 210,
+"ab6.dn": 1254,
+"ab7.dn": 171,
+"ab8.dn": 381,
+"ab9.dn": 676,
+"ab10.dn": 994,
+"ab11.dn": 359,
+"ab12.dn": 999,
+"ab13.dn": 869,
+"ab14.dn": 635,
+"ab15.dn": 659,
 
 "branch-back": 626,           // distinguish forward from backward branches
 "branch-forward.phi1": 1110,  // distinguish forward from backward branches
@@ -602,6 +762,7 @@ nnT2BR: 967,    // doubly inverted
 IRQP: 675,
 "#IRQP": 888,
 "~IRQP": 888, // automatic alias replacing hash with tilde
+"~nmi": 1392,   // internal signal: nmi pad read back (gates NMIP)
 NMIP: 1032,
 "#NMIP": 297,
 "~NMIP": 297, // automatic alias replacing hash with tilde
@@ -610,7 +771,9 @@ NMIP: 1032,
 NMIL: 1374,
 RESP: 67,
 RESG: 926,
+"~RESG": 1054,  // internal signal: inverse of RESG
 VEC0: 1465,
+"~VEC0": 728,   // internal signal: inverse of VEC0
 VEC1: 1481,
 "#VEC": 1134,
 "~VEC": 1134, // automatic alias replacing hash with tilde
@@ -682,6 +845,7 @@ pipeVectorA2: 45,
 "0/ADL0": 217,
 "0/ADL1": 686,
 "0/ADL2": 1193,
+"~0/ADL2": 815, // drives 0/ADL2 (inverted)
 
 // internal state: datapath control drivers
 pipedpc28: 683,
@@ -803,6 +967,10 @@ AxB7: 1241,
 "~A.B6": 336, // automatic alias replacing hash with tilde
 "#A.B7": 1318,
 "~A.B7": 1318, // automatic alias replacing hash with tilde
+"A.B1": 936,    // true sense; only these four bits have it, 2 is the DA-AB2 above
+"A.B3": 988,
+"A.B5": 647,
+"A.B7": 748,
 "A+B0": 693,
 "A+B1": 1021,
 "A+B2": 110,
@@ -867,6 +1035,13 @@ AxB7: 1241,
 
 "ADH/ABH": 821,      // load ABH latches from ADH bus
 "dpc-2_ADH/ABH": 821,// alias for DPControl pseudo-bus
+"~ADL/ABL": 190,     // predriver inside the ADL/ABL driver (inverted)
+"~ADH/ABH": 610,     // predriver inside the ADH/ABH driver (inverted)
+
+clearDPC: 1247,      // clamps the 18 dpc assert lines every phi1 (inverse of cp1)
+"clearDPC.up": 38,   // pullup gate of clearDPC
+clearDPCpre: 43,     // clamps the 14 dpc predrivers every phi1 (inverse of cp1)
+"clearDPCpre.up": 839, // pullup gate of clearDPCpre
 
 dpc0_YSB: 801,       // drive sb from y
 dpc1_SBY: 325,       // load y from sb
@@ -889,6 +1064,7 @@ dpc16_EORS: 1666,    // alu op: a xor b (?)
 dpc17_SUMS: 921,     // alu op: a plus b (?)
 alucin: 910,         // alu carry in
 notalucin: 1165,
+C0in: 105,           // alu carry in, buffered (the C0in of (AxB)0.~C0in)
 "dpc18_#DAA": 1201,  // decimal related (inverted)
 "dpc18_~DAA": 1201,   // automatic alias replacing hash with tilde
 dpc19_ADDSB7: 214,   // alu to sb bit 7 only
@@ -904,6 +1080,7 @@ alucout: 1146,       // alu carry out (latched by phi2)
 "~~alucout": 465, // automatic alias replacing hash with tilde
 notaluvout: 1308,    // alu overflow out
 aluvout: 938,        // alu overflow out (latched by phi2)
+"~aluvout": 1245,    // alu overflow out (inverted)
 
 "#DBZ": 1268,   // internal signal: not (databus is zero)
 "~DBZ": 1268,    // automatic alias replacing hash with tilde
@@ -937,6 +1114,78 @@ dpc40_ADLPCL: 414,   // load pcl from adl
 "dpc41_DL/ADL": 1564,// pass-connect adl to mux node driven by idl
 "dpc42_DL/ADH": 41,  // pass-connect adh to mux node driven by idl
 "dpc43_DL/DB": 863,  // pass-connect idb to mux node driven by idl
+
+// ~dpcN_X grounds the gate of dpcN_X's pullup, so it is that line inverted, and
+// ~dpcN_X.pre is the stage cclk latches into it. dpc19_ADDSB7 has no pair here:
+// its clamp inverts once rather than twice, so the node equals the line instead
+"~dpc0_YSB": 1113,
+"~dpc1_SBY": 460,
+"~dpc1_SBY.pre": 616,
+"~dpc2_XSB": 1404,
+"~dpc2_XSB.pre": 1106,
+"~dpc3_SBX": 459,
+"~dpc3_SBX.pre": 844,
+"~dpc4_SSB": 621,
+"~dpc4_SSB.pre": 1586,
+"~dpc5_SADL": 339,
+"~dpc5_SADL.pre": 632,
+"~dpc6_SBS": 521,
+"~dpc6_SBS.pre": 1358,
+"~dpc7_SS": 796,
+"~dpc7_SS.pre": 396,
+"~dpc8_nDBADD": 805,
+"~dpc8_nDBADD.pre": 779,
+"~dpc9_DBADD": 688,
+"~dpc9_DBADD.pre": 1594,
+"~dpc10_ADLADD": 1477,
+"~dpc10_ADLADD.pre": 604,
+"~dpc11_SBADD": 360,
+"~dpc11_SBADD.pre": 795,
+"~dpc12_0ADD": 1027,
+"~dpc12_0ADD.pre": 1649,
+"~dpc13_ORS": 95,
+"~dpc14_SRS": 226,
+"~dpc15_ANDS": 1529,
+"~dpc15_ANDS.pre": 1089,
+"~dpc16_EORS": 101,
+"~dpc17_SUMS": 1674,
+"~dpc18_~DAA": 1450,
+"~dpc20_ADDSB06": 512,
+"~dpc21_ADDADL": 745,
+"~dpc23_SBAC": 1505,
+"~dpc23_SBAC.pre": 1455,
+"~dpc24_ACSB": 55,
+"~dpc24_ACSB.pre": 11,
+"~dpc25_SBDB": 1527,
+"~dpc25_SBDB.pre": 1347,
+"~dpc26_ACDB": 266,
+"~dpc26_ACDB.pre": 1037,
+"~dpc27_SBADH": 1602,
+"~dpc27_SBADH.pre": 506,
+"~dpc29_0ADH17": 1683,
+"~dpc29_0ADH17.pre": 1090,
+"~dpc30_ADHPCH": 1162,
+"~dpc30_ADHPCH.pre": 272,
+"~dpc31_PCHPCH": 1509,
+"~dpc31_PCHPCH.pre": 952,
+"~dpc32_PCHADH": 598,
+"~dpc32_PCHADH.pre": 176,
+"~dpc33_PCHDB": 398,
+"~dpc33_PCHDB.pre": 824,
+"~dpc37_PCLDB": 878,
+"~dpc37_PCLDB.pre": 462,
+"~dpc38_PCLADL": 897,
+"~dpc38_PCLADL.pre": 1211,
+"~dpc39_PCLPCL": 509,
+"~dpc39_PCLPCL.pre": 442,
+"~dpc40_ADLPCL": 265,
+"~dpc40_ADLPCL.pre": 182,
+"~dpc41_DL/ADL": 1121,
+"~dpc41_DL/ADL.pre": 1225,
+"~dpc42_DL/ADH": 1020,
+"~dpc42_DL/ADH.pre": 1705,
+"~dpc43_DL/DB": 1221,
+"~dpc43_DL/DB.pre": 104,
 
 }
 
